@@ -45,6 +45,8 @@ void DW_DisasmView::_setBreakpoint()
             {
                 QList<XBinary::MEMORY_REPLACE> listReplaces=g_pDebugger->getMemoryReplaces();
 
+                setMemoryReplaces(listReplaces);
+
                 // mb TODO XHex too
                 qDebug("Breakpoit set");
                 reload(true);
