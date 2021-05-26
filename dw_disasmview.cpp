@@ -30,6 +30,17 @@ void DW_DisasmView::setDebugger(XAbstractDebugger *pDebugger)
     g_pDebugger=pDebugger;
 }
 
+void DW_DisasmView::showStatus()
+{
+    qDebug("void DW_DisasmView::showStatus()");
+
+    QList<XBinary::MEMORY_REPLACE> listReplaces=g_pDebugger->getMemoryReplaces();
+
+    setMemoryReplaces(listReplaces);
+
+    reload(true);
+}
+
 void DW_DisasmView::_setBreakpoint()
 {
     qDebug("void DW_DisasmView::_setBreakpoint()");
@@ -43,13 +54,9 @@ void DW_DisasmView::_setBreakpoint()
         {
             if(g_pDebugger->setBP(nAddress))
             {
-                QList<XBinary::MEMORY_REPLACE> listReplaces=g_pDebugger->getMemoryReplaces();
-
-                setMemoryReplaces(listReplaces);
-
-                // mb TODO XHex too
                 qDebug("Breakpoit set");
-                reload(true);
+
+                showStatus();
             }
         }
     }

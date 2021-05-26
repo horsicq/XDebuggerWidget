@@ -154,6 +154,9 @@ void XDebuggerWidget::onShowStatus()
         ui->widgetDisasm->goToAddress(g_currentBreakPointInfo.nAddress);
     }
 
+    ui->widgetDisasm->setSelectionAddress(g_currentBreakPointInfo.nAddress,1);
+    ui->widgetDisasm->showStatus();
+
 //    // TODO address cache
 //    XProcessDevice *pPDCode=new XProcessDevice(this);
 //    if(pPDCode->openHandle(currentBreakPointInfo.hProcess,g_mrCode.nAddress,g_mrCode.nSize,QIODevice::ReadOnly))

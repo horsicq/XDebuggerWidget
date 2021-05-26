@@ -31,6 +31,7 @@ class DW_DisasmView : public XDisasmView
 public:
     explicit DW_DisasmView(QWidget *pParent=nullptr);
     void setDebugger(XAbstractDebugger *pDebugger);
+    void showStatus();
 
 public slots:
     void _setBreakpoint();
