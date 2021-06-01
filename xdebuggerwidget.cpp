@@ -83,6 +83,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
     connect(g_pDebugger,SIGNAL(eventCreateProcess(XAbstractDebugger::PROCESS_INFO *)),this,SLOT(onCreateProcess(XAbstractDebugger::PROCESS_INFO *)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *)),this,SLOT(onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventExitProcess(XAbstractDebugger::EXITPROCESS_INFO*)),this,SLOT(onExitProcess(XAbstractDebugger::EXITPROCESS_INFO *)),Qt::DirectConnection);
     connect(this,SIGNAL(showStatus()),this,SLOT(onShowStatus()));
 
     g_pDebugger->moveToThread(g_pThread);
@@ -118,6 +119,13 @@ void XDebuggerWidget::onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoi
     XAbstractDebugger::suspendThread(pBreakPointInfo->hThread);
 
     emit showStatus();
+}
+
+void XDebuggerWidget::onExitProcess(XAbstractDebugger::EXITPROCESS_INFO *pExitProcessInfo)
+{
+    qDebug("void XDebuggerWidget::onExitProcess(XAbstractDebugger::EXITPROCESS_INFO *pExitProcessInfo)");
+
+    // TODO Clear screen
 }
 
 void XDebuggerWidget::onShowStatus()
