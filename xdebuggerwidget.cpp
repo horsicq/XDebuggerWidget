@@ -39,6 +39,9 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     g_mrCode={};
     g_pPDCode=nullptr;
 
+    ui->widgetRegs->setMode(XRegistersView::MODE_X86_32);
+
+    connect(this,SIGNAL(showStatus()),this,SLOT(onShowStatus()));
 //    ui->widgetDisasm->installEventFilter(this);
 //    XDebuggerWidget::registerShortcuts(true);
 }
@@ -55,8 +58,6 @@ XDebuggerWidget::~XDebuggerWidget()
 bool XDebuggerWidget::loadFile(QString sFileName)
 {
     cleanUp();
-
-    ui->widgetRegs->setMode(XRegistersView::MODE_X86_32);
 
     g_pThread=new QThread;
 #ifdef Q_OS_WIN
@@ -84,7 +85,6 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     connect(g_pDebugger,SIGNAL(eventCreateProcess(XAbstractDebugger::PROCESS_INFO *)),this,SLOT(onCreateProcess(XAbstractDebugger::PROCESS_INFO *)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *)),this,SLOT(onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventExitProcess(XAbstractDebugger::EXITPROCESS_INFO*)),this,SLOT(onExitProcess(XAbstractDebugger::EXITPROCESS_INFO *)),Qt::DirectConnection);
-    connect(this,SIGNAL(showStatus()),this,SLOT(onShowStatus()));
 
     g_pDebugger->moveToThread(g_pThread);
     g_pThread->start();
@@ -234,6 +234,19 @@ void XDebuggerWidget::_setBreakpoint()
 
 void XDebuggerWidget::cleanUp()
 {
+    if(g_pDebugger&&g_pThread)
+    {
+        g_pDebugger->stop();
+
+        g_pThread->quit();
+        g_pThread->wait();
+
+        delete g_pThread;
+        delete g_pDebugger;
+        g_pDebugger=nullptr;
+        g_pDebugger=nullptr;
+    }
+
     g_mrCode={};
 
     if(g_pPDCode)
