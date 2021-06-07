@@ -31,6 +31,7 @@ class DW_StackView : public XStackView
 public:
     explicit DW_StackView(QWidget *pParent=nullptr);
     void setDebugger(XAbstractDebugger *pDebugger);
+    void showStatus();
 
 protected:
     virtual void contextMenu(const QPoint &pos);

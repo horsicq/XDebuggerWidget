@@ -37,7 +37,9 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     g_scSetBreakpoint=nullptr;
 
     g_mrCode={};
+    g_mrStack={};
     g_pPDCode=nullptr;
+    g_pPDStack=nullptr;
 
     ui->widgetRegs->setMode(XRegistersView::MODE_X86_32);
 
@@ -163,7 +165,7 @@ void XDebuggerWidget::onShowStatus()
     }
 
     ui->widgetDisasm->setSelectionAddress(g_currentBreakPointInfo.nAddress,1);
-    ui->widgetDisasm->showStatus();
+    ui->widgetDisasm->showStatus(); // TODO do not reload data mb parameter
 
 //    // TODO address cache
 //    XProcessDevice *pPDCode=new XProcessDevice(this);
@@ -181,23 +183,38 @@ void XDebuggerWidget::onShowStatus()
     QMap<QString, QVariant> mapRegisters=g_pDebugger->getRegisters(g_currentBreakPointInfo.hThread);
     ui->widgetRegs->setData(&mapRegisters);
 
-//    qint64 nESP=mapRegisters.value("ESP").toLongLong();
+    qint64 nESP=mapRegisters.value("ESP").toLongLong();
 
-//    XProcess::MEMORY_REGION mrStack=XProcess::getMemoryRegion(currentBreakPointInfo.hProcess,nESP);
-//    // TODO address cache
-//    XProcessDevice *pPDStack=new XProcessDevice(this);
-//    if(pPDStack->openHandle(currentBreakPointInfo.hProcess,mrStack.nAddress,mrStack.nSize,QIODevice::ReadOnly))
-//    {
-//        XBinary binary(pPDCode,true,mrStack.nAddress);
-//        binary.setArch("386"); // TODO
-//        binary.setMode(XBinary::MODE_32); // TODO
+    if(!XProcess::isAddressInMemoryRegion(&g_mrStack,nESP))
+    {
+        g_mrStack=XProcess::getMemoryRegion(g_currentBreakPointInfo.hProcess,nESP);
 
-//        XHexView::OPTIONS hexOptions={};
-//        hexOptions.nStartAddress=mrStack.nAddress;
+        if(g_pPDStack)
+        {
+            delete g_pPDStack;
+            g_pPDStack=nullptr;
+        }
 
-////        ui->widgetStack->setData(pPDStack,hexOptions);
-////        ui->widgetStack->goToAddress(nESP);
-//    }
+        g_pPDStack=new XProcessDevice(this);
+
+        if(g_pPDStack->openHandle(g_currentBreakPointInfo.hProcess,g_mrStack.nAddress,g_mrStack.nSize,QIODevice::ReadOnly))
+        {
+            XBinary binary(g_pPDStack,true,g_mrStack.nAddress);
+            binary.setArch(g_pDebugger->getArch());
+            binary.setMode(g_pDebugger->getMode());
+
+            XStackView::OPTIONS stackOptions={};
+            stackOptions.nStartAddress=g_mrStack.nAddress;
+            ui->widgetStack->setData(g_pPDCode,stackOptions);
+        }
+    }
+    else
+    {
+        ui->widgetStack->goToAddress(nESP);
+    }
+
+    ui->widgetStack->setSelectionAddress(nESP);
+    ui->widgetStack->showStatus(); // TODO do not reload data mb parameter
 }
 
 void XDebuggerWidget::on_pushButtonRun_clicked()
@@ -248,11 +265,18 @@ void XDebuggerWidget::cleanUp()
     }
 
     g_mrCode={};
+    g_mrStack={};
 
     if(g_pPDCode)
     {
         delete g_pPDCode;
         g_pPDCode=nullptr;
+    }
+
+    if(g_pPDStack)
+    {
+        delete g_pPDStack;
+        g_pPDStack=nullptr;
     }
 }
 

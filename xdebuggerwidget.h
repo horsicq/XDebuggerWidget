@@ -82,7 +82,9 @@ private:
     QShortcut *g_scSetBreakpoint;
 
     XProcess::MEMORY_REGION g_mrCode;
+    XProcess::MEMORY_REGION g_mrStack;
     XProcessDevice *g_pPDCode;
+    XProcessDevice *g_pPDStack;
 };
 
 #endif // XDEBUGGERWIDGET_H
