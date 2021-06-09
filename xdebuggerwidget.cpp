@@ -38,8 +38,10 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
 
     g_mrCode={};
     g_mrStack={};
+    g_mrHex={};
     g_pPDCode=nullptr;
     g_pPDStack=nullptr;
+    g_pPDHex=nullptr;
 
     ui->widgetRegs->setMode(XRegistersView::MODE_X86_32);
 
@@ -199,13 +201,14 @@ void XDebuggerWidget::onShowStatus()
 
         if(g_pPDStack->openHandle(g_currentBreakPointInfo.hProcess,g_mrStack.nAddress,g_mrStack.nSize,QIODevice::ReadOnly))
         {
-            XBinary binary(g_pPDStack,true,g_mrStack.nAddress);
-            binary.setArch(g_pDebugger->getArch());
-            binary.setMode(g_pDebugger->getMode());
-
             XStackView::OPTIONS stackOptions={};
             stackOptions.nStartAddress=g_mrStack.nAddress;
-            ui->widgetStack->setData(g_pPDCode,stackOptions);
+            stackOptions.nCurrentAddress=nESP;
+            ui->widgetStack->setData(g_pPDStack,stackOptions);
+
+            XHexView::OPTIONS hexOptions={};
+            hexOptions.nStartAddress=g_mrStack.nAddress;
+            ui->widgetHex->setData(g_pPDStack,hexOptions);
         }
     }
     else
@@ -260,12 +263,13 @@ void XDebuggerWidget::cleanUp()
 
         delete g_pThread;
         delete g_pDebugger;
-        g_pDebugger=nullptr;
+        g_pThread=nullptr;
         g_pDebugger=nullptr;
     }
 
     g_mrCode={};
     g_mrStack={};
+    g_mrHex={};
 
     if(g_pPDCode)
     {
@@ -277,6 +281,12 @@ void XDebuggerWidget::cleanUp()
     {
         delete g_pPDStack;
         g_pPDStack=nullptr;
+    }
+
+    if(g_pPDHex)
+    {
+        delete g_pPDHex;
+        g_pPDHex=nullptr;
     }
 }
 
