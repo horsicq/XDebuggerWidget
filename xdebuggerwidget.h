@@ -22,7 +22,6 @@
 #define XDEBUGGERWIDGET_H
 
 #include <QThread>
-#include "xabstractdebugger.h"
 #ifdef Q_OS_WIN
 #include "xwindowsdebugger.h"
 #endif

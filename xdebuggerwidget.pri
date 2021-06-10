@@ -42,3 +42,8 @@ SOURCES += \
     XCONFIG += xstackview
     include($$PWD/../XStackView/xstackview.pri)
 }
+
+!contains(XCONFIG, xdebugscript) {
+    XCONFIG += xdebugscript
+    include($$PWD/../XDebugScript/xdebugscript.pri)
+}
