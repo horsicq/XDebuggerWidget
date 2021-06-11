@@ -77,7 +77,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
     XAbstractDebugger::OPTIONS options={};
 
-    options.bShowWindow=true;
+    options.bShowConsole=true;
     options.sFileName=sFileName;
     options.bBreakpointOnTargetEntryPoint=true;
 
