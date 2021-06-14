@@ -30,6 +30,8 @@
 #endif
 #include "xshortcutswidget.h"
 
+// TODO WinAPI page/ Widget
+
 namespace Ui {
 class XDebuggerWidget;
 }
