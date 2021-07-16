@@ -53,6 +53,8 @@ signals:
 private slots:
     void onCreateProcess(XAbstractDebugger::PROCESS_INFO *pProcessInfo);
     void onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
+    void onEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
+    void onStep(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
     void onExitProcess(XAbstractDebugger::EXITPROCESS_INFO *pExitProcessInfo);
     void onShowStatus();
     void on_pushButtonRun_clicked();
