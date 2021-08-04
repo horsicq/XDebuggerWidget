@@ -49,6 +49,8 @@ public:
 
 signals:
     void showStatus();
+    void errorMessage(QString sErrorMessage);
+    void infoMessage(QString sInfoMessage);
 
 private slots:
     void onCreateProcess(XAbstractDebugger::PROCESS_INFO *pProcessInfo);
@@ -65,6 +67,10 @@ private slots:
     void _setBreakpoint();
 
     void cleanUp();
+
+    void errorMessageSlot(QString sErrorMessage);
+    void infoMessageSlot(QString sInfoMessage);
+    void writeToLog(QString sText);
 
 protected:
     virtual void registerShortcuts(bool bState);
