@@ -33,8 +33,11 @@ public:
     void setDebugger(XAbstractDebugger *pDebugger);
     void showStatus();
 
+signals:
+    void debugAction(XAbstractDebugger::DEBUG_ACTION action);
+
 public slots:
-    void _setBreakpoint();
+    void _setRemoveBreakpoint();
 
 protected:
     virtual void contextMenu(const QPoint &pos);

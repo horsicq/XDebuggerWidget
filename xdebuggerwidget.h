@@ -64,13 +64,16 @@ private slots:
 
     void _run();
     void _stepInto();
-    void _setBreakpoint();
+    void _setRemoveBreakpoint();
 
     void cleanUp();
 
     void errorMessageSlot(QString sErrorMessage);
     void infoMessageSlot(QString sInfoMessage);
     void writeToLog(QString sText);
+    void on_pushButtonActionsRecord_clicked();
+
+    void addDebugAction(XAbstractDebugger::DEBUG_ACTION action);
 
 protected:
     virtual void registerShortcuts(bool bState);
@@ -88,7 +91,7 @@ private:
 
     QShortcut *g_scRun;
     QShortcut *g_scStepInto;
-    QShortcut *g_scSetBreakpoint;
+    QShortcut *g_scSetRemoveBreakpoint;
 
     XProcess::MEMORY_REGION g_mrCode;
     XProcess::MEMORY_REGION g_mrStack;
