@@ -58,6 +58,10 @@ private slots:
     void onEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
     void onStep(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
     void onExitProcess(XAbstractDebugger::EXITPROCESS_INFO *pExitProcessInfo);
+    void eventCreateThread(XAbstractDebugger::THREAD_INFO *pThreadInfo);
+    void eventExitThread(XAbstractDebugger::EXITTHREAD_INFO *pExitThreadInfo);
+    void eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
+    void eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
     void onShowStatus();
     void on_pushButtonRun_clicked();
     void on_pushButtonStep_clicked();

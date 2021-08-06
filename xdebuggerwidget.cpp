@@ -94,6 +94,10 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     connect(g_pDebugger,SIGNAL(eventStep(XAbstractDebugger::BREAKPOINT_INFO *)),this,SLOT(onStep(XAbstractDebugger::BREAKPOINT_INFO *)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *)),this,SLOT(onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventExitProcess(XAbstractDebugger::EXITPROCESS_INFO *)),this,SLOT(onExitProcess(XAbstractDebugger::EXITPROCESS_INFO *)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventCreateThread(XAbstractDebugger::THREAD_INFO *)),this,SLOT(eventCreateThread(XAbstractDebugger::THREAD_INFO *)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventExitThread(XAbstractDebugger::EXITTHREAD_INFO *)),this,SLOT(eventExitThread(XAbstractDebugger::EXITTHREAD_INFO *)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *)),this,SLOT(eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *)),this,SLOT(eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *)),Qt::DirectConnection);
 
     g_pDebugger->moveToThread(g_pThread);
     g_pThread->start();
@@ -160,11 +164,43 @@ void XDebuggerWidget::onStep(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo
 void XDebuggerWidget::onExitProcess(XAbstractDebugger::EXITPROCESS_INFO *pExitProcessInfo)
 {
     // TODO more info
-    QString sString=QString("%1 PID: %2").arg(tr("Process terminated"),QString::number(pExitProcessInfo->nProcessID));
+    QString sString=QString("%1 PID: %2").arg(tr("Process exited"),QString::number(pExitProcessInfo->nProcessID));
 
     emit infoMessage(sString);
 
     // TODO Clear screen
+}
+
+void XDebuggerWidget::eventCreateThread(XAbstractDebugger::THREAD_INFO *pThreadInfo)
+{
+    // TODO more info
+    QString sString=QString("%1 ThreadID: %2").arg(tr("Thread created"),QString::number(pThreadInfo->nThreadID));
+
+    emit infoMessage(sString);
+}
+
+void XDebuggerWidget::eventExitThread(XAbstractDebugger::EXITTHREAD_INFO *pExitThreadInfo)
+{
+    // TODO more info
+    QString sString=QString("%1 ThreadID: %2").arg(tr("Thread exited"),QString::number(pExitThreadInfo->nThreadID));
+
+    emit infoMessage(sString);
+}
+
+void XDebuggerWidget::eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo)
+{
+    // TODO more info
+    QString sString=QString("%1: %2").arg(tr("Shared object loaded"),pSharedObjectInfo->sFileName);
+
+    emit infoMessage(sString);
+}
+
+void XDebuggerWidget::eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo)
+{
+    // TODO more info
+    QString sString=QString("%1: %2").arg(tr("Shared object unloaded"),pSharedObjectInfo->sFileName);
+
+    emit infoMessage(sString);
 }
 
 void XDebuggerWidget::onShowStatus()
