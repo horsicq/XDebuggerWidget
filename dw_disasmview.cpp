@@ -56,7 +56,7 @@ void DW_DisasmView::_setRemoveBreakpoint()
             {
                 if(g_pDebugger->setSoftwareBreakpoint(nAddress))
                 {
-                    qDebug("Breakpoit set");
+//                    qDebug("Breakpoit set");
                     XAbstractDebugger::DEBUG_ACTION dbgAction={};
                     dbgAction.type=XAbstractDebugger::DBT_SETSOFTWAREBREAKPOINT;
                     dbgAction.var[0]=nAddress;
@@ -70,7 +70,7 @@ void DW_DisasmView::_setRemoveBreakpoint()
             {
                 if(g_pDebugger->removeSoftwareBreakpoint(nAddress))
                 {
-                    qDebug("Breakpoit unset");
+//                    qDebug("Breakpoit unset");
                     XAbstractDebugger::DEBUG_ACTION dbgAction={};
                     dbgAction.type=XAbstractDebugger::DBT_REMOVESOFTWAREBREAKPOINT;
                     dbgAction.var[0]=nAddress;
@@ -86,6 +86,10 @@ void DW_DisasmView::_setRemoveBreakpoint()
 
 void DW_DisasmView::contextMenu(const QPoint &pos)
 {
+    // TODO Search
+    // TODO Signatures
+    // TODO Copy
+
     QMenu menuBreakpoint(tr("Breakpoint"),this);
 
     QAction actionSetRemoveBreakpoint(this);
