@@ -90,29 +90,32 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
     // TODO Signatures
     // TODO Copy
 
-    QMenu menuBreakpoint(tr("Breakpoint"),this);
-
-    QAction actionSetRemoveBreakpoint(this);
-
-    qint64 nAddress=getSelectionInitAddress();
-
-    if(!g_pDebugger->isSoftwareBreakpointPresent(nAddress))
+    if(g_pDebugger)
     {
-        actionSetRemoveBreakpoint.setText(tr("Set Breakpoint"));
+        QMenu menuBreakpoint(tr("Breakpoint"),this);
+
+        QAction actionSetRemoveBreakpoint(this);
+
+        qint64 nAddress=getSelectionInitAddress();
+
+        if(!g_pDebugger->isSoftwareBreakpointPresent(nAddress))
+        {
+            actionSetRemoveBreakpoint.setText(tr("Set Breakpoint"));
+        }
+        else
+        {
+            actionSetRemoveBreakpoint.setText(tr("Remove Breakpoint"));
+        }
+
+        actionSetRemoveBreakpoint.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_SETREMOVEBREAKPOINT));
+        connect(&actionSetRemoveBreakpoint,SIGNAL(triggered()),this,SLOT(_setRemoveBreakpoint()));
+
+        menuBreakpoint.addAction(&actionSetRemoveBreakpoint);
+
+        QMenu contextMenu(this);
+        contextMenu.addMenu(&menuBreakpoint);
+        contextMenu.exec(pos);
     }
-    else
-    {
-        actionSetRemoveBreakpoint.setText(tr("Remove Breakpoint"));
-    }
-
-    actionSetRemoveBreakpoint.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_SETREMOVEBREAKPOINT));
-    connect(&actionSetRemoveBreakpoint,SIGNAL(triggered()),this,SLOT(_setRemoveBreakpoint()));
-
-    menuBreakpoint.addAction(&actionSetRemoveBreakpoint);
-
-    QMenu contextMenu(this);
-    contextMenu.addMenu(&menuBreakpoint);
-    contextMenu.exec(pos);
 }
 
 void DW_DisasmView::registerShortcuts(bool bState)
