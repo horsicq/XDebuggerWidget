@@ -379,7 +379,10 @@ void XDebuggerWidget::writeToLog(QString sText)
 }
 
 void XDebuggerWidget::registerShortcuts(bool bState)
-{ 
+{
+    // TODO more
+    // TODO Check if main window contains the shortcuts
+
     if(bState)
     {
         qDebug("registerShortcuts"); // TODO remove
