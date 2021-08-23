@@ -28,6 +28,9 @@
 #ifdef Q_OS_LINUX
 #include "xlinuxdebugger.h"
 #endif
+#ifdef Q_OS_OSX
+#include "xosxdebugger.h"
+#endif
 #include "xshortcutswidget.h"
 
 // TODO WinAPI page/ Widget
@@ -90,6 +93,9 @@ private:
 #endif
 #ifdef Q_OS_LINUX
     XLinuxDebugger *g_pDebugger;
+#endif
+#ifdef Q_OS_OSX
+    XOSXDebugger *g_pDebugger;
 #endif
     XAbstractDebugger::BREAKPOINT_INFO g_currentBreakPointInfo;
 

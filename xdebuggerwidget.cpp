@@ -73,6 +73,9 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 #ifdef Q_OS_LINUX
     g_pDebugger=new XLinuxDebugger;
 #endif
+#ifdef Q_OS_OSX
+    g_pDebugger=new XOSXDebugger;
+#endif
     ui->widgetDisasm->setDebugger(g_pDebugger);
     ui->widgetHex->setDebugger(g_pDebugger);
     ui->widgetRegs->setDebugger(g_pDebugger);
