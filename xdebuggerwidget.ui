@@ -60,7 +60,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>7</number>
      </property>
      <widget class="QWidget" name="tabCPU">
       <attribute name="title">
@@ -171,6 +171,31 @@
         </widget>
        </item>
       </layout>
+     </widget>
+     <widget class="QWidget" name="tabBreakpoints">
+      <attribute name="title">
+       <string>Breakpoints</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="tabMemoryMap">
+      <attribute name="title">
+       <string>Memory Map</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="tabCallStack">
+      <attribute name="title">
+       <string>Call Stack</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="tabThreads">
+      <attribute name="title">
+       <string>Threads</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="tabHandles">
+      <attribute name="title">
+       <string>Handles</string>
+      </attribute>
      </widget>
     </widget>
    </item>
