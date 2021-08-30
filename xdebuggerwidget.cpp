@@ -339,6 +339,46 @@ void XDebuggerWidget::debugStepOver()
     }
 }
 
+void XDebuggerWidget::viewCPU()
+{
+    ui->tabWidgetMain->setCurrentIndex(MT_CPU);
+}
+
+void XDebuggerWidget::viewActions()
+{
+    ui->tabWidgetMain->setCurrentIndex(MT_ACTIONS);
+}
+
+void XDebuggerWidget::viewLog()
+{
+    ui->tabWidgetMain->setCurrentIndex(MT_LOG);
+}
+
+void XDebuggerWidget::viewBreakpoints()
+{
+    ui->tabWidgetMain->setCurrentIndex(MT_BREAKPOINTS);
+}
+
+void XDebuggerWidget::viewMemoryMap()
+{
+    ui->tabWidgetMain->setCurrentIndex(MT_MEMORYMAP);
+}
+
+void XDebuggerWidget::viewCallstack()
+{
+    ui->tabWidgetMain->setCurrentIndex(MT_CALLSTACK);
+}
+
+void XDebuggerWidget::viewThreads()
+{
+    ui->tabWidgetMain->setCurrentIndex(MT_THREADS);
+}
+
+void XDebuggerWidget::viewHandles()
+{
+    ui->tabWidgetMain->setCurrentIndex(MT_HANDLES);
+}
+
 void XDebuggerWidget::_setRemoveBreakpoint()
 {
     ui->widgetDisasm->_setRemoveBreakpoint();

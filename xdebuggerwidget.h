@@ -72,6 +72,14 @@ public slots:
     void debugRun();
     void debugStepInto();
     void debugStepOver();
+    void viewCPU();
+    void viewActions();
+    void viewLog();
+    void viewBreakpoints();
+    void viewMemoryMap();
+    void viewCallstack();
+    void viewThreads();
+    void viewHandles();
 
 private slots:
     void onCreateProcess(XAbstractDebugger::PROCESS_INFO *pProcessInfo);
