@@ -32,8 +32,9 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
 
     g_currentBreakPointInfo={};
 
-    g_scRun=nullptr;
-    g_scStepInto=nullptr;
+//    g_scRun=nullptr;
+//    g_scStepInto=nullptr;
+//    g_scStepOver=nullptr;
     g_scSetRemoveBreakpoint=nullptr;
 
     g_mrCode={};
@@ -46,11 +47,14 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     ui->widgetRegs->setMode(XRegistersView::MODE_X86_32);
 
     connect(this,SIGNAL(showStatus()),this,SLOT(onShowStatus()));
+    connect(this,SIGNAL(cleanUpSignal()),this,SLOT(cleanUp()));
     connect(this,SIGNAL(infoMessage(QString)),this,SLOT(infoMessageSlot(QString)));
     connect(this,SIGNAL(errorMessage(QString)),this,SLOT(errorMessageSlot(QString)));
 //    ui->widgetDisasm->installEventFilter(this);
 //    XDebuggerWidget::registerShortcuts(true);
     connect(ui->widgetDisasm,SIGNAL(debugAction(XAbstractDebugger::DEBUG_ACTION)),this,SLOT(addDebugAction(XAbstractDebugger::DEBUG_ACTION)));
+
+    ui->tabWidgetMain->setCurrentIndex(MT_CPU);
 }
 
 XDebuggerWidget::~XDebuggerWidget()
@@ -294,17 +298,22 @@ void XDebuggerWidget::onShowStatus()
     ui->widgetStack->showStatus(); // TODO do not reload data mb parameter
 }
 
-void XDebuggerWidget::on_pushButtonRun_clicked()
+void XDebuggerWidget::on_toolButtonRun_clicked()
 {
-    _run();
+    debugRun();
 }
 
-void XDebuggerWidget::on_pushButtonStep_clicked()
+void XDebuggerWidget::on_toolButtonStepInto_clicked()
 {
-    _stepInto();
+    debugStepInto();
 }
 
-void XDebuggerWidget::_run()
+void XDebuggerWidget::on_toolButtonStepOver_clicked()
+{
+    debugStepOver();
+}
+
+void XDebuggerWidget::debugRun()
 {
     if(g_currentBreakPointInfo.hThread)
     {
@@ -312,11 +321,20 @@ void XDebuggerWidget::_run()
     }
 }
 
-void XDebuggerWidget::_stepInto()
+void XDebuggerWidget::debugStepInto()
 {
     if(g_currentBreakPointInfo.hThread)
     {
-        g_pDebugger->setSingleStep(g_currentBreakPointInfo.hThread);
+        g_pDebugger->stepInto(g_currentBreakPointInfo.hThread);
+        XAbstractDebugger::resumeThread(g_currentBreakPointInfo.hThread);
+    }
+}
+
+void XDebuggerWidget::debugStepOver()
+{
+    if(g_currentBreakPointInfo.hThread)
+    {
+        g_pDebugger->stepOver(g_currentBreakPointInfo.hThread);
         XAbstractDebugger::resumeThread(g_currentBreakPointInfo.hThread);
     }
 }
@@ -328,6 +346,11 @@ void XDebuggerWidget::_setRemoveBreakpoint()
 
 void XDebuggerWidget::cleanUp()
 {
+    ui->widgetDisasm->clear();
+    ui->widgetHex->clear();
+    ui->widgetRegs->clear();
+    ui->widgetStack->clear();
+
     if(g_pDebugger&&g_pThread)
     {
         g_pDebugger->stop();
@@ -388,16 +411,22 @@ void XDebuggerWidget::registerShortcuts(bool bState)
 
     if(bState)
     {
-        qDebug("registerShortcuts"); // TODO remove
-        if(!g_scRun)                    g_scRun                     =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_RUN),                    this,SLOT(_run()));
-        if(!g_scStepInto)               g_scStepInto                =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_STEPINTO),               this,SLOT(_stepInto()));
-        if(!g_scSetRemoveBreakpoint)    g_scSetRemoveBreakpoint     =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_SETREMOVEBREAKPOINT),    this,SLOT(_setRemoveBreakpoint()));
+    #ifdef QT_DEBUG
+        qDebug("registerShortcuts");
+    #endif
+//        if(!g_scRun)                    g_scRun                     =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_RUN),                    this,SLOT(_run()));
+//        if(!g_scStepInto)               g_scStepInto                =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_STEPINTO),               this,SLOT(_stepInto()));
+//        if(!g_scStepOver)               g_scStepOver                =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_STEPOVER),               this,SLOT(_stepOver()));
+        if(!g_scSetRemoveBreakpoint)    g_scSetRemoveBreakpoint     =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DEBUG_SETREMOVEBREAKPOINT),    this,SLOT(_setRemoveBreakpoint()));
     }
     else
     {
-        qDebug("unregisterShortcuts"); // TODO remove
-        if(g_scRun)                     {delete g_scRun;                    g_scRun=nullptr;}
-        if(g_scStepInto)                {delete g_scStepInto;               g_scStepInto=nullptr;}
+    #ifdef QT_DEBUG
+        qDebug("unregisterShortcuts");
+    #endif
+//        if(g_scRun)                     {delete g_scRun;                    g_scRun=nullptr;}
+//        if(g_scStepInto)                {delete g_scStepInto;               g_scStepInto=nullptr;}
+//        if(g_scStepOver)                {delete g_scStepOver;               g_scStepOver=nullptr;}
         if(g_scSetRemoveBreakpoint)     {delete g_scSetRemoveBreakpoint;    g_scSetRemoveBreakpoint=nullptr;}
     }
 }

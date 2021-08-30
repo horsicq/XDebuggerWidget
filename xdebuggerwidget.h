@@ -43,6 +43,18 @@ class XDebuggerWidget : public XShortcutsWidget
 {
     Q_OBJECT
 
+    enum MT
+    {
+        MT_CPU=0,
+        MT_ACTIONS,
+        MT_LOG,
+        MT_BREAKPOINTS,
+        MT_MEMORYMAP,
+        MT_CALLSTACK,
+        MT_THREADS,
+        MT_HANDLES,
+    };
+
 public:
     explicit XDebuggerWidget(QWidget *pParent=nullptr);
     ~XDebuggerWidget();
@@ -54,6 +66,12 @@ signals:
     void showStatus();
     void errorMessage(QString sErrorMessage);
     void infoMessage(QString sInfoMessage);
+    void cleanUpSignal();
+
+public slots:
+    void debugRun();
+    void debugStepInto();
+    void debugStepOver();
 
 private slots:
     void onCreateProcess(XAbstractDebugger::PROCESS_INFO *pProcessInfo);
@@ -66,11 +84,10 @@ private slots:
     void eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
     void eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
     void onShowStatus();
-    void on_pushButtonRun_clicked();
-    void on_pushButtonStep_clicked();
+    void on_toolButtonRun_clicked();
+    void on_toolButtonStepInto_clicked();
+    void on_toolButtonStepOver_clicked();
 
-    void _run();
-    void _stepInto();
     void _setRemoveBreakpoint();
 
     void cleanUp();
@@ -99,8 +116,9 @@ private:
 #endif
     XAbstractDebugger::BREAKPOINT_INFO g_currentBreakPointInfo;
 
-    QShortcut *g_scRun;
-    QShortcut *g_scStepInto;
+//    QShortcut *g_scRun;
+//    QShortcut *g_scStepInto;
+//    QShortcut *g_scStepOver;
     QShortcut *g_scSetRemoveBreakpoint;
 
     XProcess::MEMORY_REGION g_mrCode;

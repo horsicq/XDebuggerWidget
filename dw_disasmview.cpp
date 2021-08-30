@@ -107,7 +107,7 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
             actionSetRemoveBreakpoint.setText(tr("Remove Breakpoint"));
         }
 
-        actionSetRemoveBreakpoint.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_SETREMOVEBREAKPOINT));
+        actionSetRemoveBreakpoint.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DEBUG_SETREMOVEBREAKPOINT));
         connect(&actionSetRemoveBreakpoint,SIGNAL(triggered()),this,SLOT(_setRemoveBreakpoint()));
 
         menuBreakpoint.addAction(&actionSetRemoveBreakpoint);
