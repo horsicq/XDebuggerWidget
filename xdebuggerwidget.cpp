@@ -135,9 +135,9 @@ void XDebuggerWidget::onCreateProcess(XAbstractDebugger::PROCESS_INFO *pProcessI
 void XDebuggerWidget::onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
 {
     g_currentBreakPointInfo=*pBreakPointInfo;
-
+#ifdef QT_DEBUG
     qDebug("ExceptionAddress %x",pBreakPointInfo->nAddress);
-
+#endif
     // mb TODO regs
     XAbstractDebugger::suspendThread(pBreakPointInfo->hThread);
 
@@ -147,9 +147,9 @@ void XDebuggerWidget::onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoi
 void XDebuggerWidget::onEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
 {
     g_currentBreakPointInfo=*pBreakPointInfo;
-
+#ifdef QT_DEBUG
     qDebug("EntryPoint %x",pBreakPointInfo->nAddress);
-
+#endif
     // mb TODO regs
     XAbstractDebugger::suspendThread(pBreakPointInfo->hThread);
 
@@ -159,9 +159,9 @@ void XDebuggerWidget::onEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoi
 void XDebuggerWidget::onStep(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
 {
     g_currentBreakPointInfo=*pBreakPointInfo;
-
+#ifdef QT_DEBUG
     qDebug("Step %x",pBreakPointInfo->nAddress);
-
+#endif
     // mb TODO regs
     XAbstractDebugger::suspendThread(pBreakPointInfo->hThread);
 
@@ -241,7 +241,7 @@ void XDebuggerWidget::onShowStatus()
     else
     {
         ui->widgetDisasm->setCurrentIPAddress(g_currentBreakPointInfo.nAddress);
-        ui->widgetDisasm->goToAddress(g_currentBreakPointInfo.nAddress);
+        ui->widgetDisasm->goToAddress(g_currentBreakPointInfo.nAddress,true);
     }
 
     ui->widgetDisasm->setSelectionAddress(g_currentBreakPointInfo.nAddress,1);
@@ -478,7 +478,9 @@ void XDebuggerWidget::on_pushButtonActionsRecord_clicked()
 
 void XDebuggerWidget::addDebugAction(XAbstractDebugger::DEBUG_ACTION action)
 {
+#ifdef QT_DEBUG
     qDebug("addDebugAction");
+#endif
     // TODO encode/decode functions for DEBUG_ACTION
     QString sResult=XAbstractDebugger::debugActionToString(action);
 

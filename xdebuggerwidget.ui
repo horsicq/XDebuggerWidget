@@ -238,12 +238,12 @@
      </widget>
      <widget class="QWidget" name="tabMemoryMap">
       <attribute name="title">
-       <string>Memory Map</string>
+       <string>Memory map</string>
       </attribute>
      </widget>
      <widget class="QWidget" name="tabCallStack">
       <attribute name="title">
-       <string>Call Stack</string>
+       <string>Call stack</string>
       </attribute>
      </widget>
      <widget class="QWidget" name="tabThreads">
