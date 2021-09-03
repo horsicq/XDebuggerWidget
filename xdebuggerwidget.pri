@@ -7,6 +7,7 @@ FORMS += \
 HEADERS += \
     $$PWD/dw_disasmview.h \
     $$PWD/dw_hexview.h \
+    $$PWD/dw_processmemorymap.h \
     $$PWD/dw_registersview.h \
     $$PWD/dw_stackview.h \
     $$PWD/xdebuggerwidget.h
@@ -14,6 +15,7 @@ HEADERS += \
 SOURCES += \
     $$PWD/dw_disasmview.cpp \
     $$PWD/dw_hexview.cpp \
+    $$PWD/dw_processmemorymap.cpp \
     $$PWD/dw_registersview.cpp \
     $$PWD/dw_stackview.cpp \
     $$PWD/xdebuggerwidget.cpp
@@ -46,4 +48,9 @@ SOURCES += \
 !contains(XCONFIG, xdebugscript) {
     XCONFIG += xdebugscript
     include($$PWD/../XDebugScript/xdebugscript.pri)
+}
+
+!contains(XCONFIG, xprocessmemorymapwidget) {
+    XCONFIG += xprocessmemorymapwidget
+    include($$PWD/../XProcessMemoryMapWidget/xprocessmemorymapwidget.pri)
 }
