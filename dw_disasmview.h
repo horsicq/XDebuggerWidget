@@ -37,7 +37,7 @@ signals:
     void debugAction(XAbstractDebugger::DEBUG_ACTION action);
 
 public slots:
-    void _setRemoveBreakpoint();
+    void _toggle();
 
 protected:
     virtual void contextMenu(const QPoint &pos);

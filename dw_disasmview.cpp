@@ -41,7 +41,7 @@ void DW_DisasmView::showStatus()
     reload(true);
 }
 
-void DW_DisasmView::_setRemoveBreakpoint()
+void DW_DisasmView::_toggle()
 {
     qDebug("void DW_DisasmView::_setBreakpoint()");
     // TODO XHexView
@@ -94,23 +94,23 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
     {
         QMenu menuBreakpoint(tr("Breakpoint"),this);
 
-        QAction actionSetRemoveBreakpoint(this);
+        QAction actionToggle(this);
 
-        qint64 nAddress=getSelectionInitAddress();
+//        qint64 nAddress=getSelectionInitAddress();
+//        if(!g_pDebugger->isSoftwareBreakpointPresent(nAddress))
+//        {
+//            actionToggle.setText(tr("Set Breakpoint"));
+//        }
+//        else
+//        {
+//            actionToggle.setText(tr("Remove Breakpoint"));
+//        }
+        actionToggle.setText(tr("Toggle"));
 
-        if(!g_pDebugger->isSoftwareBreakpointPresent(nAddress))
-        {
-            actionSetRemoveBreakpoint.setText(tr("Set Breakpoint"));
-        }
-        else
-        {
-            actionSetRemoveBreakpoint.setText(tr("Remove Breakpoint"));
-        }
+        actionToggle.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DEBUG_TOGGLE));
+        connect(&actionToggle,SIGNAL(triggered()),this,SLOT(_toggle()));
 
-        actionSetRemoveBreakpoint.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DEBUG_SETREMOVEBREAKPOINT));
-        connect(&actionSetRemoveBreakpoint,SIGNAL(triggered()),this,SLOT(_setRemoveBreakpoint()));
-
-        menuBreakpoint.addAction(&actionSetRemoveBreakpoint);
+        menuBreakpoint.addAction(&actionToggle);
 
         QMenu contextMenu(this);
         contextMenu.addMenu(&menuBreakpoint);

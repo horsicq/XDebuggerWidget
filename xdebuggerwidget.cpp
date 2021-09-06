@@ -381,7 +381,7 @@ void XDebuggerWidget::viewHandles()
 
 void XDebuggerWidget::_setRemoveBreakpoint()
 {
-    ui->widgetDisasm->_setRemoveBreakpoint();
+    ui->widgetDisasm->_toggle();
 }
 
 void XDebuggerWidget::cleanUp()
@@ -457,7 +457,7 @@ void XDebuggerWidget::registerShortcuts(bool bState)
 //        if(!g_scRun)                    g_scRun                     =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_RUN),                    this,SLOT(_run()));
 //        if(!g_scStepInto)               g_scStepInto                =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_STEPINTO),               this,SLOT(_stepInto()));
 //        if(!g_scStepOver)               g_scStepOver                =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_STEPOVER),               this,SLOT(_stepOver()));
-        if(!g_scSetRemoveBreakpoint)    g_scSetRemoveBreakpoint     =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DEBUG_SETREMOVEBREAKPOINT),    this,SLOT(_setRemoveBreakpoint()));
+        if(!g_scSetRemoveBreakpoint)    g_scSetRemoveBreakpoint     =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DEBUG_TOGGLE),    this,SLOT(_setRemoveBreakpoint()));
     }
     else
     {
