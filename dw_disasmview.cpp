@@ -32,7 +32,9 @@ void DW_DisasmView::setDebugger(XAbstractDebugger *pDebugger)
 
 void DW_DisasmView::showStatus()
 {
+#ifdef QT_DEBUG
     qDebug("void DW_DisasmView::showStatus()");
+#endif
 
     QList<XBinary::MEMORY_REPLACE> listReplaces=g_pDebugger->getMemoryReplaces();
 
@@ -43,9 +45,6 @@ void DW_DisasmView::showStatus()
 
 void DW_DisasmView::_toggle()
 {
-    qDebug("void DW_DisasmView::_setBreakpoint()");
-    // TODO XHexView
-
     if(g_pDebugger)
     {
         qint64 nAddress=getSelectionInitAddress();

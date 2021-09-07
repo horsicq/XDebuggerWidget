@@ -44,7 +44,14 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     g_pPDStack=nullptr;
     g_pPDHex=nullptr;
 
-    ui->widgetRegs->setMode(XRegistersView::MODE_X86_32);
+    // TODO ARM
+#ifdef Q_OS_WIN
+#ifndef Q_OS_WIN64
+    ui->widgetRegs->setMode(XBinary::DM_X86_32);
+#else
+    ui->widgetRegs->setMode(XBinary::DM_X86_64);
+#endif
+#endif
 
     connect(this,SIGNAL(showStatus()),this,SLOT(onShowStatus()));
     connect(this,SIGNAL(cleanUpSignal()),this,SLOT(cleanUp()));
@@ -96,15 +103,15 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     connect(g_pThread, SIGNAL(started()), g_pDebugger, SLOT(process()));
 //    connect(pDebugger, SIGNAL(finished()), pDebugger, SLOT(deleteLater()));
 
-    connect(g_pDebugger,SIGNAL(eventCreateProcess(XAbstractDebugger::PROCESS_INFO *)),this,SLOT(onCreateProcess(XAbstractDebugger::PROCESS_INFO *)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *)),this,SLOT(onEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventStep(XAbstractDebugger::BREAKPOINT_INFO *)),this,SLOT(onStep(XAbstractDebugger::BREAKPOINT_INFO *)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *)),this,SLOT(onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventExitProcess(XAbstractDebugger::EXITPROCESS_INFO *)),this,SLOT(onExitProcess(XAbstractDebugger::EXITPROCESS_INFO *)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventCreateThread(XAbstractDebugger::THREAD_INFO *)),this,SLOT(eventCreateThread(XAbstractDebugger::THREAD_INFO *)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventExitThread(XAbstractDebugger::EXITTHREAD_INFO *)),this,SLOT(eventExitThread(XAbstractDebugger::EXITTHREAD_INFO *)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *)),this,SLOT(eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *)),this,SLOT(eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventCreateProcess(XAbstractDebugger::PROCESS_INFO*)),this,SLOT(onCreateProcess(XAbstractDebugger::PROCESS_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventStep(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onStep(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventBreakPoint(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventExitProcess(XAbstractDebugger::EXITPROCESS_INFO*)),this,SLOT(onExitProcess(XAbstractDebugger::EXITPROCESS_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventCreateThread(XAbstractDebugger::THREAD_INFO*)),this,SLOT(eventCreateThread(XAbstractDebugger::THREAD_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventExitThread(XAbstractDebugger::EXITTHREAD_INFO*)),this,SLOT(eventExitThread(XAbstractDebugger::EXITTHREAD_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO*)),this,SLOT(eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO*)),this,SLOT(eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO*)),Qt::DirectConnection);
 
     g_pDebugger->moveToThread(g_pThread);
     g_pThread->start();
@@ -263,11 +270,19 @@ void XDebuggerWidget::onShowStatus()
     QMap<QString, QVariant> mapRegisters=g_pDebugger->getRegisters(g_currentBreakPointInfo.hThread);
     ui->widgetRegs->setData(&mapRegisters);
 
-    qint64 nESP=mapRegisters.value("ESP").toLongLong();
+    qint64 nStackPointer=0;
 
-    if(!XProcess::isAddressInMemoryRegion(&g_mrStack,nESP))
+#ifdef Q_OS_WIN
+#ifndef Q_OS_WIN64
+    nStackPointer=mapRegisters.value("ESP").toLongLong();
+#else
+    nStackPointer=mapRegisters.value("RSP").toLongLong();
+#endif
+#endif
+
+    if(!XProcess::isAddressInMemoryRegion(&g_mrStack,nStackPointer))
     {
-        g_mrStack=XProcess::getMemoryRegion(g_currentBreakPointInfo.hProcess,nESP);
+        g_mrStack=XProcess::getMemoryRegion(g_currentBreakPointInfo.hProcess,nStackPointer);
 
         if(g_pPDStack)
         {
@@ -281,7 +296,7 @@ void XDebuggerWidget::onShowStatus()
         {
             XStackView::OPTIONS stackOptions={};
             stackOptions.nStartAddress=g_mrStack.nAddress;
-            stackOptions.nCurrentAddress=nESP;
+            stackOptions.nCurrentAddress=nStackPointer;
             ui->widgetStack->setData(g_pPDStack,stackOptions);
 
             XHexView::OPTIONS hexOptions={};
@@ -291,10 +306,10 @@ void XDebuggerWidget::onShowStatus()
     }
     else
     {
-        ui->widgetStack->goToAddress(nESP);
+        ui->widgetStack->goToAddress(nStackPointer);
     }
 
-    ui->widgetStack->setSelectionAddress(nESP);
+    ui->widgetStack->setSelectionAddress(nStackPointer);
     ui->widgetStack->showStatus(); // TODO do not reload data mb parameter
 }
 
