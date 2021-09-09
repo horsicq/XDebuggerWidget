@@ -44,12 +44,16 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     g_pPDStack=nullptr;
     g_pPDHex=nullptr;
 
+    g_regOptions={};
+    g_regOptions.bGeneral=true;
+    g_regOptions.bIP=true;
+    g_regOptions.bFlags=true;
     // TODO ARM
 #ifdef Q_OS_WIN
 #ifndef Q_OS_WIN64
-    ui->widgetRegs->setMode(XBinary::DM_X86_32);
+    ui->widgetRegs->setOptions(XBinary::DM_X86_32,g_regOptions);
 #else
-    ui->widgetRegs->setMode(XBinary::DM_X86_64);
+    ui->widgetRegs->setOptions(XBinary::DM_X86_64,g_regOptions);
 #endif
 #endif
 
@@ -267,7 +271,7 @@ void XDebuggerWidget::onShowStatus()
 ////        ui->widgetHex->goToAddress(currentBreakPointInfo.nAddress);
 //    }
 
-    QMap<QString, QVariant> mapRegisters=g_pDebugger->getRegisters(g_currentBreakPointInfo.hThread);
+    QMap<QString, QVariant> mapRegisters=g_pDebugger->getRegisters(g_currentBreakPointInfo.hThread,g_regOptions);
     ui->widgetRegs->setData(&mapRegisters);
 
     qint64 nStackPointer=0;
@@ -472,7 +476,7 @@ void XDebuggerWidget::registerShortcuts(bool bState)
 //        if(!g_scRun)                    g_scRun                     =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_RUN),                    this,SLOT(_run()));
 //        if(!g_scStepInto)               g_scStepInto                =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_STEPINTO),               this,SLOT(_stepInto()));
 //        if(!g_scStepOver)               g_scStepOver                =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_STEPOVER),               this,SLOT(_stepOver()));
-        if(!g_scSetRemoveBreakpoint)    g_scSetRemoveBreakpoint     =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DEBUG_TOGGLE),    this,SLOT(_setRemoveBreakpoint()));
+        if(!g_scSetRemoveBreakpoint)    g_scSetRemoveBreakpoint     =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DISASM_TOGGLE),    this,SLOT(_setRemoveBreakpoint()));
     }
     else
     {

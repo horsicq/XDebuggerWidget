@@ -135,6 +135,7 @@ private:
     XProcessDevice *g_pPDCode;
     XProcessDevice *g_pPDStack;
     XProcessDevice *g_pPDHex;
+    XAbstractDebugger::REG_OPTIONS g_regOptions;
 };
 
 #endif // XDEBUGGERWIDGET_H

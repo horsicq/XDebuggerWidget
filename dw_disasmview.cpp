@@ -83,6 +83,11 @@ void DW_DisasmView::_toggle()
     }
 }
 
+void DW_DisasmView::_goToAddress()
+{
+    // TODO
+}
+
 void DW_DisasmView::contextMenu(const QPoint &pos)
 {
     // TODO Search
@@ -93,7 +98,25 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
     {
         QMenu menuBreakpoint(tr("Breakpoint"),this);
 
-        QAction actionToggle(this);
+        QAction actionToggle(tr("Toggle"),this);
+
+        actionToggle.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DISASM_TOGGLE));
+        connect(&actionToggle,SIGNAL(triggered()),this,SLOT(_toggle()));
+
+        menuBreakpoint.addAction(&actionToggle);
+
+        QMenu contextMenu(this);
+        contextMenu.addMenu(&menuBreakpoint);
+
+        QAction actionGoToAddress(tr("Go to address"),this);
+
+        actionToggle.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DISASM_GOTOADDRESS));
+        connect(&actionToggle,SIGNAL(triggered()),this,SLOT(_goToAddress()));
+
+        contextMenu.addAction(&actionGoToAddress);
+
+        contextMenu.exec(pos);
+
 
 //        qint64 nAddress=getSelectionInitAddress();
 //        if(!g_pDebugger->isSoftwareBreakpointPresent(nAddress))
@@ -104,16 +127,6 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
 //        {
 //            actionToggle.setText(tr("Remove Breakpoint"));
 //        }
-        actionToggle.setText(tr("Toggle"));
-
-        actionToggle.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DEBUG_TOGGLE));
-        connect(&actionToggle,SIGNAL(triggered()),this,SLOT(_toggle()));
-
-        menuBreakpoint.addAction(&actionToggle);
-
-        QMenu contextMenu(this);
-        contextMenu.addMenu(&menuBreakpoint);
-        contextMenu.exec(pos);
     }
 }
 

@@ -119,7 +119,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidgetMain">
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabCPU">
       <attribute name="title">
@@ -140,12 +140,6 @@
        </property>
        <item>
         <widget class="QSplitter" name="splitter_3">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -160,7 +154,27 @@
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
-          <widget class="DW_RegistersView" name="widgetRegs" native="true"/>
+          <widget class="QScrollArea" name="scrollAreaRegs">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="DW_RegistersView" name="widgetRegs">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>69</width>
+              <height>254</height>
+             </rect>
+            </property>
+           </widget>
+          </widget>
           <widget class="DW_StackView" name="widgetStack" native="true"/>
          </widget>
         </widget>

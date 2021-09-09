@@ -38,6 +38,7 @@ signals:
 
 public slots:
     void _toggle();
+    void _goToAddress();
 
 protected:
     virtual void contextMenu(const QPoint &pos);
