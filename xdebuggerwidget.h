@@ -86,6 +86,8 @@ private slots:
     void onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
     void onEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
     void onStep(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
+    void onStepInto(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
+    void onStepOver(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
     void onExitProcess(XAbstractDebugger::EXITPROCESS_INFO *pExitProcessInfo);
     void eventCreateThread(XAbstractDebugger::THREAD_INFO *pThreadInfo);
     void eventExitThread(XAbstractDebugger::EXITTHREAD_INFO *pExitThreadInfo);
@@ -96,7 +98,7 @@ private slots:
     void on_toolButtonStepInto_clicked();
     void on_toolButtonStepOver_clicked();
 
-    void _setRemoveBreakpoint();
+    void _toggleBreakpoint();
 
     void cleanUp();
 
@@ -127,7 +129,7 @@ private:
 //    QShortcut *g_scRun;
 //    QShortcut *g_scStepInto;
 //    QShortcut *g_scStepOver;
-    QShortcut *g_scSetRemoveBreakpoint;
+    QShortcut *g_scBreakpointToggle;
 
     XProcess::MEMORY_REGION g_mrCode;
     XProcess::MEMORY_REGION g_mrStack;
