@@ -149,7 +149,7 @@ void XDebuggerWidget::onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoi
 {
     g_currentBreakPointInfo=*pBreakPointInfo;
 #ifdef QT_DEBUG
-    qDebug("ExceptionAddress %x",pBreakPointInfo->nAddress);
+    qDebug("ExceptionAddress %llx",pBreakPointInfo->nAddress);
 #endif
     // mb TODO regs
     XAbstractDebugger::suspendThread(pBreakPointInfo->hThread);
@@ -185,7 +185,7 @@ void XDebuggerWidget::onStepInto(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoint
 {
     g_currentBreakPointInfo=*pBreakPointInfo;
 #ifdef QT_DEBUG
-    qDebug("StepInto %x",pBreakPointInfo->nAddress);
+    qDebug("StepInto %llx",pBreakPointInfo->nAddress);
 #endif
     // mb TODO regs
     XAbstractDebugger::suspendThread(pBreakPointInfo->hThread);
@@ -197,7 +197,7 @@ void XDebuggerWidget::onStepOver(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoint
 {
     g_currentBreakPointInfo=*pBreakPointInfo;
 #ifdef QT_DEBUG
-    qDebug("StepOver %x",pBreakPointInfo->nAddress);
+    qDebug("StepOver %llx",pBreakPointInfo->nAddress);
 #endif
     // mb TODO regs
     XAbstractDebugger::suspendThread(pBreakPointInfo->hThread);
