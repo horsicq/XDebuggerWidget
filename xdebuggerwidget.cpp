@@ -86,10 +86,10 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     g_pDebugger=new XWindowsDebugger; // TODO CleanUP !!!
 #endif
 #ifdef Q_OS_LINUX
-    g_pDebugger=new XLinuxDebugger;
+    g_pDebugger=new XLinuxDebugger; // TODO CleanUP !!!
 #endif
 #ifdef Q_OS_OSX
-    g_pDebugger=new XOSXDebugger;
+    g_pDebugger=new XOSXDebugger; // TODO CleanUP !!!
 #endif
     ui->widgetDisasm->setDebugger(g_pDebugger);
     ui->widgetHex->setDebugger(g_pDebugger);
