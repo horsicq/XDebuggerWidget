@@ -85,7 +85,7 @@ void DW_DisasmView::_toggle()
 
 void DW_DisasmView::_goToAddress()
 {
-    // TODO
+    _goToAddressSlot();
 }
 
 void DW_DisasmView::contextMenu(const QPoint &pos)
