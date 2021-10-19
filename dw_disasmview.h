@@ -37,7 +37,8 @@ signals:
     void debugAction(XAbstractDebugger::DEBUG_ACTION action);
 
 public slots:
-    void _toggle();
+    void _breakpointToggle();
+    void _copyCursorAddress();
     void _goToAddress();
 
 protected:

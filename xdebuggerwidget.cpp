@@ -48,6 +48,8 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     g_regOptions.bGeneral=true;
     g_regOptions.bIP=true;
     g_regOptions.bFlags=true;
+    g_regOptions.bSegments=true;
+    g_regOptions.bDebug=true;
     // TODO ARM
 #ifdef Q_OS_WIN
 #ifndef Q_OS_WIN64
@@ -426,7 +428,7 @@ void XDebuggerWidget::viewHandles()
 
 void XDebuggerWidget::_toggleBreakpoint()
 {
-    ui->widgetDisasm->_toggle();
+    ui->widgetDisasm->_breakpointToggle();
 }
 
 void XDebuggerWidget::cleanUp()
@@ -502,7 +504,7 @@ void XDebuggerWidget::registerShortcuts(bool bState)
 //        if(!g_scRun)                    g_scRun                     =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_RUN),                    this,SLOT(_run()));
 //        if(!g_scStepInto)               g_scStepInto                =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_STEPINTO),               this,SLOT(_stepInto()));
 //        if(!g_scStepOver)               g_scStepOver                =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_STEPOVER),               this,SLOT(_stepOver()));
-        if(!g_scBreakpointToggle)        g_scBreakpointToggle         =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DISASM_TOGGLE),      this,SLOT(_toggleBreakpoint()));
+        if(!g_scBreakpointToggle)        g_scBreakpointToggle         =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DISASM_BREAKPOINTTOGGLE),      this,SLOT(_toggleBreakpoint()));
     }
     else
     {
@@ -530,4 +532,12 @@ void XDebuggerWidget::addDebugAction(XAbstractDebugger::DEBUG_ACTION action)
     QString sResult=XAbstractDebugger::debugActionToString(action);
 
     ui->plainTextEditActions->appendPlainText(sResult);
+}
+
+void XDebuggerWidget::on_tabWidgetMain_currentChanged(int nIndex)
+{
+    if(nIndex==MT_MEMORYMAP)
+    {
+        ui->widgetProcessMemoryMap->setData(g_pDebugger->getProcessInfo()->nProcessID); // TODO optimize
+    }
 }

@@ -108,6 +108,7 @@ private slots:
     void on_pushButtonActionsRecord_clicked();
 
     void addDebugAction(XAbstractDebugger::DEBUG_ACTION action);
+    void on_tabWidgetMain_currentChanged(int nIndex);
 
 protected:
     virtual void registerShortcuts(bool bState);
