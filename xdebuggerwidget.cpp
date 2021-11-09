@@ -299,16 +299,16 @@ void XDebuggerWidget::onShowStatus()
 ////        ui->widgetHex->goToAddress(currentBreakPointInfo.nAddress);
 //    }
 
-    QMap<QString, QVariant> mapRegisters=g_pDebugger->getRegisters(g_currentBreakPointInfo.hThread,g_regOptions);
+    QMap<QString, XBinary::XVARIANT> mapRegisters=g_pDebugger->getRegisters(g_currentBreakPointInfo.hThread,g_regOptions);
     ui->widgetRegs->setData(&mapRegisters);
 
     qint64 nStackPointer=0;
 
 #ifdef Q_OS_WIN
 #ifndef Q_OS_WIN64
-    nStackPointer=mapRegisters.value("ESP").toLongLong();
+    nStackPointer=mapRegisters.value("ESP").var.v_uint32;
 #else
-    nStackPointer=mapRegisters.value("RSP").toLongLong();
+    nStackPointer=mapRegisters.value("RSP").var.v_uint64;
 #endif
 #endif
 
