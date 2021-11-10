@@ -50,6 +50,7 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     g_regOptions.bFlags=true;
     g_regOptions.bSegments=true;
     g_regOptions.bDebug=true;
+    g_regOptions.bXMM=true;
     // TODO ARM
 #ifdef Q_OS_WIN
 #ifndef Q_OS_WIN64
