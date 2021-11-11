@@ -50,6 +50,7 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     g_regOptions.bFlags=true;
     g_regOptions.bSegments=true;
     g_regOptions.bDebug=true;
+    g_regOptions.bFloat=true;
     g_regOptions.bXMM=true;
     // TODO ARM
 #ifdef Q_OS_WIN
@@ -214,6 +215,8 @@ void XDebuggerWidget::onExitProcess(XAbstractDebugger::EXITPROCESS_INFO *pExitPr
     QString sString=QString("%1 PID: %2").arg(tr("Process exited"),QString::number(pExitProcessInfo->nProcessID));
 
     emit infoMessage(sString);
+
+    emit cleanUpSignal();
 
     // TODO Clear screen
 }
@@ -434,6 +437,10 @@ void XDebuggerWidget::_toggleBreakpoint()
 
 void XDebuggerWidget::cleanUp()
 {
+#ifdef QT_DEBUG
+    qDebug("void XDebuggerWidget::cleanUp()");
+#endif
+
     ui->widgetDisasm->clear();
     ui->widgetHex->clear();
     ui->widgetRegs->clear();
