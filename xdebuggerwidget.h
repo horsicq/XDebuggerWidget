@@ -132,9 +132,12 @@ private:
 //    QShortcut *g_scStepOver;
     QShortcut *g_scBreakpointToggle;
 
-    XProcess::MEMORY_REGION g_mrCode;
-    XProcess::MEMORY_REGION g_mrStack;
-    XProcess::MEMORY_REGION g_mrHex;
+    XBinary::OSINFO g_osInfo;
+
+    XBinary::MEMORY_REGION g_mrCode;
+    XBinary::MEMORY_REGION g_mrStack;
+    XBinary::MEMORY_REGION g_mrHex;
+
     XProcessDevice *g_pPDCode;
     XProcessDevice *g_pPDStack;
     XProcessDevice *g_pPDHex;

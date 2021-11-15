@@ -100,6 +100,8 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     ui->widgetRegs->setDebugger(g_pDebugger);
     ui->widgetStack->setDebugger(g_pDebugger);
 
+    g_osInfo=XProcess::getOsInfo();
+
     XAbstractDebugger::OPTIONS options={};
 
     options.bShowConsole=true;
@@ -248,14 +250,16 @@ void XDebuggerWidget::eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO
 void XDebuggerWidget::eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo)
 {
     // TODO more info
-    QString sString=QString("%1: %2").arg(tr("Shared object unloaded"),pSharedObjectInfo->sFileName);
+    QString sString=QString("%1: %2").arg(tr("Shared object unloaded"),pSharedObjectInfo->sFileName); // TODO rewrite
 
     emit infoMessage(sString);
 }
 
 void XDebuggerWidget::onShowStatus()
 {
-    if(!XProcess::isAddressInMemoryRegion(&g_mrCode,g_currentBreakPointInfo.nAddress))
+    // TODO getMemoryRegions
+
+    if(!XBinary::isAddressInMemoryRegion(&g_mrCode,g_currentBreakPointInfo.nAddress))
     {
         g_mrCode=XProcess::getMemoryRegion(g_currentBreakPointInfo.hProcess,g_currentBreakPointInfo.nAddress);
 
@@ -270,8 +274,8 @@ void XDebuggerWidget::onShowStatus()
         if(g_pPDCode->openHandle(g_currentBreakPointInfo.hProcess,g_mrCode.nAddress,g_mrCode.nSize,QIODevice::ReadOnly))
         {
             XBinary binary(g_pPDCode,true,g_mrCode.nAddress);
-            binary.setArch(g_pDebugger->getArch());
-            binary.setMode(g_pDebugger->getMode());
+            binary.setArch(g_osInfo.sArch);
+            binary.setMode(g_osInfo.mode);
 
             XDisasmView::OPTIONS disasmOptions={};
             disasmOptions.nInitAddress=g_currentBreakPointInfo.nAddress;
@@ -303,20 +307,12 @@ void XDebuggerWidget::onShowStatus()
 ////        ui->widgetHex->goToAddress(currentBreakPointInfo.nAddress);
 //    }
 
-    QMap<QString, XBinary::XVARIANT> mapRegisters=g_pDebugger->getRegisters(g_currentBreakPointInfo.hThread,g_regOptions);
+    QMap<QString, XBinary::XVARIANT> mapRegisters=g_pDebugger->getRegisters(g_currentBreakPointInfo.hThread,g_regOptions); // TODO move to RegisterWidget
     ui->widgetRegs->setData(&mapRegisters);
 
-    qint64 nStackPointer=0;
+    qint64 nStackPointer=g_pDebugger->getStackPointer(g_currentBreakPointInfo.hThread);
 
-#ifdef Q_OS_WIN
-#ifndef Q_OS_WIN64
-    nStackPointer=mapRegisters.value("ESP").var.v_uint32;
-#else
-    nStackPointer=mapRegisters.value("RSP").var.v_uint64;
-#endif
-#endif
-
-    if(!XProcess::isAddressInMemoryRegion(&g_mrStack,nStackPointer))
+    if(!XBinary::isAddressInMemoryRegion(&g_mrStack,nStackPointer))
     {
         g_mrStack=XProcess::getMemoryRegion(g_currentBreakPointInfo.hProcess,nStackPointer);
 
@@ -441,6 +437,8 @@ void XDebuggerWidget::cleanUp()
     qDebug("void XDebuggerWidget::cleanUp()");
 #endif
 
+    ui->tabWidgetMain->setCurrentIndex(MT_CPU);
+
     ui->widgetDisasm->clear();
     ui->widgetHex->clear();
     ui->widgetRegs->clear();
@@ -546,6 +544,9 @@ void XDebuggerWidget::on_tabWidgetMain_currentChanged(int nIndex)
 {
     if(nIndex==MT_MEMORYMAP)
     {
-        ui->widgetProcessMemoryMap->setData(g_pDebugger->getProcessInfo()->nProcessID); // TODO optimize
+        if(g_pDebugger)
+        {
+            ui->widgetProcessMemoryMap->setData(g_pDebugger->getProcessInfo()->nProcessID); // TODO optimize
+        }
     }
 }
