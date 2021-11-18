@@ -60,7 +60,7 @@ public:
     ~XDebuggerWidget();
 
     bool loadFile(QString sFileName);
-    void setShortcuts(XShortcuts *pShortcuts);
+    void setGlobal(XShortcuts *pShortcuts,XOptions *pXOptions);
 
 signals:
     void showStatus();

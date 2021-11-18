@@ -131,16 +131,16 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     return false;
 }
 
-void XDebuggerWidget::setShortcuts(XShortcuts *pShortcuts)
+void XDebuggerWidget::setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions)
 {
     setActive(true);
 
-    ui->widgetDisasm->setShortcuts(pShortcuts);
-    ui->widgetHex->setShortcuts(pShortcuts);
-    ui->widgetRegs->setShortcuts(pShortcuts);
-    ui->widgetStack->setShortcuts(pShortcuts);
+    ui->widgetDisasm->setGlobal(pShortcuts,pXOptions);
+    ui->widgetHex->setGlobal(pShortcuts,pXOptions);
+    ui->widgetRegs->setGlobal(pShortcuts,pXOptions);
+    ui->widgetStack->setGlobal(pShortcuts,pXOptions);
 
-    XShortcutsWidget::setShortcuts(pShortcuts);
+    XShortcutsWidget::setGlobal(pShortcuts,pXOptions);
 }
 
 void XDebuggerWidget::onCreateProcess(XAbstractDebugger::PROCESS_INFO *pProcessInfo)
