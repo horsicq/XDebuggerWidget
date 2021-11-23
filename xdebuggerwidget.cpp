@@ -106,7 +106,9 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
     options.bShowConsole=true;
     options.sFileName=sFileName;
-    options.bBreakpointOnTargetEntryPoint=true;
+    options.bBreakpointOnEntryPoint=getGlobalOptions()->getValue(XOptions::ID_BREAKPOINT_ENTRYPOINT).toBool();
+    options.bBreakPointOnDLLMain=getGlobalOptions()->getValue(XOptions::ID_BREAKPOINT_DLLMAIN).toBool();
+    options.bBreakPointOnTLSFunction=getGlobalOptions()->getValue(XOptions::ID_BREAKPOINT_TLSFUNCTIONS).toBool();
 
     g_pDebugger->setOptions(options);
 
