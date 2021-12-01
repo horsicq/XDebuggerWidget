@@ -1,4 +1,4 @@
-// copyright (c) 2021 hors<horsicq@gmail.com>
+// Copyright (c) 2021 hors<horsicq@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,10 @@ class DW_HexView : public XHexView
 public:
     explicit DW_HexView(QWidget *pParent=nullptr);
     void setDebugger(XAbstractDebugger *pDebugger);
+
+public slots:
+    void _copyCursorAddress();
+    void _goToAddress();
 
 protected:
     virtual void contextMenu(const QPoint &pos);

@@ -30,9 +30,51 @@ void DW_HexView::setDebugger(XAbstractDebugger *pDebugger)
     g_pDebugger=pDebugger;
 }
 
+void DW_HexView::_copyCursorAddress()
+{
+    if(g_pDebugger)
+    {
+        qint64 nAddress=getSelectionInitOffset();
+
+        if(nAddress!=-1)
+        {
+            // TODO
+        #ifdef QT_DEBUG
+            qDebug("_copyCursorAddress");
+        #endif
+        }
+    }
+}
+
+void DW_HexView::_goToAddress()
+{
+    _goToAddressSlot();
+}
+
 void DW_HexView::contextMenu(const QPoint &pos)
 {
-    Q_UNUSED(pos)
+    if(g_pDebugger)
+    {
+        QMenu contextMenu(this);
+
+        QAction actionGoToAddress(tr("Go to address"),this);
+        actionGoToAddress.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_HEX_GOTOADDRESS));
+        connect(&actionGoToAddress,SIGNAL(triggered()),this,SLOT(_goToAddress()));
+
+        contextMenu.addAction(&actionGoToAddress);
+
+        QMenu menuCopy(tr("Copy"),this);
+
+        QAction actionCopyAddress(tr("Copy address"),this);
+        actionCopyAddress.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_HEX_COPYCURSORADDRESS));
+        connect(&actionCopyAddress,SIGNAL(triggered()),this,SLOT(_copyCursorAddress()));
+
+        menuCopy.addAction(&actionCopyAddress);
+
+        contextMenu.addMenu(&menuCopy);
+
+        contextMenu.exec(pos);
+    }
 }
 
 void DW_HexView::registerShortcuts(bool bState)

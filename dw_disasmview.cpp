@@ -91,6 +91,7 @@ void DW_DisasmView::_copyCursorAddress()
 
         if(nAddress!=-1)
         {
+            // TODO
         #ifdef QT_DEBUG
             qDebug("_copyCursorAddress");
         #endif

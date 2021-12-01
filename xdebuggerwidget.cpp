@@ -284,7 +284,6 @@ void XDebuggerWidget::onShowStatus()
             disasmOptions.nInitAddress=g_currentBreakPointInfo.nAddress;
             disasmOptions.nCurrentIPAddress=g_currentBreakPointInfo.nAddress;
             disasmOptions.memoryMap=binary.getMemoryMap();
-            disasmOptions.bHideOffset=true;
             ui->widgetDisasm->setData(g_pPDCode,disasmOptions);
         }
     }
