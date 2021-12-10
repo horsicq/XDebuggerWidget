@@ -54,3 +54,7 @@ SOURCES += \
     XCONFIG += xprocessmemorymapwidget
     include($$PWD/../XProcessMemoryMapWidget/xprocessmemorymapwidget.pri)
 }
+
+DISTFILES += \
+    $$PWD/LICENSE \
+    $$PWD/README.md
