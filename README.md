@@ -1,1 +1,3 @@
 # XDebuggerWidget
+
+Debugger widget
