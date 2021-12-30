@@ -2,6 +2,7 @@ INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
 FORMS += \
+    $$PWD/xdebuggeroptionswidget.ui \
     $$PWD/xdebuggerwidget.ui
 
 HEADERS += \
@@ -10,6 +11,7 @@ HEADERS += \
     $$PWD/dw_processmemorymap.h \
     $$PWD/dw_registersview.h \
     $$PWD/dw_stackview.h \
+    $$PWD/xdebuggeroptionswidget.h \
     $$PWD/xdebuggerwidget.h
 
 SOURCES += \
@@ -18,6 +20,7 @@ SOURCES += \
     $$PWD/dw_processmemorymap.cpp \
     $$PWD/dw_registersview.cpp \
     $$PWD/dw_stackview.cpp \
+    $$PWD/xdebuggeroptionswidget.cpp \
     $$PWD/xdebuggerwidget.cpp
 
 !contains(XCONFIG, xspecdebugger) {
