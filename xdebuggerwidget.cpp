@@ -133,7 +133,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     return false;
 }
 
-void XDebuggerWidget::setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions)
+void XDebuggerWidget::setGlobal(XShortcuts *pShortcuts,XOptions *pXOptions)
 {
     setActive(true);
 
