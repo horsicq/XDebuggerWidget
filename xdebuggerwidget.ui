@@ -144,8 +144,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>1118</width>
-              <height>69</height>
+              <width>1122</width>
+              <height>68</height>
              </rect>
             </property>
            </widget>
@@ -243,7 +243,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="DW_ProcessMemoryMap" name="widgetProcessMemoryMap" native="true"/>
+        <widget class="DW_ProcessMemoryMapWidget" name="widgetProcessMemoryMap" native="true"/>
        </item>
       </layout>
      </widget>
@@ -314,9 +314,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>DW_ProcessMemoryMap</class>
+   <class>DW_ProcessMemoryMapWidget</class>
    <extends>QWidget</extends>
-   <header>dw_processmemorymap.h</header>
+   <header>dw_processmemorymapwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

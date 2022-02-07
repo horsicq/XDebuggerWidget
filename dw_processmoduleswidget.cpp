@@ -20,7 +20,7 @@
  */
 #include "dw_processmoduleswidget.h"
 
-DW_ProcessModulesWidget::DW_ProcessModulesWidget()
+DW_ProcessModulesWidget::DW_ProcessModulesWidget(QWidget *pParent) : XProcessModulesWidget(pParent)
 {
 
 }

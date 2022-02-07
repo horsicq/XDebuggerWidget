@@ -21,13 +21,14 @@
 #ifndef DW_PROCESSMODULESWIDGET_H
 #define DW_PROCESSMODULESWIDGET_H
 
-#include <xprocessmoduleswidget.h>
+#include "xprocessmoduleswidget.h"
 
 class DW_ProcessModulesWidget : public XProcessModulesWidget
 {
     Q_OBJECT
+
 public:
-    DW_ProcessModulesWidget();
+    explicit DW_ProcessModulesWidget(QWidget *pParent=nullptr);
 };
 
 #endif // DW_PROCESSMODULESWIDGET_H
