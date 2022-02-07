@@ -8,7 +8,8 @@ FORMS += \
 HEADERS += \
     $$PWD/dw_disasmview.h \
     $$PWD/dw_hexview.h \
-    $$PWD/dw_processmemorymap.h \
+    $$PWD/dw_processmemorymapwidget.h \
+    $$PWD/dw_processmoduleswidget.h \
     $$PWD/dw_registersview.h \
     $$PWD/dw_stackview.h \
     $$PWD/xdebuggeroptionswidget.h \
@@ -17,7 +18,8 @@ HEADERS += \
 SOURCES += \
     $$PWD/dw_disasmview.cpp \
     $$PWD/dw_hexview.cpp \
-    $$PWD/dw_processmemorymap.cpp \
+    $$PWD/dw_processmemorymapwidget.cpp \
+    $$PWD/dw_processmoduleswidget.cpp \
     $$PWD/dw_registersview.cpp \
     $$PWD/dw_stackview.cpp \
     $$PWD/xdebuggeroptionswidget.cpp \
@@ -56,6 +58,11 @@ SOURCES += \
 !contains(XCONFIG, xprocessmemorymapwidget) {
     XCONFIG += xprocessmemorymapwidget
     include($$PWD/../XProcessMemoryMapWidget/xprocessmemorymapwidget.pri)
+}
+
+!contains(XCONFIG, xprocessmoduleswidget) {
+    XCONFIG += xprocessmoduleswidget
+    include($$PWD/../XProcessModulesWidget/xprocessmoduleswidget.pri)
 }
 
 DISTFILES += \

@@ -94,7 +94,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidgetMain">
      <property name="currentIndex">
-      <number>0</number>
+      <number>8</number>
      </property>
      <widget class="QWidget" name="tabCPU">
       <attribute name="title">
@@ -144,8 +144,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>1122</width>
-              <height>68</height>
+              <width>1118</width>
+              <height>69</height>
              </rect>
             </property>
            </widget>
@@ -262,6 +262,28 @@
        <string>Handles</string>
       </attribute>
      </widget>
+     <widget class="QWidget" name="tabModules">
+      <attribute name="title">
+       <string>Modules</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="DW_ProcessModulesWidget" name="widgetProcessModules" native="true"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
@@ -295,6 +317,12 @@
    <class>DW_ProcessMemoryMap</class>
    <extends>QWidget</extends>
    <header>dw_processmemorymap.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DW_ProcessModulesWidget</class>
+   <extends>QWidget</extends>
+   <header>dw_processmoduleswidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
