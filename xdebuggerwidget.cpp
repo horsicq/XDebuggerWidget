@@ -551,4 +551,11 @@ void XDebuggerWidget::on_tabWidgetMain_currentChanged(int nIndex)
             ui->widgetProcessMemoryMap->setData(g_pDebugger->getProcessInfo()->nProcessID); // TODO optimize
         }
     }
+    else if(nIndex==MT_MODULES)
+    {
+        if(g_pDebugger)
+        {
+            ui->widgetProcessModules->setData(g_pDebugger->getProcessInfo()->nProcessID); // TODO optimize
+        }
+    }
 }

@@ -53,6 +53,7 @@ class XDebuggerWidget : public XShortcutsWidget
         MT_CALLSTACK,
         MT_THREADS,
         MT_HANDLES,
+        MT_MODULES
     };
 
 public:
