@@ -85,6 +85,7 @@ public slots:
 private slots:
     void onCreateProcess(XAbstractDebugger::PROCESS_INFO *pProcessInfo);
     void onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
+    void onProcessEntry(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
     void onEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
     void onStep(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
     void onStepInto(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
