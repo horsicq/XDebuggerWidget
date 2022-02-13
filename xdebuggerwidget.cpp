@@ -106,7 +106,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
     options.bShowConsole=true;
     options.sFileName=sFileName;
-    options.bBreakpointOnEntryPoint=getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_ENTRYPOINT).toBool();
+    options.bBreakpointOnProgramEntryPoint=getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_ENTRYPOINT).toBool();
     options.bBreakPointOnDLLMain=getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_DLLMAIN).toBool();
     options.bBreakPointOnTLSFunction=getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_TLSFUNCTIONS).toBool();
 
@@ -117,7 +117,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
     connect(g_pDebugger,SIGNAL(eventCreateProcess(XAbstractDebugger::PROCESS_INFO*)),this,SLOT(onCreateProcess(XAbstractDebugger::PROCESS_INFO*)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventProcessEntry(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onProcessEntry(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventProgramEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventStep(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onStep(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventStepInto(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onStepInto(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventStepOver(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onStepOver(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
@@ -317,7 +317,7 @@ void XDebuggerWidget::onShowStatus()
 ////        ui->widgetHex->goToAddress(currentBreakPointInfo.nAddress);
 //    }
 
-    QMap<QString, XBinary::XVARIANT> mapRegisters=g_pDebugger->getRegisters(g_currentBreakPointInfo.handleIDThread,g_regOptions); // TODO move to RegisterWidget
+    QMap<QString,XBinary::XVARIANT> mapRegisters=g_pDebugger->getRegisters(g_currentBreakPointInfo.handleIDThread,g_regOptions); // TODO move to RegisterWidget
     ui->widgetRegs->setData(&mapRegisters);
 
     qint64 nStackPointer=g_pDebugger->getStackPointer(g_currentBreakPointInfo.handleIDThread);
