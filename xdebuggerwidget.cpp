@@ -116,8 +116,8 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 //    connect(pDebugger,SIGNAL(finished()),pDebugger,SLOT(deleteLater()));
 
     connect(g_pDebugger,SIGNAL(eventCreateProcess(XAbstractDebugger::PROCESS_INFO*)),this,SLOT(onCreateProcess(XAbstractDebugger::PROCESS_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventProcessEntry(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onProcessEntry(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventProgramEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventProcessEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onProcessEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventProgramEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onProgramEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventStep(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onStep(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventStepInto(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onStepInto(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventStepOver(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onStepOver(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
@@ -167,18 +167,18 @@ void XDebuggerWidget::onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoi
     emit showStatus();
 }
 
-void XDebuggerWidget::onProcessEntry(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
+void XDebuggerWidget::onProcessEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
 {
 //    XAbstractDebugger::suspendThread(pBreakPointInfo->handleIDThread);
 
 //    emit showStatus();
 }
 
-void XDebuggerWidget::onEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
+void XDebuggerWidget::onProgramEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
 {
     g_currentBreakPointInfo=*pBreakPointInfo;
 #ifdef QT_DEBUG
-    qDebug("EntryPoint %x",pBreakPointInfo->nAddress);
+    qDebug("EntryPoint %llx",pBreakPointInfo->nAddress);
 #endif
     // mb TODO regs
     XAbstractDebugger::suspendThread(pBreakPointInfo->handleIDThread);
@@ -190,7 +190,7 @@ void XDebuggerWidget::onStep(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo
 {
     g_currentBreakPointInfo=*pBreakPointInfo;
 #ifdef QT_DEBUG
-    qDebug("Step %x",pBreakPointInfo->nAddress);
+    qDebug("Step %llx",pBreakPointInfo->nAddress);
 #endif
     // mb TODO regs
     XAbstractDebugger::suspendThread(pBreakPointInfo->handleIDThread);
