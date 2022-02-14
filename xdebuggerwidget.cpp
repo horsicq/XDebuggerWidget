@@ -162,7 +162,7 @@ void XDebuggerWidget::onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoi
 #endif
     // mb TODO regs
 
-    XAbstractDebugger::suspendThread(pBreakPointInfo->handleIDThread);
+    XAbstractDebugger::suspendThread(pBreakPointInfo->handleThread);
 
     emit showStatus();
 }
@@ -181,7 +181,7 @@ void XDebuggerWidget::onProgramEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pB
     qDebug("EntryPoint %llx",pBreakPointInfo->nAddress);
 #endif
     // mb TODO regs
-    XAbstractDebugger::suspendThread(pBreakPointInfo->handleIDThread);
+    XAbstractDebugger::suspendThread(pBreakPointInfo->handleThread);
 
     emit showStatus();
 }
@@ -193,7 +193,7 @@ void XDebuggerWidget::onStep(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo
     qDebug("Step %llx",pBreakPointInfo->nAddress);
 #endif
     // mb TODO regs
-    XAbstractDebugger::suspendThread(pBreakPointInfo->handleIDThread);
+    XAbstractDebugger::suspendThread(pBreakPointInfo->handleThread);
 
     emit showStatus();
 }
@@ -205,7 +205,7 @@ void XDebuggerWidget::onStepInto(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoint
     qDebug("StepInto %llx",pBreakPointInfo->nAddress);
 #endif
     // mb TODO regs
-    XAbstractDebugger::suspendThread(pBreakPointInfo->handleIDThread);
+    XAbstractDebugger::suspendThread(pBreakPointInfo->handleThread);
 
     emit showStatus();
 }
@@ -217,7 +217,7 @@ void XDebuggerWidget::onStepOver(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoint
     qDebug("StepOver %llx",pBreakPointInfo->nAddress);
 #endif
     // mb TODO regs
-    XAbstractDebugger::suspendThread(pBreakPointInfo->handleIDThread);
+    XAbstractDebugger::suspendThread(pBreakPointInfo->handleThread);
 
     emit showStatus();
 }
@@ -272,7 +272,7 @@ void XDebuggerWidget::onShowStatus()
 
     if(!XBinary::isAddressInMemoryRegion(&g_mrCode,g_currentBreakPointInfo.nAddress))
     {
-        g_mrCode=XProcess::getMemoryRegion(g_currentBreakPointInfo.handleIDProcess,g_currentBreakPointInfo.nAddress);
+        g_mrCode=XProcess::getMemoryRegion(g_currentBreakPointInfo.handleProcessMemoryQuery,g_currentBreakPointInfo.nAddress);
 
         if(g_pPDCode)
         {
@@ -282,7 +282,7 @@ void XDebuggerWidget::onShowStatus()
 
         g_pPDCode=new XProcessDevice(this);
 
-        if(g_pPDCode->openHandle(g_currentBreakPointInfo.handleIDProcess.hHandle,g_mrCode.nAddress,g_mrCode.nSize,QIODevice::ReadOnly)) // Windows TODO Linux
+        if(g_pPDCode->openHandle(g_currentBreakPointInfo.handleProcessMemoryIO.hHandle,g_mrCode.nAddress,g_mrCode.nSize,QIODevice::ReadOnly)) // Windows TODO Linux
         {
             XBinary binary(g_pPDCode,true,g_mrCode.nAddress);
             binary.setArch(g_osInfo.sArch);
@@ -317,14 +317,14 @@ void XDebuggerWidget::onShowStatus()
 ////        ui->widgetHex->goToAddress(currentBreakPointInfo.nAddress);
 //    }
 
-    QMap<QString,XBinary::XVARIANT> mapRegisters=g_pDebugger->getRegisters(g_currentBreakPointInfo.handleIDThread,g_regOptions); // TODO move to RegisterWidget
+    QMap<QString,XBinary::XVARIANT> mapRegisters=g_pDebugger->getRegisters(g_currentBreakPointInfo.handleThread,g_regOptions); // TODO move to RegisterWidget
     ui->widgetRegs->setData(&mapRegisters);
 
-    qint64 nStackPointer=g_pDebugger->getStackPointer(g_currentBreakPointInfo.handleIDThread);
+    qint64 nStackPointer=g_pDebugger->getStackPointer(g_currentBreakPointInfo.handleThread);
 
     if(!XBinary::isAddressInMemoryRegion(&g_mrStack,nStackPointer))
     {
-        g_mrStack=XProcess::getMemoryRegion(g_currentBreakPointInfo.handleIDProcess,nStackPointer);
+        g_mrStack=XProcess::getMemoryRegion(g_currentBreakPointInfo.handleProcessMemoryIO,nStackPointer);
 
         if(g_pPDStack)
         {
@@ -334,7 +334,7 @@ void XDebuggerWidget::onShowStatus()
 
         g_pPDStack=new XProcessDevice(this);
 
-        if(g_pPDStack->openHandle(g_currentBreakPointInfo.handleIDProcess.hHandle,g_mrStack.nAddress,g_mrStack.nSize,QIODevice::ReadOnly))
+        if(g_pPDStack->openHandle(g_currentBreakPointInfo.handleProcessMemoryIO.hHandle,g_mrStack.nAddress,g_mrStack.nSize,QIODevice::ReadOnly))
         {
             XStackView::OPTIONS stackOptions={};
             stackOptions.nStartAddress=g_mrStack.nAddress;
@@ -372,27 +372,27 @@ void XDebuggerWidget::on_toolButtonStepOver_clicked()
 
 void XDebuggerWidget::debugRun()
 {
-    if(g_currentBreakPointInfo.handleIDThread.nID)
+    if(g_currentBreakPointInfo.handleThread.nID)
     {
-        XAbstractDebugger::resumeThread(g_currentBreakPointInfo.handleIDThread);
+        XAbstractDebugger::resumeThread(g_currentBreakPointInfo.handleThread);
     }
 }
 
 void XDebuggerWidget::debugStepInto()
 {
-    if(g_currentBreakPointInfo.handleIDThread.nID)
+    if(g_currentBreakPointInfo.handleThread.nID)
     {
-        g_pDebugger->stepInto(g_currentBreakPointInfo.handleIDThread);
-        XAbstractDebugger::resumeThread(g_currentBreakPointInfo.handleIDThread);
+        g_pDebugger->stepInto(g_currentBreakPointInfo.handleThread);
+        XAbstractDebugger::resumeThread(g_currentBreakPointInfo.handleThread);
     }
 }
 
 void XDebuggerWidget::debugStepOver()
 {
-    if(g_currentBreakPointInfo.handleIDThread.nID)
+    if(g_currentBreakPointInfo.handleThread.nID)
     {
-        g_pDebugger->stepOver(g_currentBreakPointInfo.handleIDThread);
-        XAbstractDebugger::resumeThread(g_currentBreakPointInfo.handleIDThread);
+        g_pDebugger->stepOver(g_currentBreakPointInfo.handleThread);
+        XAbstractDebugger::resumeThread(g_currentBreakPointInfo.handleThread);
     }
 }
 
