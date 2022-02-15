@@ -293,6 +293,11 @@ void XDebuggerWidget::onShowStatus()
             disasmOptions.nCurrentIPAddress=g_currentBreakPointInfo.nAddress;
             disasmOptions.memoryMap=binary.getMemoryMap();
             ui->widgetDisasm->setData(g_pPDCode,disasmOptions);
+
+            XHexView::OPTIONS hexOptions={};
+            hexOptions.nStartAddress=g_mrCode.nAddress;
+            hexOptions.nStartSelectionOffset=disasmOptions.nCurrentIPAddress-hexOptions.nStartAddress;
+            ui->widgetHex->setData(g_pPDCode,hexOptions);
         }
     }
     else
@@ -341,9 +346,9 @@ void XDebuggerWidget::onShowStatus()
             stackOptions.nCurrentAddress=nStackPointer;
             ui->widgetStack->setData(g_pPDStack,stackOptions);
 
-            XHexView::OPTIONS hexOptions={};
-            hexOptions.nStartAddress=g_mrStack.nAddress;
-            ui->widgetHex->setData(g_pPDStack,hexOptions);
+//            XHexView::OPTIONS hexOptions={};
+//            hexOptions.nStartAddress=g_mrStack.nAddress;
+//            ui->widgetHex->setData(g_pPDStack,hexOptions);
         }
     }
     else
@@ -439,6 +444,16 @@ void XDebuggerWidget::viewHandles()
 void XDebuggerWidget::_toggleBreakpoint()
 {
     ui->widgetDisasm->_breakpointToggle();
+
+    QList<XBinary::MEMORY_REPLACE> listReplaces=g_pDebugger->getMemoryReplaces();
+
+    ui->widgetDisasm->setMemoryReplaces(listReplaces);
+    ui->widgetHex->setMemoryReplaces(listReplaces);
+    ui->widgetStack->setMemoryReplaces(listReplaces);
+
+    ui->widgetDisasm->reload(true);
+    ui->widgetHex->reload(true);
+    ui->widgetStack->reload(true);
 }
 
 void XDebuggerWidget::cleanUp()

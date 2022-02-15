@@ -36,11 +36,11 @@ void DW_DisasmView::showStatus()
     qDebug("void DW_DisasmView::showStatus()");
 #endif
 
-    QList<XBinary::MEMORY_REPLACE> listReplaces=g_pDebugger->getMemoryReplaces();
+//    QList<XBinary::MEMORY_REPLACE> listReplaces=g_pDebugger->getMemoryReplaces();
 
-    setMemoryReplaces(listReplaces);
+//    setMemoryReplaces(listReplaces);
 
-    reload(true);
+//    reload(true);
 }
 
 void DW_DisasmView::_breakpointToggle()
