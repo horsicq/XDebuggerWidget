@@ -322,6 +322,8 @@ void XDebuggerWidget::onShowStatus()
 ////        ui->widgetHex->goToAddress(currentBreakPointInfo.nAddress);
 //    }
 
+//    qint64 nTest=g_pDebugger->getCurrentAddress(g_currentBreakPointInfo.handleThread);
+
     QMap<QString,XBinary::XVARIANT> mapRegisters=g_pDebugger->getRegisters(g_currentBreakPointInfo.handleThread,g_regOptions); // TODO move to RegisterWidget
     ui->widgetRegs->setData(&mapRegisters);
 
