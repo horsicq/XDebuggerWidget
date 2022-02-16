@@ -28,7 +28,7 @@ class DW_ProcessMemoryMapWidget : public XProcessMemoryMapWidget
     Q_OBJECT
 
 public:
-    explicit DW_ProcessMemoryMapWidget(QWidget *parent=nullptr);
+    explicit DW_ProcessMemoryMapWidget(QWidget *pParent=nullptr);
 
 signals:
 

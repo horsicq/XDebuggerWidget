@@ -20,7 +20,7 @@
  */
 #include "dw_processmemorymapwidget.h"
 
-DW_ProcessMemoryMapWidget::DW_ProcessMemoryMapWidget(QWidget *parent) : XProcessMemoryMapWidget(parent)
+DW_ProcessMemoryMapWidget::DW_ProcessMemoryMapWidget(QWidget *pParent) : XProcessMemoryMapWidget(pParent)
 {
 
 }
