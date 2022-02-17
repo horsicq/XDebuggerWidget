@@ -62,6 +62,7 @@ public:
 
     bool loadFile(QString sFileName);
     void setGlobal(XShortcuts *pShortcuts,XOptions *pXOptions);
+    virtual void adjustView();
 
 signals:
     void showStatus();
