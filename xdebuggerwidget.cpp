@@ -161,6 +161,7 @@ void XDebuggerWidget::onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoi
     qDebug("ExceptionAddress %llx",pBreakPointInfo->nAddress);
 #endif
     // mb TODO regs
+    qDebug("Current Address2: %llX",XAbstractDebugger::getCurrentAddress(pBreakPointInfo->handleThread));
 
     XAbstractDebugger::suspendThread(pBreakPointInfo->handleThread);
 
