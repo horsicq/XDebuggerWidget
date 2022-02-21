@@ -61,7 +61,9 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
 #endif
 #endif
 
-    connect(this,SIGNAL(showStatus()),this,SLOT(onShowStatus()));
+    qRegisterMetaType<STATUS>("STATUS");
+
+    connect(this,SIGNAL(showStatus(STATUS)),this,SLOT(onShowStatus(STATUS)));
     connect(this,SIGNAL(cleanUpSignal()),this,SLOT(cleanUp()));
     connect(this,SIGNAL(infoMessage(QString)),this,SLOT(infoMessageSlot(QString)));
     connect(this,SIGNAL(errorMessage(QString)),this,SLOT(errorMessageSlot(QString)));
@@ -156,6 +158,15 @@ void XDebuggerWidget::adjustView()
     XShortcutsWidget::adjustView();
 }
 
+XDebuggerWidget::STATUS XDebuggerWidget::getStatus(XProcess::HANDLEID handleID)
+{
+    XDebuggerWidget::STATUS result={};
+
+    result.registers=g_pDebugger->getRegisters(handleID,g_regOptions);
+
+    return result;
+}
+
 void XDebuggerWidget::onCreateProcess(XAbstractDebugger::PROCESS_INFO *pProcessInfo)
 {
     // TODO more info
@@ -178,9 +189,11 @@ void XDebuggerWidget::onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoi
 
     qDebug("Current Address2: %llX",XAbstractDebugger::getCurrentAddress(handleThread));
 
-    XAbstractDebugger::suspendThread(handleThread);
+    g_pDebugger->suspendThread(handleThread);
 
-    emit showStatus();
+    STATUS status=getStatus(handleThread);
+
+    emit showStatus(status);
 }
 
 void XDebuggerWidget::onProcessEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
@@ -201,9 +214,9 @@ void XDebuggerWidget::onProgramEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pB
     handleThread.hHandle=pBreakPointInfo->pHThread;
     handleThread.nID=pBreakPointInfo->nThreadID;
 
-    XAbstractDebugger::suspendThread(handleThread);
+    g_pDebugger->suspendThread(handleThread);
 
-    emit showStatus();
+    emit showStatus(getStatus(handleThread));
 }
 
 void XDebuggerWidget::onStep(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
@@ -217,9 +230,9 @@ void XDebuggerWidget::onStep(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo
     handleThread.hHandle=pBreakPointInfo->pHThread;
     handleThread.nID=pBreakPointInfo->nThreadID;
 
-    XAbstractDebugger::suspendThread(handleThread);
+    g_pDebugger->suspendThread(handleThread);
 
-    emit showStatus();
+    emit showStatus(getStatus(handleThread));
 }
 
 void XDebuggerWidget::onStepInto(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
@@ -232,9 +245,9 @@ void XDebuggerWidget::onStepInto(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoint
     handleThread.hHandle=pBreakPointInfo->pHThread;
     handleThread.nID=pBreakPointInfo->nThreadID;
     // mb TODO regs
-    XAbstractDebugger::suspendThread(handleThread);
+    g_pDebugger->suspendThread(handleThread);
 
-    emit showStatus();
+    emit showStatus(getStatus(handleThread));
 }
 
 void XDebuggerWidget::onStepOver(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
@@ -247,9 +260,9 @@ void XDebuggerWidget::onStepOver(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoint
     handleThread.hHandle=pBreakPointInfo->pHThread;
     handleThread.nID=pBreakPointInfo->nThreadID;
     // mb TODO regs
-    XAbstractDebugger::suspendThread(handleThread);
+    g_pDebugger->suspendThread(handleThread);
 
-    emit showStatus();
+    emit showStatus(getStatus(handleThread));
 }
 
 void XDebuggerWidget::onExitProcess(XAbstractDebugger::EXITPROCESS_INFO *pExitProcessInfo)
@@ -296,7 +309,7 @@ void XDebuggerWidget::eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_IN
     emit infoMessage(sString);
 }
 
-void XDebuggerWidget::onShowStatus()
+void XDebuggerWidget::onShowStatus(STATUS status)
 {
     XProcess::HANDLEID handleProcessMemoryQuery={};
     handleProcessMemoryQuery.nID=g_currentBreakPointInfo.nProcessID;
@@ -366,8 +379,7 @@ void XDebuggerWidget::onShowStatus()
 
 //    qint64 nTest=g_pDebugger->getCurrentAddress(g_currentBreakPointInfo.handleThread);
 
-    QMap<QString,XBinary::XVARIANT> mapRegisters=g_pDebugger->getRegisters(handleThread,g_regOptions); // TODO move to RegisterWidget
-    ui->widgetRegs->setData(&mapRegisters);
+    ui->widgetRegs->setData(&status.registers);
 
     qint64 nStackPointer=g_pDebugger->getStackPointer(handleThread);
 
@@ -427,7 +439,7 @@ void XDebuggerWidget::debugRun()
         handleThread.nID=g_currentBreakPointInfo.nThreadID;
         handleThread.hHandle=g_currentBreakPointInfo.pHThread;
 
-        XAbstractDebugger::resumeThread(handleThread);
+        g_pDebugger->resumeThread(handleThread);
     }
 }
 
@@ -440,7 +452,7 @@ void XDebuggerWidget::debugStepInto()
         handleThread.hHandle=g_currentBreakPointInfo.pHThread;
 
         g_pDebugger->stepInto(handleThread);
-        XAbstractDebugger::resumeThread(handleThread);
+        g_pDebugger->resumeThread(handleThread);
     }
 }
 
@@ -453,7 +465,7 @@ void XDebuggerWidget::debugStepOver()
         handleThread.hHandle=g_currentBreakPointInfo.pHThread;
 
         g_pDebugger->stepOver(handleThread);
-        XAbstractDebugger::resumeThread(handleThread);
+        g_pDebugger->resumeThread(handleThread);
     }
 }
 

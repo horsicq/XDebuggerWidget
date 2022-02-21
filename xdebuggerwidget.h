@@ -56,6 +56,11 @@ class XDebuggerWidget : public XShortcutsWidget
         MT_MODULES
     };
 
+    struct STATUS
+    {
+        XAbstractDebugger::REGISTERS registers;
+    };
+
 public:
     explicit XDebuggerWidget(QWidget *pParent=nullptr);
     ~XDebuggerWidget();
@@ -64,8 +69,11 @@ public:
     void setGlobal(XShortcuts *pShortcuts,XOptions *pXOptions);
     virtual void adjustView();
 
+private:
+    STATUS getStatus(XProcess::HANDLEID handleID);
+
 signals:
-    void showStatus();
+    void showStatus(STATUS status); // TODO status struct as argument getStatus function
     void errorMessage(QString sErrorMessage);
     void infoMessage(QString sInfoMessage);
     void cleanUpSignal();
@@ -96,7 +104,7 @@ private slots:
     void eventExitThread(XAbstractDebugger::EXITTHREAD_INFO *pExitThreadInfo);
     void eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
     void eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
-    void onShowStatus();
+    void onShowStatus(STATUS status);
     void on_toolButtonRun_clicked();
     void on_toolButtonStepInto_clicked();
     void on_toolButtonStepOver_clicked();
