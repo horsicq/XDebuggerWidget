@@ -53,13 +53,7 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     g_regOptions.bFloat=true;
     g_regOptions.bXMM=true;
     // TODO ARM
-#ifdef Q_OS_WIN
-#ifndef Q_OS_WIN64
-    ui->widgetRegs->setOptions(XBinary::DM_X86_32,g_regOptions);
-#else
-    ui->widgetRegs->setOptions(XBinary::DM_X86_64,g_regOptions);
-#endif
-#endif
+    ui->widgetRegs->setOptions(g_regOptions);
 
     qRegisterMetaType<STATUS>("STATUS");
 
@@ -381,7 +375,14 @@ void XDebuggerWidget::onShowStatus(STATUS status)
 
     ui->widgetRegs->setData(&status.registers);
 
-    qint64 nStackPointer=g_pDebugger->getStackPointer(handleThread);
+    qint64 nStackPointer=0;
+
+#ifdef Q_PROCESSOR_X86_32
+    nStackPointer=status.registers.ESP;
+#endif
+#ifdef Q_PROCESSOR_X86_64
+    nStackPointer=status.registers.RSP;
+#endif
 
     if(!XBinary::isAddressInMemoryRegion(&g_mrStack,nStackPointer))
     {
