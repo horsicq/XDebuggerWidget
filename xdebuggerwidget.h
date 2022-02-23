@@ -59,6 +59,7 @@ class XDebuggerWidget : public XShortcutsWidget
     struct STATUS
     {
         XAbstractDebugger::REGISTERS registers;
+        XProcess::PROCESS_STATE processState;
     };
 
 public:
@@ -70,7 +71,7 @@ public:
     virtual void adjustView();
 
 private:
-    STATUS getStatus(XProcess::HANDLEID handleID);
+    STATUS getStatus(XProcess::HANDLEID handleProcess,XProcess::HANDLEID handleThread); // mb TODO nProcessID, threadID
 
 signals:
     void showStatus(STATUS status); // TODO status struct as argument getStatus function
