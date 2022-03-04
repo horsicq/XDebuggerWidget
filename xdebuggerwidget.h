@@ -71,7 +71,7 @@ public:
     virtual void adjustView();
 
 private:
-    STATUS getStatus(XProcess::HANDLEID handleProcess,XProcess::HANDLEID handleThread); // mb TODO nProcessID,threadID
+    STATUS getStatus(XProcess::HANDLEID handleProcess,XProcess::HANDLEID handleThread); // mb TODO nProcessID,threadID !!!
 
 signals:
     void showStatus(STATUS status); // TODO status struct as argument getStatus function
