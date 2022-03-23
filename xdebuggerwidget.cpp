@@ -79,6 +79,10 @@ XDebuggerWidget::~XDebuggerWidget()
 
 bool XDebuggerWidget::loadFile(QString sFileName)
 {
+    bool bResult=true; // TODO check
+
+    // TODO Check function
+
     cleanUp();
 
     g_pThread=new QThread;
@@ -127,7 +131,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     g_pDebugger->moveToThread(g_pThread);
     g_pThread->start();
 
-    return false;
+    return bResult;
 }
 
 void XDebuggerWidget::setGlobal(XShortcuts *pShortcuts,XOptions *pXOptions)
