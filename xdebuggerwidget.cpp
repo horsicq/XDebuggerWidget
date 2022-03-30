@@ -328,7 +328,7 @@ void XDebuggerWidget::eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_IN
     emit infoMessage(sString);
 }
 
-void XDebuggerWidget::onShowStatus(STATUS status)
+void XDebuggerWidget::onShowStatus(XDebuggerWidget::STATUS status)
 {
     quint64 nCurrentAddress=0;
     quint64 nStackPointer=0;
@@ -634,22 +634,6 @@ void XDebuggerWidget::registerShortcuts(bool bState)
 //        if(g_scStepOver)                {delete g_scStepOver;               g_scStepOver=nullptr;}
         if(g_scBreakpointToggle)     {delete g_scBreakpointToggle;    g_scBreakpointToggle=nullptr;}
     }
-}
-
-void XDebuggerWidget::on_pushButtonActionsRecord_clicked()
-{
-    // TODO record/Stop actions
-}
-
-void XDebuggerWidget::addDebugAction(XAbstractDebugger::DEBUG_ACTION action)
-{
-#ifdef QT_DEBUG
-    qDebug("addDebugAction");
-#endif
-    // TODO encode/decode functions for DEBUG_ACTION
-    QString sResult=XAbstractDebugger::debugActionToString(action);
-
-    ui->plainTextEditActions->appendPlainText(sResult);
 }
 
 void XDebuggerWidget::on_tabWidgetMain_currentChanged(int nIndex)

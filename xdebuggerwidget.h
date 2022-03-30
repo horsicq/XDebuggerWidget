@@ -74,7 +74,7 @@ private:
     STATUS getStatus(XProcess::HANDLEID handleProcess,XProcess::HANDLEID handleThread); // mb TODO nProcessID,threadID !!!
 
 signals:
-    void showStatus(STATUS status); // TODO status struct as argument getStatus function
+    void showStatus(XDebuggerWidget::STATUS status); // TODO status struct as argument getStatus function
     void errorMessage(QString sErrorMessage);
     void infoMessage(QString sInfoMessage);
     void cleanUpSignal();
@@ -105,7 +105,7 @@ private slots:
     void eventExitThread(XAbstractDebugger::EXITTHREAD_INFO *pExitThreadInfo);
     void eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
     void eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
-    void onShowStatus(STATUS status);
+    void onShowStatus(XDebuggerWidget::STATUS status);
     void on_toolButtonRun_clicked();
     void on_toolButtonStepInto_clicked();
     void on_toolButtonStepOver_clicked();
@@ -117,9 +117,7 @@ private slots:
     void errorMessageSlot(QString sErrorMessage);
     void infoMessageSlot(QString sInfoMessage);
     void writeToLog(QString sText);
-    void on_pushButtonActionsRecord_clicked();
 
-    void addDebugAction(XAbstractDebugger::DEBUG_ACTION action);
     void on_tabWidgetMain_currentChanged(int nIndex);
 
 protected:
