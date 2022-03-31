@@ -55,15 +55,15 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     // TODO ARM
     ui->widgetRegs->setOptions(g_regOptions);
 
-    qRegisterMetaType<STATUS>("STATUS");
+    qRegisterMetaType<XDebuggerWidget::STATUS>("XDebuggerWidget::STATUS");
 
-    connect(this,SIGNAL(showStatus(STATUS)),this,SLOT(onShowStatus(STATUS)));
+    connect(this,SIGNAL(showStatus(XDebuggerWidget::STATUS)),this,SLOT(onShowStatus(XDebuggerWidget::STATUS)));
     connect(this,SIGNAL(cleanUpSignal()),this,SLOT(cleanUp()));
     connect(this,SIGNAL(infoMessage(QString)),this,SLOT(infoMessageSlot(QString)));
     connect(this,SIGNAL(errorMessage(QString)),this,SLOT(errorMessageSlot(QString)));
 //    ui->widgetDisasm->installEventFilter(this);
 //    XDebuggerWidget::registerShortcuts(true);
-    connect(ui->widgetDisasm,SIGNAL(debugAction(XAbstractDebugger::DEBUG_ACTION)),this,SLOT(addDebugAction(XAbstractDebugger::DEBUG_ACTION)));
+//    connect(ui->widgetDisasm,SIGNAL(debugAction(XAbstractDebugger::DEBUG_ACTION)),this,SLOT(addDebugAction(XAbstractDebugger::DEBUG_ACTION)));
 
     ui->tabWidgetMain->setCurrentIndex(MT_CPU);
 }

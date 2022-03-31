@@ -33,6 +33,7 @@ void DW_RegistersView::setDebugger(XAbstractDebugger *pDebugger)
 void DW_RegistersView::contextMenu(const QPoint &pos)
 {
     Q_UNUSED(pos)
+    qDebug("void DW_RegistersView::contextMenu(const QPoint &pos)");
 }
 
 void DW_RegistersView::registerShortcuts(bool bState)
