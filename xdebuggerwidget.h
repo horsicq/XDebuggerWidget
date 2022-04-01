@@ -111,7 +111,6 @@ private slots:
     void on_toolButtonStepOver_clicked();
 
     void _toggleBreakpoint();
-
     void cleanUp();
 
     void errorMessageSlot(QString sErrorMessage);
