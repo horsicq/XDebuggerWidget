@@ -56,12 +56,6 @@ class XDebuggerWidget : public XShortcutsWidget
         MT_MODULES
     };
 
-    struct STATUS
-    {
-        XAbstractDebugger::REGISTERS registers;
-        XProcess::PROCESS_STATE processState;
-    };
-
 public:
     explicit XDebuggerWidget(QWidget *pParent=nullptr);
     ~XDebuggerWidget();
@@ -71,10 +65,10 @@ public:
     virtual void adjustView();
 
 private:
-    STATUS getStatus(XProcess::HANDLEID handleProcess,XProcess::HANDLEID handleThread); // mb TODO nProcessID,threadID !!!
+    XProcess::STATUS getStatus(XProcess::HANDLEID handleProcess,XProcess::HANDLEID handleThread); // mb TODO nProcessID,threadID !!!
 
 signals:
-    void showStatus(XDebuggerWidget::STATUS status); // TODO status struct as argument getStatus function
+    void showStatus(XProcess::STATUS status); // TODO status struct as argument getStatus function
     void errorMessage(QString sErrorMessage);
     void infoMessage(QString sInfoMessage);
     void cleanUpSignal();
@@ -105,7 +99,7 @@ private slots:
     void eventExitThread(XAbstractDebugger::EXITTHREAD_INFO *pExitThreadInfo);
     void eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
     void eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
-    void onShowStatus(XDebuggerWidget::STATUS status);
+    void onShowStatus(XProcess::STATUS status);
     void on_toolButtonRun_clicked();
     void on_toolButtonStepInto_clicked();
     void on_toolButtonStepOver_clicked();
@@ -147,10 +141,9 @@ private:
     XBinary::MEMORY_REGION g_mrStack;
     XBinary::MEMORY_REGION g_mrHex;
 
-    XProcessDevice *g_pPDCode;
-    XProcessDevice *g_pPDStack;
-    XProcessDevice *g_pPDHex;
-    XAbstractDebugger::REG_OPTIONS g_regOptions;
+    XProcessDevice *g_pPDCode;  // TODO -> XProcess
+    XProcessDevice *g_pPDStack;  // TODO -> XProcess
+    XProcessDevice *g_pPDHex;  // TODO -> XProcess
 };
 
 #endif // XDEBUGGERWIDGET_H

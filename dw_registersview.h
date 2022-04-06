@@ -33,7 +33,7 @@ public:
     void setDebugger(XAbstractDebugger *pDebugger);
 
 protected:
-    virtual void contextMenu(const QPoint &pos);
+//    virtual void contextMenu(const QPoint &pos);
     virtual void registerShortcuts(bool bState);
 
 private:

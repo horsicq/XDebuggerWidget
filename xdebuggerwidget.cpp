@@ -44,20 +44,9 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     g_pPDStack=nullptr;
     g_pPDHex=nullptr;
 
-    g_regOptions={};
-    g_regOptions.bGeneral=true;
-    g_regOptions.bIP=true;
-    g_regOptions.bFlags=true;
-    g_regOptions.bSegments=true;
-    g_regOptions.bDebug=true;
-    g_regOptions.bFloat=true;
-    g_regOptions.bXMM=true;
-    // TODO ARM
-    ui->widgetRegs->setOptions(g_regOptions);
+    qRegisterMetaType<XProcess::STATUS>("XProcess::STATUS");
 
-    qRegisterMetaType<XDebuggerWidget::STATUS>("XDebuggerWidget::STATUS");
-
-    connect(this,SIGNAL(showStatus(XDebuggerWidget::STATUS)),this,SLOT(onShowStatus(XDebuggerWidget::STATUS)));
+    connect(this,SIGNAL(showStatus(XProcess::STATUS)),this,SLOT(onShowStatus(XProcess::STATUS)));
     connect(this,SIGNAL(cleanUpSignal()),this,SLOT(cleanUp()));
     connect(this,SIGNAL(infoMessage(QString)),this,SLOT(infoMessageSlot(QString)));
     connect(this,SIGNAL(errorMessage(QString)),this,SLOT(errorMessageSlot(QString)));
@@ -156,12 +145,13 @@ void XDebuggerWidget::adjustView()
     XShortcutsWidget::adjustView();
 }
 
-XDebuggerWidget::STATUS XDebuggerWidget::getStatus(XProcess::HANDLEID handleProcess,XProcess::HANDLEID handleThread)
+XProcess::STATUS XDebuggerWidget::getStatus(XProcess::HANDLEID handleProcess,XProcess::HANDLEID handleThread)
 {
-    XDebuggerWidget::STATUS result={};
+    XProcess::STATUS result={};
 
-    result.registers=g_pDebugger->getRegisters(handleThread,g_regOptions);
-    result.processState=XProcess::getProcessState(handleProcess);
+    result.registers=XProcess::getRegisters(handleThread,ui->widgetRegs->getOptions()); // TODO Check getOptions
+    result.listMemoryRegions=XProcess::getMemoryRegionsList(handleProcess,0,0xFFFFFFFFFFFFFFFF);
+    result.listModules=XProcess::getModulesList(handleProcess.nID);
 
     return result;
 }
@@ -194,9 +184,7 @@ void XDebuggerWidget::onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoi
 
     g_pDebugger->suspendThread(handleThread);
 
-    STATUS status=getStatus(handleProcess,handleThread);
-
-    emit showStatus(status);
+    emit showStatus(getStatus(handleProcess,handleThread));
 }
 
 void XDebuggerWidget::onProcessEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
@@ -328,7 +316,7 @@ void XDebuggerWidget::eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_IN
     emit infoMessage(sString);
 }
 
-void XDebuggerWidget::onShowStatus(XDebuggerWidget::STATUS status)
+void XDebuggerWidget::onShowStatus(XProcess::STATUS status)
 {
     quint64 nCurrentAddress=0;
     quint64 nStackPointer=0;
@@ -343,11 +331,12 @@ void XDebuggerWidget::onShowStatus(XDebuggerWidget::STATUS status)
 #endif
 
     // TODO getMemoryRegions
+    // TODO Memory Regions manager
 
     if(!XBinary::isAddressInMemoryRegion(&g_mrCode,nCurrentAddress))
     {
 //        g_mrCode=XProcess::getMemoryRegion(handleProcessMemoryQuery,g_currentBreakPointInfo.nAddress);
-        g_mrCode=XBinary::getMemoryRegionByAddress(&(status.processState.listMemoryRegions),nCurrentAddress);
+        g_mrCode=XBinary::getMemoryRegionByAddress(&(status.listMemoryRegions),nCurrentAddress);
 
         if(g_pPDCode)
         {
@@ -355,7 +344,7 @@ void XDebuggerWidget::onShowStatus(XDebuggerWidget::STATUS status)
             g_pPDCode=nullptr;
         }
 
-        g_pPDCode=new XProcessDevice(this);
+        g_pPDCode=new XProcessDevice(this);  // TODO -> XProcess
 
         if(g_pPDCode->openHandle(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrCode.nAddress,g_mrCode.nSize,QIODevice::ReadOnly)) // Windows TODO Linux
         {
@@ -404,7 +393,7 @@ void XDebuggerWidget::onShowStatus(XDebuggerWidget::STATUS status)
     if(!XBinary::isAddressInMemoryRegion(&g_mrStack,nStackPointer))
     {
 //        g_mrStack=XProcess::getMemoryRegion(handleProcessMemoryQuery,nStackPointer);
-        g_mrStack=XBinary::getMemoryRegionByAddress(&(status.processState.listMemoryRegions),nStackPointer);
+        g_mrStack=XBinary::getMemoryRegionByAddress(&(status.listMemoryRegions),nStackPointer);
 
         if(g_pPDStack)
         {
@@ -412,7 +401,7 @@ void XDebuggerWidget::onShowStatus(XDebuggerWidget::STATUS status)
             g_pPDStack=nullptr;
         }
 
-        g_pPDStack=new XProcessDevice(this);
+        g_pPDStack=new XProcessDevice(this);  // TODO -> XProcess
 
         if(g_pPDStack->openHandle(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrStack.nAddress,g_mrStack.nSize,QIODevice::ReadOnly))
         {
