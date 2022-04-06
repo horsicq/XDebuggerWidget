@@ -44,9 +44,9 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     g_pPDStack=nullptr;
     g_pPDHex=nullptr;
 
-    qRegisterMetaType<XProcess::STATUS>("XProcess::STATUS");
+    qRegisterMetaType<XBinary::STATUS>("XBinary::STATUS");
 
-    connect(this,SIGNAL(showStatus(XProcess::STATUS)),this,SLOT(onShowStatus(XProcess::STATUS)));
+    connect(this,SIGNAL(showStatus(XBinary::STATUS)),this,SLOT(onShowStatus(XBinary::STATUS)));
     connect(this,SIGNAL(cleanUpSignal()),this,SLOT(cleanUp()));
     connect(this,SIGNAL(infoMessage(QString)),this,SLOT(infoMessageSlot(QString)));
     connect(this,SIGNAL(errorMessage(QString)),this,SLOT(errorMessageSlot(QString)));
@@ -145,9 +145,9 @@ void XDebuggerWidget::adjustView()
     XShortcutsWidget::adjustView();
 }
 
-XProcess::STATUS XDebuggerWidget::getStatus(XProcess::HANDLEID handleProcess,XProcess::HANDLEID handleThread)
+XBinary::STATUS XDebuggerWidget::getStatus(XProcess::HANDLEID handleProcess,XProcess::HANDLEID handleThread)
 {
-    XProcess::STATUS result={};
+    XBinary::STATUS result={};
 
     result.registers=XProcess::getRegisters(handleThread,ui->widgetRegs->getOptions()); // TODO Check getOptions
     result.listMemoryRegions=XProcess::getMemoryRegionsList(handleProcess,0,0xFFFFFFFFFFFFFFFF);
@@ -316,7 +316,7 @@ void XDebuggerWidget::eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_IN
     emit infoMessage(sString);
 }
 
-void XDebuggerWidget::onShowStatus(XProcess::STATUS status)
+void XDebuggerWidget::onShowStatus(XBinary::STATUS status)
 {
     quint64 nCurrentAddress=0;
     quint64 nStackPointer=0;
@@ -480,11 +480,6 @@ void XDebuggerWidget::debugStepOver()
 void XDebuggerWidget::viewCPU()
 {
     ui->tabWidgetMain->setCurrentIndex(MT_CPU);
-}
-
-void XDebuggerWidget::viewActions()
-{
-    ui->tabWidgetMain->setCurrentIndex(MT_ACTIONS);
 }
 
 void XDebuggerWidget::viewLog()

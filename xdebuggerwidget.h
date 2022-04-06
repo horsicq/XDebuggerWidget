@@ -46,7 +46,6 @@ class XDebuggerWidget : public XShortcutsWidget
     enum MT
     {
         MT_CPU=0,
-        MT_ACTIONS,
         MT_LOG,
         MT_BREAKPOINTS,
         MT_MEMORYMAP,
@@ -65,10 +64,10 @@ public:
     virtual void adjustView();
 
 private:
-    XProcess::STATUS getStatus(XProcess::HANDLEID handleProcess,XProcess::HANDLEID handleThread); // mb TODO nProcessID,threadID !!!
+    XBinary::STATUS getStatus(XProcess::HANDLEID handleProcess,XProcess::HANDLEID handleThread); // mb TODO nProcessID,threadID !!!
 
 signals:
-    void showStatus(XProcess::STATUS status); // TODO status struct as argument getStatus function
+    void showStatus(XBinary::STATUS status); // TODO status struct as argument getStatus function
     void errorMessage(QString sErrorMessage);
     void infoMessage(QString sInfoMessage);
     void cleanUpSignal();
@@ -78,7 +77,6 @@ public slots:
     void debugStepInto();
     void debugStepOver();
     void viewCPU();
-    void viewActions();
     void viewLog();
     void viewBreakpoints();
     void viewMemoryMap();
@@ -99,7 +97,7 @@ private slots:
     void eventExitThread(XAbstractDebugger::EXITTHREAD_INFO *pExitThreadInfo);
     void eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
     void eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
-    void onShowStatus(XProcess::STATUS status);
+    void onShowStatus(XBinary::STATUS status);
     void on_toolButtonRun_clicked();
     void on_toolButtonStepInto_clicked();
     void on_toolButtonStepOver_clicked();
