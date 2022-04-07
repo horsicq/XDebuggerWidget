@@ -32,6 +32,7 @@
 #include "xosxdebugger.h"
 #endif
 #include "xshortcutswidget.h"
+#include "xinfodb.h"
 
 // TODO WinAPI page/ Widget
 
@@ -63,11 +64,8 @@ public:
     void setGlobal(XShortcuts *pShortcuts,XOptions *pXOptions);
     virtual void adjustView();
 
-private:
-    XBinary::STATUS getStatus(XProcess::HANDLEID handleProcess,XProcess::HANDLEID handleThread); // mb TODO nProcessID,threadID !!!
-
 signals:
-    void showStatus(XBinary::STATUS status); // TODO status struct as argument getStatus function
+    void showStatus();
     void errorMessage(QString sErrorMessage);
     void infoMessage(QString sInfoMessage);
     void cleanUpSignal();
@@ -97,7 +95,7 @@ private slots:
     void eventExitThread(XAbstractDebugger::EXITTHREAD_INFO *pExitThreadInfo);
     void eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
     void eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
-    void onShowStatus(XBinary::STATUS status);
+    void onShowStatus();
     void on_toolButtonRun_clicked();
     void on_toolButtonStepInto_clicked();
     void on_toolButtonStepOver_clicked();
@@ -126,6 +124,8 @@ private:
 #ifdef Q_OS_OSX
     XOSXDebugger *g_pDebugger;
 #endif
+    XInfoDB *g_pInfoDB;
+
     XAbstractDebugger::BREAKPOINT_INFO g_currentBreakPointInfo;
 
 //    QShortcut *g_scRun;
