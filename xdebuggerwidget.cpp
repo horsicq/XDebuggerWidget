@@ -345,8 +345,8 @@ void XDebuggerWidget::onShowStatus()
     nCurrentAddress=status.registers.ESP;
 #endif
 #ifdef Q_PROCESSOR_X86_64
-    nStackPointer=g_pInfoDB->getCurrentReg(XInfoDB::REG_RSP).var.v_uint64;
-    nCurrentAddress=g_pInfoDB->getCurrentReg(XInfoDB::REG_RIP).var.v_uint64;
+    nStackPointer=g_pInfoDB->getCurrentReg(XInfoDB::XREG_RSP).var.v_uint64;
+    nCurrentAddress=g_pInfoDB->getCurrentReg(XInfoDB::XREG_RIP).var.v_uint64;
 #endif
 
     // TODO getMemoryRegions
