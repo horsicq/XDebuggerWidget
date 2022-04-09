@@ -51,31 +51,17 @@ void DW_DisasmView::_breakpointToggle()
 
         if(nAddress!=-1)
         {
-            if(!g_pDebugger->isSoftwareBreakpointPresent(nAddress))
+            if(!g_pDebugger->getXInfoDB()->isBreakPointPresent(nAddress))
             {
-                if(g_pDebugger->setSoftwareBreakpoint(nAddress))
+                if(g_pDebugger->getXInfoDB()->addBreakPoint(nAddress))
                 {
-//                    qDebug("Breakpoit set");
-                    XAbstractDebugger::DEBUG_ACTION dbgAction={};
-                    dbgAction.type=XAbstractDebugger::DBT_SETSOFTWAREBREAKPOINT;
-                    dbgAction.var[0]=nAddress;
-
-                    emit debugAction(dbgAction);
-
                     showStatus();
                 }
             }
             else
             {
-                if(g_pDebugger->removeSoftwareBreakpoint(nAddress))
+                if(g_pDebugger->getXInfoDB()->removeBreakPoint(nAddress))
                 {
-//                    qDebug("Breakpoit unset");
-                    XAbstractDebugger::DEBUG_ACTION dbgAction={};
-                    dbgAction.type=XAbstractDebugger::DBT_REMOVESOFTWAREBREAKPOINT;
-                    dbgAction.var[0]=nAddress;
-
-                    emit debugAction(dbgAction);
-
                     showStatus();
                 }
             }

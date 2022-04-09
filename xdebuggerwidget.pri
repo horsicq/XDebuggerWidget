@@ -1,6 +1,8 @@
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
+DEFINES += USE_XPROCESS
+
 FORMS += \
     $$PWD/xdebuggeroptionswidget.ui \
     $$PWD/xdebuggerwidget.ui

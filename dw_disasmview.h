@@ -34,9 +34,6 @@ public:
     void setDebugger(XAbstractDebugger *pDebugger);
     void showStatus();
 
-signals:
-    void debugAction(XAbstractDebugger::DEBUG_ACTION action);
-
 public slots:
     void _breakpointToggle();
     void _copyCursorAddress();

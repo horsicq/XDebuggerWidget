@@ -53,7 +53,7 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     connect(this,SIGNAL(errorMessage(QString)),this,SLOT(errorMessageSlot(QString)));
 //    ui->widgetDisasm->installEventFilter(this);
 //    XDebuggerWidget::registerShortcuts(true);
-//    connect(ui->widgetDisasm,SIGNAL(debugAction(XAbstractDebugger::DEBUG_ACTION)),this,SLOT(addDebugAction(XAbstractDebugger::DEBUG_ACTION)));
+//    connect(ui->widgetDisasm,SIGNAL(debugAction(XInfoDB::DEBUG_ACTION)),this,SLOT(addDebugAction(XInfoDB::DEBUG_ACTION)));
 
     ui->tabWidgetMain->setCurrentIndex(MT_CPU);
 }
@@ -75,18 +75,18 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
     cleanUp();
 
+    g_pInfoDB=new XInfoDB;
+
     g_pThread=new QThread;
 #ifdef Q_OS_WIN
-    g_pDebugger=new XWindowsDebugger;
+    g_pDebugger=new XWindowsDebugger(0,g_pInfoDB);
 #endif
 #ifdef Q_OS_LINUX
-    g_pDebugger=new XLinuxDebugger;
+    g_pDebugger=new XLinuxDebugger(0,g_pInfoDB);
 #endif
 #ifdef Q_OS_OSX
-    g_pDebugger=new XOSXDebugger;
+    g_pDebugger=new XOSXDebugger(0,g_pInfoDB);
 #endif
-
-    g_pInfoDB=new XInfoDB;
 
     ui->widgetDisasm->setDebugger(g_pDebugger);
     ui->widgetHex->setDebugger(g_pDebugger);
@@ -108,18 +108,18 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     connect(g_pThread,SIGNAL(started()),g_pDebugger,SLOT(process()));
 //    connect(pDebugger,SIGNAL(finished()),pDebugger,SLOT(deleteLater()));
 
-    connect(g_pDebugger,SIGNAL(eventCreateProcess(XAbstractDebugger::PROCESS_INFO*)),this,SLOT(onCreateProcess(XAbstractDebugger::PROCESS_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventProcessEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onProcessEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventProgramEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onProgramEntryPoint(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventStep(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onStep(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventStepInto(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onStepInto(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventStepOver(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onStepOver(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventBreakPoint(XAbstractDebugger::BREAKPOINT_INFO*)),this,SLOT(onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventExitProcess(XAbstractDebugger::EXITPROCESS_INFO*)),this,SLOT(onExitProcess(XAbstractDebugger::EXITPROCESS_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventCreateThread(XAbstractDebugger::THREAD_INFO*)),this,SLOT(eventCreateThread(XAbstractDebugger::THREAD_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventExitThread(XAbstractDebugger::EXITTHREAD_INFO*)),this,SLOT(eventExitThread(XAbstractDebugger::EXITTHREAD_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO*)),this,SLOT(eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO*)),this,SLOT(eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventCreateProcess(XInfoDB::PROCESS_INFO*)),this,SLOT(onCreateProcess(XInfoDB::PROCESS_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventProcessEntryPoint(XInfoDB::BREAKPOINT_INFO*)),this,SLOT(onProcessEntryPoint(XInfoDB::BREAKPOINT_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventProgramEntryPoint(XInfoDB::BREAKPOINT_INFO*)),this,SLOT(onProgramEntryPoint(XInfoDB::BREAKPOINT_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventStep(XInfoDB::BREAKPOINT_INFO*)),this,SLOT(onStep(XInfoDB::BREAKPOINT_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventStepInto(XInfoDB::BREAKPOINT_INFO*)),this,SLOT(onStepInto(XInfoDB::BREAKPOINT_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventStepOver(XInfoDB::BREAKPOINT_INFO*)),this,SLOT(onStepOver(XInfoDB::BREAKPOINT_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventBreakPoint(XInfoDB::BREAKPOINT_INFO*)),this,SLOT(onBreakPoint(XInfoDB::BREAKPOINT_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventExitProcess(XInfoDB::EXITPROCESS_INFO*)),this,SLOT(onExitProcess(XInfoDB::EXITPROCESS_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventCreateThread(XInfoDB::THREAD_INFO*)),this,SLOT(eventCreateThread(XInfoDB::THREAD_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventExitThread(XInfoDB::EXITTHREAD_INFO*)),this,SLOT(eventExitThread(XInfoDB::EXITTHREAD_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),this,SLOT(eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),Qt::DirectConnection);
+    connect(g_pDebugger,SIGNAL(eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),this,SLOT(eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),Qt::DirectConnection);
 
     g_pDebugger->moveToThread(g_pThread);
     g_pThread->start();
@@ -149,7 +149,7 @@ void XDebuggerWidget::adjustView()
     XShortcutsWidget::adjustView();
 }
 
-void XDebuggerWidget::onCreateProcess(XAbstractDebugger::PROCESS_INFO *pProcessInfo)
+void XDebuggerWidget::onCreateProcess(XInfoDB::PROCESS_INFO *pProcessInfo)
 {
     // TODO more info
     QString sString=QString("%1 PID: %2").arg(tr("Process created"),QString::number(pProcessInfo->nProcessID));
@@ -160,10 +160,11 @@ void XDebuggerWidget::onCreateProcess(XAbstractDebugger::PROCESS_INFO *pProcessI
     handleProcess.hHandle=pProcessInfo->hProcessMemoryQuery;
     handleProcess.nID=pProcessInfo->nProcessID;
 
-    g_pInfoDB->setProcess(handleProcess);
+    ui->widgetProcessMemoryMap->setData(g_pDebugger->getXInfoDB()->getProcessInfo()->nProcessID,false);
+    ui->widgetProcessModules->setData(g_pDebugger->getXInfoDB()->getProcessInfo()->nProcessID,false);
 }
 
-void XDebuggerWidget::onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
+void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 {
     g_currentBreakPointInfo=*pBreakPointInfo;
 #ifdef QT_DEBUG
@@ -190,14 +191,14 @@ void XDebuggerWidget::onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoi
     emit showStatus();
 }
 
-void XDebuggerWidget::onProcessEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
+void XDebuggerWidget::onProcessEntryPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 {
-//    XAbstractDebugger::suspendThread(pBreakPointInfo->handleIDThread);
+//    XInfoDB::suspendThread(pBreakPointInfo->handleIDThread);
 
 //    emit showStatus();
 }
 
-void XDebuggerWidget::onProgramEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
+void XDebuggerWidget::onProgramEntryPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 {
     g_currentBreakPointInfo=*pBreakPointInfo;
 #ifdef QT_DEBUG
@@ -221,7 +222,7 @@ void XDebuggerWidget::onProgramEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pB
     emit showStatus();
 }
 
-void XDebuggerWidget::onStep(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
+void XDebuggerWidget::onStep(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 {
     g_currentBreakPointInfo=*pBreakPointInfo;
 #ifdef QT_DEBUG
@@ -245,7 +246,7 @@ void XDebuggerWidget::onStep(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo
     emit showStatus();
 }
 
-void XDebuggerWidget::onStepInto(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
+void XDebuggerWidget::onStepInto(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 {
     g_currentBreakPointInfo=*pBreakPointInfo;
 #ifdef QT_DEBUG
@@ -268,7 +269,7 @@ void XDebuggerWidget::onStepInto(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoint
     emit showStatus();
 }
 
-void XDebuggerWidget::onStepOver(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo)
+void XDebuggerWidget::onStepOver(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 {
     g_currentBreakPointInfo=*pBreakPointInfo;
 #ifdef QT_DEBUG
@@ -291,7 +292,7 @@ void XDebuggerWidget::onStepOver(XAbstractDebugger::BREAKPOINT_INFO *pBreakPoint
     emit showStatus();
 }
 
-void XDebuggerWidget::onExitProcess(XAbstractDebugger::EXITPROCESS_INFO *pExitProcessInfo)
+void XDebuggerWidget::onExitProcess(XInfoDB::EXITPROCESS_INFO *pExitProcessInfo)
 {
     // TODO more info
     QString sString=QString("%1 PID: %2").arg(tr("Process exited"),QString::number(pExitProcessInfo->nProcessID));
@@ -303,7 +304,7 @@ void XDebuggerWidget::onExitProcess(XAbstractDebugger::EXITPROCESS_INFO *pExitPr
     // TODO Clear screen
 }
 
-void XDebuggerWidget::eventCreateThread(XAbstractDebugger::THREAD_INFO *pThreadInfo)
+void XDebuggerWidget::eventCreateThread(XInfoDB::THREAD_INFO *pThreadInfo)
 {
     // TODO more info
     QString sString=QString("%1 ThreadID: %2").arg(tr("Thread created"),QString::number(pThreadInfo->nThreadID));
@@ -311,7 +312,7 @@ void XDebuggerWidget::eventCreateThread(XAbstractDebugger::THREAD_INFO *pThreadI
     emit infoMessage(sString);
 }
 
-void XDebuggerWidget::eventExitThread(XAbstractDebugger::EXITTHREAD_INFO *pExitThreadInfo)
+void XDebuggerWidget::eventExitThread(XInfoDB::EXITTHREAD_INFO *pExitThreadInfo)
 {
     // TODO more info
     QString sString=QString("%1 ThreadID: %2").arg(tr("Thread exited"),QString::number(pExitThreadInfo->nThreadID));
@@ -319,7 +320,7 @@ void XDebuggerWidget::eventExitThread(XAbstractDebugger::EXITTHREAD_INFO *pExitT
     emit infoMessage(sString);
 }
 
-void XDebuggerWidget::eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo)
+void XDebuggerWidget::eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pSharedObjectInfo)
 {
     // TODO more info
     QString sString=QString("%1: %2").arg(tr("Shared object loaded"),pSharedObjectInfo->sFileName);
@@ -327,7 +328,7 @@ void XDebuggerWidget::eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO
     emit infoMessage(sString);
 }
 
-void XDebuggerWidget::eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo)
+void XDebuggerWidget::eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pSharedObjectInfo)
 {
     // TODO more info
     QString sString=QString("%1: %2").arg(tr("Shared object unloaded"),pSharedObjectInfo->sFileName); // TODO rewrite
@@ -537,13 +538,13 @@ void XDebuggerWidget::_toggleBreakpoint()
 
     QList<XBinary::MEMORY_REPLACE> listReplaces=g_pDebugger->getMemoryReplaces();
 
-    ui->widgetDisasm->setMemoryReplaces(listReplaces);
-    ui->widgetHex->setMemoryReplaces(listReplaces);
-    ui->widgetStack->setMemoryReplaces(listReplaces);
+    ui->widgetDisasm->setMemoryReplaces(listReplaces); // TODO remove
+    ui->widgetHex->setMemoryReplaces(listReplaces); // TODO remove
+    ui->widgetStack->setMemoryReplaces(listReplaces); // TODO remove
 
-    ui->widgetDisasm->reload(true);
-    ui->widgetHex->reload(true);
-    ui->widgetStack->reload(true);
+    ui->widgetDisasm->reload(true); // TODO signal/slot
+    ui->widgetHex->reload(true); // TODO signal/slot
+    ui->widgetStack->reload(true); // TODO signal/slot
 }
 
 void XDebuggerWidget::cleanUp()
@@ -643,18 +644,27 @@ void XDebuggerWidget::registerShortcuts(bool bState)
 
 void XDebuggerWidget::on_tabWidgetMain_currentChanged(int nIndex)
 {
-    if(nIndex==MT_MEMORYMAP)
+    Q_UNUSED(nIndex)
+
+    reload();
+}
+
+void XDebuggerWidget::reload()
+{
+    qint32 nIndex=ui->tabWidgetMain->currentIndex();
+
+    if(nIndex==MT_CPU)
     {
-        if(g_pDebugger)
-        {
-            ui->widgetProcessMemoryMap->setData(g_pDebugger->getProcessInfo()->nProcessID); // TODO optimize
-        }
+        ui->widgetDisasm->reload(true);
+        ui->widgetHex->reload(true);
+        ui->widgetStack->reload(true);
+    }
+    else if(nIndex==MT_MEMORYMAP)
+    {
+        ui->widgetProcessMemoryMap->reload();
     }
     else if(nIndex==MT_MODULES)
     {
-        if(g_pDebugger)
-        {
-            ui->widgetProcessModules->setData(g_pDebugger->getProcessInfo()->nProcessID); // TODO optimize
-        }
+        ui->widgetProcessModules->reload();
     }
 }

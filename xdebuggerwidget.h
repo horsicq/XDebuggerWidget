@@ -83,18 +83,18 @@ public slots:
     void viewHandles();
 
 private slots:
-    void onCreateProcess(XAbstractDebugger::PROCESS_INFO *pProcessInfo);
-    void onBreakPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
-    void onProcessEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
-    void onProgramEntryPoint(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
-    void onStep(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
-    void onStepInto(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
-    void onStepOver(XAbstractDebugger::BREAKPOINT_INFO *pBreakPointInfo);
-    void onExitProcess(XAbstractDebugger::EXITPROCESS_INFO *pExitProcessInfo);
-    void eventCreateThread(XAbstractDebugger::THREAD_INFO *pThreadInfo);
-    void eventExitThread(XAbstractDebugger::EXITTHREAD_INFO *pExitThreadInfo);
-    void eventLoadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
-    void eventUnloadSharedObject(XAbstractDebugger::SHAREDOBJECT_INFO *pSharedObjectInfo);
+    void onCreateProcess(XInfoDB::PROCESS_INFO *pProcessInfo);
+    void onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo);
+    void onProcessEntryPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo);
+    void onProgramEntryPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo);
+    void onStep(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo);
+    void onStepInto(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo);
+    void onStepOver(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo);
+    void onExitProcess(XInfoDB::EXITPROCESS_INFO *pExitProcessInfo);
+    void eventCreateThread(XInfoDB::THREAD_INFO *pThreadInfo);
+    void eventExitThread(XInfoDB::EXITTHREAD_INFO *pExitThreadInfo);
+    void eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pSharedObjectInfo);
+    void eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pSharedObjectInfo);
     void onShowStatus();
     void on_toolButtonRun_clicked();
     void on_toolButtonStepInto_clicked();
@@ -108,6 +108,7 @@ private slots:
     void writeToLog(QString sText);
 
     void on_tabWidgetMain_currentChanged(int nIndex);
+    void reload();
 
 protected:
     virtual void registerShortcuts(bool bState);
@@ -126,7 +127,7 @@ private:
 #endif
     XInfoDB *g_pInfoDB;
 
-    XAbstractDebugger::BREAKPOINT_INFO g_currentBreakPointInfo;
+    XInfoDB::BREAKPOINT_INFO g_currentBreakPointInfo;
 
 //    QShortcut *g_scRun;
 //    QShortcut *g_scStepInto;
