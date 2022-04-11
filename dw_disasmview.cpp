@@ -22,47 +22,29 @@
 
 DW_DisasmView::DW_DisasmView(QWidget *pParent) : XDisasmView(pParent)
 {
-    g_pDebugger=nullptr;
-}
 
-void DW_DisasmView::setDebugger(XAbstractDebugger *pDebugger)
-{
-    g_pDebugger=pDebugger;
-}
-
-void DW_DisasmView::showStatus()
-{
-#ifdef QT_DEBUG
-    qDebug("void DW_DisasmView::showStatus()");
-#endif
-
-//    QList<XBinary::MEMORY_REPLACE> listReplaces=g_pDebugger->getMemoryReplaces();
-
-//    setMemoryReplaces(listReplaces);
-
-//    reload(true);
 }
 
 void DW_DisasmView::_breakpointToggle()
 {
-    if(g_pDebugger)
+    if(getXInfoDB())
     {
         qint64 nAddress=getSelectionInitAddress();
 
         if(nAddress!=-1)
         {
-            if(!g_pDebugger->getXInfoDB()->isBreakPointPresent(nAddress))
+            if(!getXInfoDB()->isBreakPointPresent(nAddress))
             {
-                if(g_pDebugger->getXInfoDB()->addBreakPoint(nAddress))
+                if(getXInfoDB()->addBreakPoint(nAddress))
                 {
-                    showStatus();
+                    getXInfoDB()->reload(false);
                 }
             }
             else
             {
-                if(g_pDebugger->getXInfoDB()->removeBreakPoint(nAddress))
+                if(getXInfoDB()->removeBreakPoint(nAddress))
                 {
-                    showStatus();
+                    getXInfoDB()->reload(false);
                 }
             }
         }
@@ -71,7 +53,7 @@ void DW_DisasmView::_breakpointToggle()
 
 void DW_DisasmView::_copyCursorAddress()
 {
-    if(g_pDebugger)
+    if(getXInfoDB())
     {
         qint64 nAddress=getSelectionInitAddress();
 
@@ -96,7 +78,7 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
     // TODO Signatures
     // TODO Copy
 
-    if(g_pDebugger)
+    if(getXInfoDB())
     {
         QMenu contextMenu(this);
 
@@ -127,7 +109,6 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
         contextMenu.addMenu(&menuCopy);
 
         contextMenu.exec(pos);
-
 
 //        qint64 nAddress=getSelectionInitAddress();
 //        if(!g_pDebugger->isSoftwareBreakpointPresent(nAddress))

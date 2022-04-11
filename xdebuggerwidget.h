@@ -65,7 +65,6 @@ public:
     virtual void adjustView();
 
 signals:
-    void showStatus();
     void errorMessage(QString sErrorMessage);
     void infoMessage(QString sInfoMessage);
     void cleanUpSignal();
@@ -95,7 +94,7 @@ private slots:
     void eventExitThread(XInfoDB::EXITTHREAD_INFO *pExitThreadInfo);
     void eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pSharedObjectInfo);
     void eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pSharedObjectInfo);
-    void onShowStatus();
+    void onDataChanged(bool bDataReload);
     void on_toolButtonRun_clicked();
     void on_toolButtonStepInto_clicked();
     void on_toolButtonStepOver_clicked();
@@ -136,9 +135,9 @@ private:
 
     XBinary::OSINFO g_osInfo;
 
-    XBinary::MEMORY_REGION g_mrCode;
-    XBinary::MEMORY_REGION g_mrStack;
-    XBinary::MEMORY_REGION g_mrHex;
+    XProcess::MEMORY_REGION g_mrCode;
+    XProcess::MEMORY_REGION g_mrStack;
+    XProcess::MEMORY_REGION g_mrHex;
 
     XProcessDevice *g_pPDCode;  // TODO -> XProcess
     XProcessDevice *g_pPDStack;  // TODO -> XProcess

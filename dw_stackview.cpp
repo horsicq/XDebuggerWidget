@@ -22,17 +22,6 @@
 
 DW_StackView::DW_StackView(QWidget *pParent) : XStackView(pParent)
 {
-    g_pDebugger=nullptr;
-}
-
-void DW_StackView::setDebugger(XAbstractDebugger *pDebugger)
-{
-    g_pDebugger=pDebugger;
-}
-
-void DW_StackView::showStatus()
-{
-    reload(true);
 }
 
 void DW_StackView::contextMenu(const QPoint &pos)

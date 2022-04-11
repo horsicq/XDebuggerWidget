@@ -47,7 +47,6 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
 
 //    qRegisterMetaType<XBinary::PROCESS_STATUS>("XBinary::PROCESS_STATUS");
 
-    connect(this,SIGNAL(showStatus()),this,SLOT(onShowStatus()));
     connect(this,SIGNAL(cleanUpSignal()),this,SLOT(cleanUp()));
     connect(this,SIGNAL(infoMessage(QString)),this,SLOT(infoMessageSlot(QString)));
     connect(this,SIGNAL(errorMessage(QString)),this,SLOT(errorMessageSlot(QString)));
@@ -88,10 +87,13 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     g_pDebugger=new XOSXDebugger(0,g_pInfoDB);
 #endif
 
-    ui->widgetDisasm->setDebugger(g_pDebugger);
-    ui->widgetHex->setDebugger(g_pDebugger);
-    ui->widgetRegs->setDebugger(g_pDebugger);
-    ui->widgetStack->setDebugger(g_pDebugger);
+    ui->widgetDisasm->setXInfoDB(g_pDebugger->getXInfoDB());
+    ui->widgetHex->setXInfoDB(g_pDebugger->getXInfoDB());
+    ui->widgetRegs->setXInfoDB(g_pDebugger->getXInfoDB());
+    ui->widgetStack->setXInfoDB(g_pDebugger->getXInfoDB());
+
+    ui->widgetProcessModules->setData(g_pDebugger->getXInfoDB(),false);
+    ui->widgetProcessMemoryMap->setData(g_pDebugger->getXInfoDB(),false);
 
     g_osInfo=XProcess::getOsInfo();
 
@@ -120,6 +122,8 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     connect(g_pDebugger,SIGNAL(eventExitThread(XInfoDB::EXITTHREAD_INFO*)),this,SLOT(eventExitThread(XInfoDB::EXITTHREAD_INFO*)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),this,SLOT(eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),this,SLOT(eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),Qt::DirectConnection);
+
+    connect(g_pInfoDB,SIGNAL(dataChanged(bool)),this,SLOT(onDataChanged(bool)));
 
     g_pDebugger->moveToThread(g_pThread);
     g_pThread->start();
@@ -155,13 +159,6 @@ void XDebuggerWidget::onCreateProcess(XInfoDB::PROCESS_INFO *pProcessInfo)
     QString sString=QString("%1 PID: %2").arg(tr("Process created"),QString::number(pProcessInfo->nProcessID));
 
     emit infoMessage(sString);
-
-    XProcess::HANDLEID handleProcess={};
-    handleProcess.hHandle=pProcessInfo->hProcessMemoryQuery;
-    handleProcess.nID=pProcessInfo->nProcessID;
-
-    ui->widgetProcessMemoryMap->setData(g_pDebugger->getXInfoDB()->getProcessInfo()->nProcessID,false);
-    ui->widgetProcessModules->setData(g_pDebugger->getXInfoDB()->getProcessInfo()->nProcessID,false);
 }
 
 void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
@@ -188,7 +185,7 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
     g_pInfoDB->updateMemoryRegionsList();
     g_pInfoDB->updateModulesList();
 
-    emit showStatus();
+    g_pInfoDB->reload(true);
 }
 
 void XDebuggerWidget::onProcessEntryPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
@@ -219,7 +216,7 @@ void XDebuggerWidget::onProgramEntryPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointI
     g_pInfoDB->updateMemoryRegionsList();
     g_pInfoDB->updateModulesList();
 
-    emit showStatus();
+    g_pInfoDB->reload(true);
 }
 
 void XDebuggerWidget::onStep(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
@@ -243,7 +240,7 @@ void XDebuggerWidget::onStep(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
     g_pInfoDB->updateMemoryRegionsList();
     g_pInfoDB->updateModulesList();
 
-    emit showStatus();
+    g_pInfoDB->reload(true);
 }
 
 void XDebuggerWidget::onStepInto(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
@@ -266,7 +263,7 @@ void XDebuggerWidget::onStepInto(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
     g_pInfoDB->updateMemoryRegionsList();
     g_pInfoDB->updateModulesList();
 
-    emit showStatus();
+    g_pInfoDB->reload(true);
 }
 
 void XDebuggerWidget::onStepOver(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
@@ -289,7 +286,7 @@ void XDebuggerWidget::onStepOver(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
     g_pInfoDB->updateMemoryRegionsList();
     g_pInfoDB->updateModulesList();
 
-    emit showStatus();
+    g_pInfoDB->reload(true);
 }
 
 void XDebuggerWidget::onExitProcess(XInfoDB::EXITPROCESS_INFO *pExitProcessInfo)
@@ -336,112 +333,113 @@ void XDebuggerWidget::eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pShare
     emit infoMessage(sString);
 }
 
-void XDebuggerWidget::onShowStatus()
+void XDebuggerWidget::onDataChanged(bool bDataReload)
 {
-    quint64 nCurrentAddress=0;
-    quint64 nStackPointer=0;
-
-#ifdef Q_PROCESSOR_X86_32
-    nStackPointer=status.registers.ESP;
-    nCurrentAddress=status.registers.ESP;
-#endif
-#ifdef Q_PROCESSOR_X86_64
-    nStackPointer=g_pInfoDB->getCurrentReg(XInfoDB::XREG_RSP).var.v_uint64;
-    nCurrentAddress=g_pInfoDB->getCurrentReg(XInfoDB::XREG_RIP).var.v_uint64;
-#endif
-
-    // TODO getMemoryRegions
-    // TODO Memory Regions manager
-
-    if(!XBinary::isAddressInMemoryRegion(&g_mrCode,nCurrentAddress))
+    if(bDataReload)
     {
-//        g_mrCode=XProcess::getMemoryRegion(handleProcessMemoryQuery,g_currentBreakPointInfo.nAddress);
-        g_mrCode=XBinary::getMemoryRegionByAddress(g_pInfoDB->getCurrentMemoryRegionsList(),nCurrentAddress);
+        quint64 nCurrentAddress=0;
+        quint64 nStackPointer=0;
 
-        if(g_pPDCode)
+    #ifdef Q_PROCESSOR_X86_32
+        nStackPointer=g_pInfoDB->getCurrentReg(XInfoDB::XREG_ESP).var.v_uint32;
+        nCurrentAddress=g_pInfoDB->getCurrentReg(XInfoDB::XREG_EIP).var.v_uint32;
+    #endif
+    #ifdef Q_PROCESSOR_X86_64
+        nStackPointer=g_pInfoDB->getCurrentReg(XInfoDB::XREG_RSP).var.v_uint64;
+        nCurrentAddress=g_pInfoDB->getCurrentReg(XInfoDB::XREG_RIP).var.v_uint64;
+    #endif
+
+        // TODO getMemoryRegions
+        // TODO Memory Regions manager
+
+        if(!XProcess::isAddressInMemoryRegion(&g_mrCode,nCurrentAddress))
         {
-            delete g_pPDCode;
-            g_pPDCode=nullptr;
+    //        g_mrCode=XProcess::getMemoryRegion(handleProcessMemoryQuery,g_currentBreakPointInfo.nAddress);
+            g_mrCode=XProcess::getMemoryRegionByAddress(g_pInfoDB->getCurrentMemoryRegionsList(),nCurrentAddress);
+
+            if(g_pPDCode)
+            {
+                delete g_pPDCode;
+                g_pPDCode=nullptr;
+            }
+
+            g_pPDCode=new XProcessDevice(this);  // TODO -> XProcess
+
+            if(g_pPDCode->openHandle(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrCode.nAddress,g_mrCode.nSize,QIODevice::ReadOnly)) // Windows TODO Linux
+            {
+                XBinary binary(g_pPDCode,true,g_mrCode.nAddress);
+                binary.setArch(g_osInfo.sArch);
+                binary.setMode(g_osInfo.mode);
+
+                XDisasmView::OPTIONS disasmOptions={};
+                disasmOptions.nInitAddress=nCurrentAddress;
+                disasmOptions.nCurrentIPAddress=nCurrentAddress;
+                disasmOptions.memoryMap=binary.getMemoryMap();
+                ui->widgetDisasm->setData(g_pPDCode,disasmOptions,false);
+
+                XHexView::OPTIONS hexOptions={};
+                hexOptions.nStartAddress=g_mrCode.nAddress;
+                hexOptions.nStartSelectionOffset=nCurrentAddress-hexOptions.nStartAddress;
+                ui->widgetHex->setData(g_pPDCode,hexOptions,false);
+            }
+        }
+        else
+        {
+            ui->widgetDisasm->setCurrentIPAddress(nCurrentAddress);
+            ui->widgetDisasm->goToAddress(nCurrentAddress,true);
         }
 
-        g_pPDCode=new XProcessDevice(this);  // TODO -> XProcess
+        ui->widgetDisasm->setSelectionAddress(nCurrentAddress,1);
 
-        if(g_pPDCode->openHandle(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrCode.nAddress,g_mrCode.nSize,QIODevice::ReadOnly)) // Windows TODO Linux
+    //    // TODO address cache
+    //    XProcessDevice *pPDCode=new XProcessDevice(this);
+    //    if(pPDCode->openHandle(currentBreakPointInfo.hProcess,g_mrCode.nAddress,g_mrCode.nSize,QIODevice::ReadOnly))
+    //    {
+
+
+    ////        XHexView::OPTIONS hexOptions={};
+    ////        hexOptions.nStartAddress=mrCode.nAddress;
+
+    ////        ui->widgetHex->setData(pPDCode,hexOptions);
+    ////        ui->widgetHex->goToAddress(currentBreakPointInfo.nAddress);
+    //    }
+
+    //    qint64 nTest=g_pDebugger->getCurrentAddress(g_currentBreakPointInfo.handleThread);
+
+        if(!XProcess::isAddressInMemoryRegion(&g_mrStack,nStackPointer))
         {
-            XBinary binary(g_pPDCode,true,g_mrCode.nAddress);
-            binary.setArch(g_osInfo.sArch);
-            binary.setMode(g_osInfo.mode);
+    //        g_mrStack=XProcess::getMemoryRegion(handleProcessMemoryQuery,nStackPointer);
+            g_mrStack=XProcess::getMemoryRegionByAddress(g_pInfoDB->getCurrentMemoryRegionsList(),nStackPointer);
 
-            XDisasmView::OPTIONS disasmOptions={};
-            disasmOptions.nInitAddress=nCurrentAddress;
-            disasmOptions.nCurrentIPAddress=nCurrentAddress;
-            disasmOptions.memoryMap=binary.getMemoryMap();
-            ui->widgetDisasm->setData(g_pPDCode,disasmOptions);
+            if(g_pPDStack)
+            {
+                delete g_pPDStack;
+                g_pPDStack=nullptr;
+            }
 
-            XHexView::OPTIONS hexOptions={};
-            hexOptions.nStartAddress=g_mrCode.nAddress;
-            hexOptions.nStartSelectionOffset=nCurrentAddress-hexOptions.nStartAddress;
-            ui->widgetHex->setData(g_pPDCode,hexOptions);
+            g_pPDStack=new XProcessDevice(this);  // TODO -> XProcess
+
+            if(g_pPDStack->openHandle(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrStack.nAddress,g_mrStack.nSize,QIODevice::ReadOnly))
+            {
+                XStackView::OPTIONS stackOptions={};
+                stackOptions.nStartAddress=g_mrStack.nAddress;
+                stackOptions.nCurrentAddress=nStackPointer;
+                ui->widgetStack->setData(g_pPDStack,stackOptions,false);
+
+    //            XHexView::OPTIONS hexOptions={};
+    //            hexOptions.nStartAddress=g_mrStack.nAddress;
+    //            ui->widgetHex->setData(g_pPDStack,hexOptions);
+            }
         }
-    }
-    else
-    {
-        ui->widgetDisasm->setCurrentIPAddress(nCurrentAddress);
-        ui->widgetDisasm->goToAddress(nCurrentAddress,true);
-    }
-
-    ui->widgetDisasm->setSelectionAddress(nCurrentAddress,1);
-    ui->widgetDisasm->showStatus(); // TODO do not reload data mb parameter
-
-//    // TODO address cache
-//    XProcessDevice *pPDCode=new XProcessDevice(this);
-//    if(pPDCode->openHandle(currentBreakPointInfo.hProcess,g_mrCode.nAddress,g_mrCode.nSize,QIODevice::ReadOnly))
-//    {
-
-
-////        XHexView::OPTIONS hexOptions={};
-////        hexOptions.nStartAddress=mrCode.nAddress;
-
-////        ui->widgetHex->setData(pPDCode,hexOptions);
-////        ui->widgetHex->goToAddress(currentBreakPointInfo.nAddress);
-//    }
-
-//    qint64 nTest=g_pDebugger->getCurrentAddress(g_currentBreakPointInfo.handleThread);
-
-    ui->widgetRegs->update(g_pInfoDB);
-
-    if(!XBinary::isAddressInMemoryRegion(&g_mrStack,nStackPointer))
-    {
-//        g_mrStack=XProcess::getMemoryRegion(handleProcessMemoryQuery,nStackPointer);
-        g_mrStack=XBinary::getMemoryRegionByAddress(g_pInfoDB->getCurrentMemoryRegionsList(),nStackPointer);
-
-        if(g_pPDStack)
+        else
         {
-            delete g_pPDStack;
-            g_pPDStack=nullptr;
+            ui->widgetStack->goToAddress(nStackPointer);
         }
 
-        g_pPDStack=new XProcessDevice(this);  // TODO -> XProcess
-
-        if(g_pPDStack->openHandle(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrStack.nAddress,g_mrStack.nSize,QIODevice::ReadOnly))
-        {
-            XStackView::OPTIONS stackOptions={};
-            stackOptions.nStartAddress=g_mrStack.nAddress;
-            stackOptions.nCurrentAddress=nStackPointer;
-            ui->widgetStack->setData(g_pPDStack,stackOptions);
-
-//            XHexView::OPTIONS hexOptions={};
-//            hexOptions.nStartAddress=g_mrStack.nAddress;
-//            ui->widgetHex->setData(g_pPDStack,hexOptions);
-        }
-    }
-    else
-    {
-        ui->widgetStack->goToAddress(nStackPointer);
+        ui->widgetStack->setSelectionAddress(nStackPointer);
     }
 
-    ui->widgetStack->setSelectionAddress(nStackPointer);
-    ui->widgetStack->showStatus(); // TODO do not reload data mb parameter
+    reload();
 }
 
 void XDebuggerWidget::on_toolButtonRun_clicked()
@@ -658,6 +656,7 @@ void XDebuggerWidget::reload()
         ui->widgetDisasm->reload(true);
         ui->widgetHex->reload(true);
         ui->widgetStack->reload(true);
+        ui->widgetRegs->reload();
     }
     else if(nIndex==MT_MEMORYMAP)
     {

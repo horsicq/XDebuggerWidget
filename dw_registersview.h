@@ -22,7 +22,6 @@
 #define DW_REGISTERSVIEW_H
 
 #include "xregistersview.h"
-#include "xabstractdebugger.h"
 
 class DW_RegistersView : public XRegistersView
 {
@@ -30,14 +29,10 @@ class DW_RegistersView : public XRegistersView
 
 public:
     explicit DW_RegistersView(QWidget *pParent=nullptr);
-    void setDebugger(XAbstractDebugger *pDebugger);
 
 protected:
 //    virtual void contextMenu(const QPoint &pos);
     virtual void registerShortcuts(bool bState);
-
-private:
-    XAbstractDebugger *g_pDebugger;
 };
 
 #endif // DW_REGISTERSVIEW_H

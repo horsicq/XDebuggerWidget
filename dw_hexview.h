@@ -22,7 +22,6 @@
 #define DW_HEXVIEW_H
 
 #include "xhexview.h"
-#include "xabstractdebugger.h"
 
 class DW_HexView : public XHexView
 {
@@ -30,7 +29,6 @@ class DW_HexView : public XHexView
 
 public:
     explicit DW_HexView(QWidget *pParent=nullptr);
-    void setDebugger(XAbstractDebugger *pDebugger);
 
 public slots:
     void _copyCursorAddress();
@@ -39,9 +37,6 @@ public slots:
 protected:
     virtual void contextMenu(const QPoint &pos);
     virtual void registerShortcuts(bool bState);
-
-private:
-    XAbstractDebugger *g_pDebugger;
 };
 
 #endif // DW_HEXVIEW_H

@@ -22,17 +22,11 @@
 
 DW_HexView::DW_HexView(QWidget *pParent) : XHexView(pParent)
 {
-    g_pDebugger=nullptr;
-}
-
-void DW_HexView::setDebugger(XAbstractDebugger *pDebugger)
-{
-    g_pDebugger=pDebugger;
 }
 
 void DW_HexView::_copyCursorAddress()
 {
-    if(g_pDebugger)
+    if(getXInfoDB())
     {
         qint64 nAddress=getSelectionInitOffset();
 
@@ -53,7 +47,7 @@ void DW_HexView::_goToAddress()
 
 void DW_HexView::contextMenu(const QPoint &pos)
 {
-    if(g_pDebugger)
+    if(getXInfoDB())
     {
         QMenu contextMenu(this);
 

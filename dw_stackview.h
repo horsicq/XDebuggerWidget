@@ -22,7 +22,6 @@
 #define DW_STACKVIEW_H
 
 #include "xstackview.h"
-#include "xabstractdebugger.h"
 
 class DW_StackView : public XStackView
 {
@@ -30,15 +29,10 @@ class DW_StackView : public XStackView
 
 public:
     explicit DW_StackView(QWidget *pParent=nullptr);
-    void setDebugger(XAbstractDebugger *pDebugger);
-    void showStatus();
 
 protected:
     virtual void contextMenu(const QPoint &pos);
     virtual void registerShortcuts(bool bState);
-
-private:
-    XAbstractDebugger *g_pDebugger;
 };
 
 #endif // DW_STACKVIEW_H

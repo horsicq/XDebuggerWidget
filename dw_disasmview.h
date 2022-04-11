@@ -22,7 +22,6 @@
 #define DW_DISASMVIEW_H
 
 #include "xdisasmview.h"
-#include "xabstractdebugger.h"
 
 class DW_DisasmView : public XDisasmView
 {
@@ -30,9 +29,6 @@ class DW_DisasmView : public XDisasmView
 
 public:
     explicit DW_DisasmView(QWidget *pParent=nullptr);
-
-    void setDebugger(XAbstractDebugger *pDebugger);
-    void showStatus();
 
 public slots:
     void _breakpointToggle();
@@ -42,9 +38,6 @@ public slots:
 protected:
     virtual void contextMenu(const QPoint &pos);
     virtual void registerShortcuts(bool bState);
-
-private:
-    XAbstractDebugger *g_pDebugger;
 };
 
 #endif // DW_DISASMVIEW_H

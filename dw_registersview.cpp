@@ -22,12 +22,6 @@
 
 DW_RegistersView::DW_RegistersView(QWidget *pParent) : XRegistersView(pParent)
 {
-    g_pDebugger=nullptr;
-}
-
-void DW_RegistersView::setDebugger(XAbstractDebugger *pDebugger)
-{
-    g_pDebugger=pDebugger;
 }
 
 //void DW_RegistersView::contextMenu(const QPoint &pos)

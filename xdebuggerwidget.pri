@@ -8,6 +8,7 @@ FORMS += \
     $$PWD/xdebuggerwidget.ui
 
 HEADERS += \
+    $$PWD/dw_breakpointswidget.h \
     $$PWD/dw_disasmview.h \
     $$PWD/dw_hexview.h \
     $$PWD/dw_processmemorymapwidget.h \
@@ -18,6 +19,7 @@ HEADERS += \
     $$PWD/xdebuggerwidget.h
 
 SOURCES += \
+    $$PWD/dw_breakpointswidget.cpp \
     $$PWD/dw_disasmview.cpp \
     $$PWD/dw_hexview.cpp \
     $$PWD/dw_processmemorymapwidget.cpp \
@@ -65,6 +67,21 @@ SOURCES += \
 !contains(XCONFIG, xprocessmoduleswidget) {
     XCONFIG += xprocessmoduleswidget
     include($$PWD/../XProcessModulesWidget/xprocessmoduleswidget.pri)
+}
+
+!contains(XCONFIG, xhandleswidget) {
+    XCONFIG += xhandleswidget
+    include($$PWD/../XHandlesWidget/xhandleswidget.pri)
+}
+
+!contains(XCONFIG, xthreadswidget) {
+    XCONFIG += xthreadswidget
+    include($$PWD/../XThreadsWidget/xthreadswidget.pri)
+}
+
+!contains(XCONFIG, xbreakpointswidget) {
+    XCONFIG += xbreakpointswidget
+    include($$PWD/../XBreakPointsWidget/xbreakpointswidget.pri)
 }
 
 DISTFILES += \
