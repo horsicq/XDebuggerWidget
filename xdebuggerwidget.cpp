@@ -534,15 +534,15 @@ void XDebuggerWidget::_toggleBreakpoint()
 {
     ui->widgetDisasm->_breakpointToggle();
 
-    QList<XBinary::MEMORY_REPLACE> listReplaces=g_pDebugger->getMemoryReplaces();
+//    QList<XBinary::MEMORY_REPLACE> listReplaces=g_pDebugger->getMemoryReplaces();
 
-    ui->widgetDisasm->setMemoryReplaces(listReplaces); // TODO remove
-    ui->widgetHex->setMemoryReplaces(listReplaces); // TODO remove
-    ui->widgetStack->setMemoryReplaces(listReplaces); // TODO remove
+//    ui->widgetDisasm->setMemoryReplaces(listReplaces); // TODO remove
+//    ui->widgetHex->setMemoryReplaces(listReplaces); // TODO remove
+//    ui->widgetStack->setMemoryReplaces(listReplaces); // TODO remove
 
-    ui->widgetDisasm->reload(true); // TODO signal/slot
-    ui->widgetHex->reload(true); // TODO signal/slot
-    ui->widgetStack->reload(true); // TODO signal/slot
+//    ui->widgetDisasm->reload(true); // TODO signal/slot
+//    ui->widgetHex->reload(true); // TODO signal/slot
+//    ui->widgetStack->reload(true); // TODO signal/slot
 }
 
 void XDebuggerWidget::cleanUp()

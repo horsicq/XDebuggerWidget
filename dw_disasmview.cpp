@@ -33,19 +33,9 @@ void DW_DisasmView::_breakpointToggle()
 
         if(nAddress!=-1)
         {
-            if(!getXInfoDB()->isBreakPointPresent(nAddress))
+            if(getXInfoDB()->breakpointToggle(nAddress))
             {
-                if(getXInfoDB()->addBreakPoint(nAddress))
-                {
-                    getXInfoDB()->reload(false);
-                }
-            }
-            else
-            {
-                if(getXInfoDB()->removeBreakPoint(nAddress))
-                {
-                    getXInfoDB()->reload(false);
-                }
+                getXInfoDB()->reload(false);
             }
         }
     }
