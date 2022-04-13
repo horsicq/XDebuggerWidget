@@ -181,7 +181,8 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 
     g_pDebugger->suspendThread(handleThread);
 
-    g_pInfoDB->updateRegs(handleThread,ui->widgetRegs->getOptions());
+    g_pInfoDB->setCurrentThread(handleThread);
+    g_pInfoDB->updateRegs(ui->widgetRegs->getOptions());
     g_pInfoDB->updateMemoryRegionsList();
     g_pInfoDB->updateModulesList();
 
@@ -212,7 +213,8 @@ void XDebuggerWidget::onProgramEntryPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointI
 
     g_pDebugger->suspendThread(handleThread);
 
-    g_pInfoDB->updateRegs(handleThread,ui->widgetRegs->getOptions());
+    g_pInfoDB->setCurrentThread(handleThread);
+    g_pInfoDB->updateRegs(ui->widgetRegs->getOptions());
     g_pInfoDB->updateMemoryRegionsList();
     g_pInfoDB->updateModulesList();
 
@@ -236,7 +238,8 @@ void XDebuggerWidget::onStep(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 
     g_pDebugger->suspendThread(handleThread);
 
-    g_pInfoDB->updateRegs(handleThread,ui->widgetRegs->getOptions());
+    g_pInfoDB->setCurrentThread(handleThread);
+    g_pInfoDB->updateRegs(ui->widgetRegs->getOptions());
     g_pInfoDB->updateMemoryRegionsList();
     g_pInfoDB->updateModulesList();
 
@@ -259,7 +262,8 @@ void XDebuggerWidget::onStepInto(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
     // mb TODO regs
     g_pDebugger->suspendThread(handleThread);
 
-    g_pInfoDB->updateRegs(handleThread,ui->widgetRegs->getOptions());
+    g_pInfoDB->setCurrentThread(handleThread);
+    g_pInfoDB->updateRegs(ui->widgetRegs->getOptions());
     g_pInfoDB->updateMemoryRegionsList();
     g_pInfoDB->updateModulesList();
 
@@ -282,7 +286,8 @@ void XDebuggerWidget::onStepOver(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
     // mb TODO regs
     g_pDebugger->suspendThread(handleThread);
 
-    g_pInfoDB->updateRegs(handleThread,ui->widgetRegs->getOptions());
+    g_pInfoDB->setCurrentThread(handleThread);
+    g_pInfoDB->updateRegs(ui->widgetRegs->getOptions());
     g_pInfoDB->updateMemoryRegionsList();
     g_pInfoDB->updateModulesList();
 
