@@ -31,7 +31,7 @@ public:
     explicit DW_RegistersView(QWidget *pParent=nullptr);
 
 protected:
-//    virtual void contextMenu(const QPoint &pos);
+    virtual void contextMenu(const QPoint &pos);
     virtual void registerShortcuts(bool bState);
 };
 

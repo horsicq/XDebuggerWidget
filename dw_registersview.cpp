@@ -24,13 +24,16 @@ DW_RegistersView::DW_RegistersView(QWidget *pParent) : XRegistersView(pParent)
 {
 }
 
-//void DW_RegistersView::contextMenu(const QPoint &pos)
-//{
-//    Q_UNUSED(pos)
-//    qDebug("void DW_RegistersView::contextMenu(const QPoint &pos)");
-//}
+void DW_RegistersView::contextMenu(const QPoint &pos)
+{
+    Q_UNUSED(pos)
+
+    // TODO
+}
 
 void DW_RegistersView::registerShortcuts(bool bState)
 {
     Q_UNUSED(bState)
+
+    // TODO
 }

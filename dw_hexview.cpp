@@ -74,4 +74,6 @@ void DW_HexView::contextMenu(const QPoint &pos)
 void DW_HexView::registerShortcuts(bool bState)
 {
     Q_UNUSED(bState)
+
+    // TODO
 }

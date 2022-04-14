@@ -15,6 +15,7 @@ HEADERS += \
     $$PWD/dw_processmoduleswidget.h \
     $$PWD/dw_registersview.h \
     $$PWD/dw_stackview.h \
+    $$PWD/dw_threadswidget.h \
     $$PWD/xdebuggeroptionswidget.h \
     $$PWD/xdebuggerwidget.h
 
@@ -26,6 +27,7 @@ SOURCES += \
     $$PWD/dw_processmoduleswidget.cpp \
     $$PWD/dw_registersview.cpp \
     $$PWD/dw_stackview.cpp \
+    $$PWD/dw_threadswidget.cpp \
     $$PWD/xdebuggeroptionswidget.cpp \
     $$PWD/xdebuggerwidget.cpp
 
