@@ -29,6 +29,7 @@ void DW_RegistersView::contextMenu(const QPoint &pos)
     Q_UNUSED(pos)
 
     // TODO
+    XRegistersView::contextMenu(pos);
 }
 
 void DW_RegistersView::registerShortcuts(bool bState)
