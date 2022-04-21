@@ -86,6 +86,11 @@ SOURCES += \
     include($$PWD/../XBreakPointsWidget/xbreakpointswidget.pri)
 }
 
+!contains(XCONFIG, xinfodb) {
+    XCONFIG += xinfodb
+    include($$PWD/../XInfoDB/xinfodb.pri)
+}
+
 DISTFILES += \
     $$PWD/LICENSE \
     $$PWD/README.md
