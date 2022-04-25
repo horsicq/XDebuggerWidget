@@ -98,14 +98,11 @@ private slots:
     void on_toolButtonRun_clicked();
     void on_toolButtonStepInto_clicked();
     void on_toolButtonStepOver_clicked();
-
     void _toggleBreakpoint();
     void cleanUp();
-
     void errorMessageSlot(QString sErrorMessage);
     void infoMessageSlot(QString sInfoMessage);
     void writeToLog(QString sText);
-
     void on_tabWidgetMain_currentChanged(int nIndex);
     void reload();
 
@@ -142,6 +139,10 @@ private:
     XProcessDevice *g_pPDCode;  // TODO -> XProcess
     XProcessDevice *g_pPDStack;  // TODO -> XProcess
     XProcessDevice *g_pPDHex;  // TODO -> XProcess
+
+//    XProcess *g_pPDCode;
+//    XProcess *g_pPDStack;
+//    XProcess *g_pPDHex;
 };
 
 #endif // XDEBUGGERWIDGET_H

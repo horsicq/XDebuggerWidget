@@ -390,7 +390,7 @@ void XDebuggerWidget::onDataChanged(bool bDataReload)
         }
         else
         {
-            ui->widgetDisasm->setCurrentIPAddress(nCurrentAddress);
+            ui->widgetDisasm->setCurrentPointerAddress(nCurrentAddress);
             ui->widgetDisasm->goToAddress(nCurrentAddress,true);
         }
 
