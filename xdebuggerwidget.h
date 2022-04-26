@@ -53,7 +53,8 @@ class XDebuggerWidget : public XShortcutsWidget
         MT_CALLSTACK,
         MT_THREADS,
         MT_HANDLES,
-        MT_MODULES
+        MT_MODULES,
+        MT_SYMBOLS
     };
 
 public:
@@ -80,6 +81,8 @@ public slots:
     void viewCallstack();
     void viewThreads();
     void viewHandles();
+    void viewModules();
+    void viewSymbols();
 
 private slots:
     void onCreateProcess(XInfoDB::PROCESS_INFO *pProcessInfo);

@@ -535,6 +535,16 @@ void XDebuggerWidget::viewHandles()
     ui->tabWidgetMain->setCurrentIndex(MT_HANDLES);
 }
 
+void XDebuggerWidget::viewModules()
+{
+    ui->tabWidgetMain->setCurrentIndex(MT_MODULES);
+}
+
+void XDebuggerWidget::viewSymbols()
+{
+    ui->tabWidgetMain->setCurrentIndex(MT_SYMBOLS);
+}
+
 void XDebuggerWidget::_toggleBreakpoint()
 {
     ui->widgetDisasm->_breakpointToggle();
