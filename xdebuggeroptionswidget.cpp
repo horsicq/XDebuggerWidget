@@ -37,9 +37,7 @@ void XDebuggerOptionsWidget::setOptions(XOptions *pOptions)
 {
     g_pOptions=pOptions;
 
-    g_pOptions->setCheckBox(ui->checkBoxDebuggerBreakPointEntryPoint,XOptions::ID_DEBUGGER_BREAKPOINT_ENTRYPOINT);
-    g_pOptions->setCheckBox(ui->checkBoxDebuggerBreakPointDLLMain,XOptions::ID_DEBUGGER_BREAKPOINT_DLLMAIN);
-    g_pOptions->setCheckBox(ui->checkBoxDebuggerBreakPointTLSFunctions,XOptions::ID_DEBUGGER_BREAKPOINT_TLSFUNCTIONS);
+    reload();
 }
 
 void XDebuggerOptionsWidget::save()
@@ -54,4 +52,11 @@ void XDebuggerOptionsWidget::setDefaultValues(XOptions *pOptions)
     pOptions->addID(XOptions::ID_DEBUGGER_BREAKPOINT_ENTRYPOINT,true);
     pOptions->addID(XOptions::ID_DEBUGGER_BREAKPOINT_DLLMAIN,true);
     pOptions->addID(XOptions::ID_DEBUGGER_BREAKPOINT_TLSFUNCTIONS,true);
+}
+
+void XDebuggerOptionsWidget::reload()
+{
+    g_pOptions->setCheckBox(ui->checkBoxDebuggerBreakPointEntryPoint,XOptions::ID_DEBUGGER_BREAKPOINT_ENTRYPOINT);
+    g_pOptions->setCheckBox(ui->checkBoxDebuggerBreakPointDLLMain,XOptions::ID_DEBUGGER_BREAKPOINT_DLLMAIN);
+    g_pOptions->setCheckBox(ui->checkBoxDebuggerBreakPointTLSFunctions,XOptions::ID_DEBUGGER_BREAKPOINT_TLSFUNCTIONS);
 }

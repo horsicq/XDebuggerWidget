@@ -92,7 +92,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     ui->widgetRegs->setXInfoDB(g_pDebugger->getXInfoDB());
     ui->widgetStack->setXInfoDB(g_pDebugger->getXInfoDB());
 
-    ui->widgetProcessModules->setData(g_pDebugger->getXInfoDB(),false);
+    ui->widgetProcessModules->setXInfoDB(g_pDebugger->getXInfoDB(),false);
     ui->widgetProcessMemoryMap->setData(g_pDebugger->getXInfoDB(),false);
 
     g_osInfo=XProcess::getOsInfo();
