@@ -87,11 +87,6 @@ public slots:
 private slots:
     void onCreateProcess(XInfoDB::PROCESS_INFO *pProcessInfo);
     void onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo);
-    void onProcessEntryPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo);
-    void onProgramEntryPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo);
-    void onStep(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo);
-    void onStepInto(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo);
-    void onStepOver(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo);
     void onExitProcess(XInfoDB::EXITPROCESS_INFO *pExitProcessInfo);
     void eventCreateThread(XInfoDB::THREAD_INFO *pThreadInfo);
     void eventExitThread(XInfoDB::EXITTHREAD_INFO *pExitThreadInfo);

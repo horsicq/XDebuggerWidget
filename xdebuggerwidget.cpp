@@ -93,7 +93,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     ui->widgetStack->setXInfoDB(g_pDebugger->getXInfoDB());
 
     ui->widgetProcessModules->setXInfoDB(g_pDebugger->getXInfoDB(),false);
-    ui->widgetProcessMemoryMap->setData(g_pDebugger->getXInfoDB(),false);
+    ui->widgetProcessMemoryMap->setXInfoDB(g_pDebugger->getXInfoDB(),false);
 
     g_osInfo=XProcess::getOsInfo();
 
@@ -101,6 +101,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
     options.bShowConsole=true;
     options.sFileName=sFileName;
+    options.bBreakpointOnSystem=getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_SYSTEM).toBool();
     options.bBreakpointOnProgramEntryPoint=getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_ENTRYPOINT).toBool();
     options.bBreakPointOnDLLMain=getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_DLLMAIN).toBool();
     options.bBreakPointOnTLSFunction=getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_TLSFUNCTIONS).toBool();
@@ -111,11 +112,6 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 //    connect(pDebugger,SIGNAL(finished()),pDebugger,SLOT(deleteLater()));
 
     connect(g_pDebugger,SIGNAL(eventCreateProcess(XInfoDB::PROCESS_INFO*)),this,SLOT(onCreateProcess(XInfoDB::PROCESS_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventProcessEntryPoint(XInfoDB::BREAKPOINT_INFO*)),this,SLOT(onProcessEntryPoint(XInfoDB::BREAKPOINT_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventProgramEntryPoint(XInfoDB::BREAKPOINT_INFO*)),this,SLOT(onProgramEntryPoint(XInfoDB::BREAKPOINT_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventStep(XInfoDB::BREAKPOINT_INFO*)),this,SLOT(onStep(XInfoDB::BREAKPOINT_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventStepInto(XInfoDB::BREAKPOINT_INFO*)),this,SLOT(onStepInto(XInfoDB::BREAKPOINT_INFO*)),Qt::DirectConnection);
-    connect(g_pDebugger,SIGNAL(eventStepOver(XInfoDB::BREAKPOINT_INFO*)),this,SLOT(onStepOver(XInfoDB::BREAKPOINT_INFO*)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventBreakPoint(XInfoDB::BREAKPOINT_INFO*)),this,SLOT(onBreakPoint(XInfoDB::BREAKPOINT_INFO*)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventExitProcess(XInfoDB::EXITPROCESS_INFO*)),this,SLOT(onExitProcess(XInfoDB::EXITPROCESS_INFO*)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventCreateThread(XInfoDB::THREAD_INFO*)),this,SLOT(eventCreateThread(XInfoDB::THREAD_INFO*)),Qt::DirectConnection);
@@ -179,111 +175,6 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 
     qDebug("Current Address2: %llX",XAbstractDebugger::getCurrentAddress(handleThread));
 
-    g_pDebugger->suspendThread(handleThread);
-
-    g_pInfoDB->setCurrentThread(handleThread);
-    g_pInfoDB->updateRegs(ui->widgetRegs->getOptions());
-    g_pInfoDB->updateMemoryRegionsList();
-    g_pInfoDB->updateModulesList();
-
-    g_pInfoDB->reload(true);
-}
-
-void XDebuggerWidget::onProcessEntryPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
-{
-//    XInfoDB::suspendThread(pBreakPointInfo->handleIDThread);
-
-//    emit showStatus();
-}
-
-void XDebuggerWidget::onProgramEntryPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
-{
-    g_currentBreakPointInfo=*pBreakPointInfo;
-#ifdef QT_DEBUG
-    qDebug("EntryPoint %llx",pBreakPointInfo->nAddress);
-#endif
-    // mb TODO regs
-    XProcess::HANDLEID handleThread={};
-    handleThread.hHandle=pBreakPointInfo->pHThread;
-    handleThread.nID=pBreakPointInfo->nThreadID;
-
-    XProcess::HANDLEID handleProcess={};
-    handleProcess.hHandle=pBreakPointInfo->pHProcessMemoryQuery;
-    handleProcess.nID=pBreakPointInfo->nProcessID;
-
-    g_pDebugger->suspendThread(handleThread);
-
-    g_pInfoDB->setCurrentThread(handleThread);
-    g_pInfoDB->updateRegs(ui->widgetRegs->getOptions());
-    g_pInfoDB->updateMemoryRegionsList();
-    g_pInfoDB->updateModulesList();
-
-    g_pInfoDB->reload(true);
-}
-
-void XDebuggerWidget::onStep(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
-{
-    g_currentBreakPointInfo=*pBreakPointInfo;
-#ifdef QT_DEBUG
-    qDebug("Step %llx",pBreakPointInfo->nAddress);
-#endif
-    // mb TODO regs
-    XProcess::HANDLEID handleThread={};
-    handleThread.hHandle=pBreakPointInfo->pHThread;
-    handleThread.nID=pBreakPointInfo->nThreadID;
-
-    XProcess::HANDLEID handleProcess={};
-    handleProcess.hHandle=pBreakPointInfo->pHProcessMemoryQuery;
-    handleProcess.nID=pBreakPointInfo->nProcessID;
-
-    g_pDebugger->suspendThread(handleThread);
-
-    g_pInfoDB->setCurrentThread(handleThread);
-    g_pInfoDB->updateRegs(ui->widgetRegs->getOptions());
-    g_pInfoDB->updateMemoryRegionsList();
-    g_pInfoDB->updateModulesList();
-
-    g_pInfoDB->reload(true);
-}
-
-void XDebuggerWidget::onStepInto(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
-{
-    g_currentBreakPointInfo=*pBreakPointInfo;
-#ifdef QT_DEBUG
-    qDebug("StepInto %llx",pBreakPointInfo->nAddress);
-#endif
-    XProcess::HANDLEID handleThread={};
-    handleThread.hHandle=pBreakPointInfo->pHThread;
-    handleThread.nID=pBreakPointInfo->nThreadID;
-
-    XProcess::HANDLEID handleProcess={};
-    handleProcess.hHandle=pBreakPointInfo->pHProcessMemoryQuery;
-    handleProcess.nID=pBreakPointInfo->nProcessID;
-    // mb TODO regs
-    g_pDebugger->suspendThread(handleThread);
-
-    g_pInfoDB->setCurrentThread(handleThread);
-    g_pInfoDB->updateRegs(ui->widgetRegs->getOptions());
-    g_pInfoDB->updateMemoryRegionsList();
-    g_pInfoDB->updateModulesList();
-
-    g_pInfoDB->reload(true);
-}
-
-void XDebuggerWidget::onStepOver(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
-{
-    g_currentBreakPointInfo=*pBreakPointInfo;
-#ifdef QT_DEBUG
-    qDebug("StepOver %llx",pBreakPointInfo->nAddress);
-#endif
-    XProcess::HANDLEID handleThread={};
-    handleThread.hHandle=pBreakPointInfo->pHThread;
-    handleThread.nID=pBreakPointInfo->nThreadID;
-
-    XProcess::HANDLEID handleProcess={};
-    handleProcess.hHandle=pBreakPointInfo->pHProcessMemoryQuery;
-    handleProcess.nID=pBreakPointInfo->nProcessID;
-    // mb TODO regs
     g_pDebugger->suspendThread(handleThread);
 
     g_pInfoDB->setCurrentThread(handleThread);
