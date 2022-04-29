@@ -181,6 +181,7 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
     g_pInfoDB->updateRegs(ui->widgetRegs->getOptions());
     g_pInfoDB->updateMemoryRegionsList();
     g_pInfoDB->updateModulesList();
+    g_pInfoDB->clearRecordInfoCache();
 
     g_pInfoDB->reload(true);
 }
