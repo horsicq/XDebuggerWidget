@@ -94,6 +94,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
     ui->widgetProcessModules->setXInfoDB(g_pDebugger->getXInfoDB(),false);
     ui->widgetProcessMemoryMap->setXInfoDB(g_pDebugger->getXInfoDB(),false);
+    ui->widgetBreakpoints->setXInfoDB(g_pDebugger->getXInfoDB(),false);
 
     g_osInfo=XProcess::getOsInfo();
 
@@ -572,5 +573,9 @@ void XDebuggerWidget::reload()
     else if(nIndex==MT_MODULES)
     {
         ui->widgetProcessModules->reload();
+    }
+    else if(nIndex==MT_BREAKPOINTS)
+    {
+        ui->widgetBreakpoints->reload();
     }
 }

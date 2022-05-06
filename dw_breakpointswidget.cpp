@@ -24,3 +24,13 @@ DW_BreakPointsWidget::DW_BreakPointsWidget(QWidget *pParent) : XBreakPointsWidge
 {
 
 }
+
+void DW_BreakPointsWidget::contextMenu(const QPoint &pos)
+{
+    Q_UNUSED(pos)
+}
+
+void DW_BreakPointsWidget::registerShortcuts(bool bState)
+{
+    Q_UNUSED(bState)
+}

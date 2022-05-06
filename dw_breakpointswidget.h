@@ -29,6 +29,10 @@ class DW_BreakPointsWidget : public XBreakPointsWidget
 
 public:
     explicit DW_BreakPointsWidget(QWidget *pParent=nullptr);
+
+protected:
+    virtual void contextMenu(const QPoint &pos);
+    virtual void registerShortcuts(bool bState);
 };
 
 #endif // DW_BREAKPOINTSWIDGET_H
