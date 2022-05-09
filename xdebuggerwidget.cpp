@@ -95,6 +95,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     ui->widgetProcessModules->setXInfoDB(g_pDebugger->getXInfoDB(),false);
     ui->widgetProcessMemoryMap->setXInfoDB(g_pDebugger->getXInfoDB(),false);
     ui->widgetBreakpoints->setXInfoDB(g_pDebugger->getXInfoDB(),false);
+    ui->widgetSymbols->setXInfoDB(g_pDebugger->getXInfoDB(),false);
 
     g_osInfo=XProcess::getOsInfo();
 
@@ -146,6 +147,11 @@ void XDebuggerWidget::adjustView()
     ui->widgetHex->adjustView();
     ui->widgetRegs->adjustView();
     ui->widgetStack->adjustView();
+    ui->widgetProcessModules->adjustView();
+    ui->widgetProcessMemoryMap->adjustView();
+    ui->widgetBreakpoints->adjustView();
+    ui->widgetSymbols->adjustView();
+    ui->widgetThreads->adjustView();
 
     XShortcutsWidget::adjustView();
 }
@@ -566,16 +572,32 @@ void XDebuggerWidget::reload()
         ui->widgetStack->reload(true);
         ui->widgetRegs->reload();
     }
+    else if(nIndex==MT_BREAKPOINTS)
+    {
+        ui->widgetBreakpoints->reload();
+    }
     else if(nIndex==MT_MEMORYMAP)
     {
         ui->widgetProcessMemoryMap->reload();
+    }
+    else if(nIndex==MT_CALLSTACK)
+    {
+        // TODO
+    }
+    else if(nIndex==MT_THREADS)
+    {
+//        ui->widgetThreads->reload();
+    }
+    else if(nIndex==MT_HANDLES)
+    {
+        // TODO
     }
     else if(nIndex==MT_MODULES)
     {
         ui->widgetProcessModules->reload();
     }
-    else if(nIndex==MT_BREAKPOINTS)
+    else if(nIndex==MT_SYMBOLS)
     {
-        ui->widgetBreakpoints->reload();
+        ui->widgetSymbols->reload();
     }
 }
