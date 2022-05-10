@@ -96,6 +96,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     ui->widgetProcessMemoryMap->setXInfoDB(g_pDebugger->getXInfoDB(),false);
     ui->widgetBreakpoints->setXInfoDB(g_pDebugger->getXInfoDB(),false);
     ui->widgetSymbols->setXInfoDB(g_pDebugger->getXInfoDB(),false);
+    ui->widgetThreads->setXInfoDB(g_pDebugger->getXInfoDB(),false);
 
     g_osInfo=XProcess::getOsInfo();
 
@@ -137,6 +138,7 @@ void XDebuggerWidget::setGlobal(XShortcuts *pShortcuts,XOptions *pXOptions)
     ui->widgetHex->setGlobal(pShortcuts,pXOptions);
     ui->widgetRegs->setGlobal(pShortcuts,pXOptions);
     ui->widgetStack->setGlobal(pShortcuts,pXOptions);
+    // TODO more
 
     XShortcutsWidget::setGlobal(pShortcuts,pXOptions);
 }
@@ -586,7 +588,7 @@ void XDebuggerWidget::reload()
     }
     else if(nIndex==MT_THREADS)
     {
-//        ui->widgetThreads->reload();
+        ui->widgetThreads->reload();
     }
     else if(nIndex==MT_HANDLES)
     {
