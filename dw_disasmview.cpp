@@ -41,24 +41,9 @@ void DW_DisasmView::_breakpointToggle()
     }
 }
 
-void DW_DisasmView::_copyCursorAddress()
-{
-    if(getXInfoDB())
-    {
-        qint64 nAddress=getSelectionInitAddress();
-
-        if(nAddress!=-1)
-        {
-            // TODO
-        #ifdef QT_DEBUG
-            qDebug("_copyCursorAddress");
-        #endif
-        }
-    }
-}
-
 void DW_DisasmView::_goToAddress()
 {
+    // TODO another modules
     _goToAddressSlot();
 }
 
@@ -73,30 +58,37 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
         QMenu contextMenu(this);
 
         QMenu menuBreakpoint(tr("Breakpoint"),this);
+        QMenu menuGoTo(tr("Go to"),this);
+        QMenu menuCopy(tr("Copy"),this);
+        QMenu menuEdit(tr("Edit"),this);
 
         QAction actionBreakpointToggle(tr("Toggle"),this);
-        actionBreakpointToggle.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DISASM_BREAKPOINTTOGGLE));
+        actionBreakpointToggle.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_BREAKPOINT_TOGGLE));
         connect(&actionBreakpointToggle,SIGNAL(triggered()),this,SLOT(_breakpointToggle()));
 
-        menuBreakpoint.addAction(&actionBreakpointToggle);
+        QAction actionGoToAddress(tr("Address"),this);
+        actionGoToAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_GOTO_ADDRESS));
+        connect(&actionGoToAddress,SIGNAL(triggered()),this,SLOT(_goToAddressSlot()));
 
+        QAction actionCopyAddress(tr("Address"),this);
+        actionCopyAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_COPY_ADDRESS));
+        connect(&actionCopyAddress,SIGNAL(triggered()),this,SLOT(_copyAddressSlot()));
+
+        QAction actionEditHex(tr("Hex"),this);
+        actionEditHex.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_EDIT_HEX));
+        connect(&actionEditHex,SIGNAL(triggered()),this,SLOT(_editHex()));
+
+        menuGoTo.addAction(&actionBreakpointToggle);
+        contextMenu.addMenu(&menuGoTo);
+
+        menuBreakpoint.addAction(&actionBreakpointToggle);
         contextMenu.addMenu(&menuBreakpoint);
 
-        QAction actionGoToAddress(tr("Go to address"),this);
-        actionGoToAddress.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DISASM_GOTOADDRESS));
-        connect(&actionGoToAddress,SIGNAL(triggered()),this,SLOT(_goToAddress()));
-
-        contextMenu.addAction(&actionGoToAddress);
-
-        QMenu menuCopy(tr("Copy"),this);
-
-        QAction actionCopyAddress(tr("Copy address"),this);
-        actionCopyAddress.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DISASM_COPYCURSORADDRESS));
-        connect(&actionCopyAddress,SIGNAL(triggered()),this,SLOT(_copyCursorAddress()));
-
         menuCopy.addAction(&actionCopyAddress);
-
         contextMenu.addMenu(&menuCopy);
+
+        menuEdit.addAction(&actionEditHex);
+        contextMenu.addMenu(&menuEdit);
 
         contextMenu.exec(pos);
 
@@ -115,4 +107,6 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
 void DW_DisasmView::registerShortcuts(bool bState)
 {
     Q_UNUSED(bState)
+
+    // TODO !!!
 }

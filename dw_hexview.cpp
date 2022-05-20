@@ -24,22 +24,6 @@ DW_HexView::DW_HexView(QWidget *pParent) : XHexView(pParent)
 {
 }
 
-void DW_HexView::_copyCursorAddress()
-{
-    if(getXInfoDB())
-    {
-        qint64 nAddress=getSelectionInitOffset();
-
-        if(nAddress!=-1)
-        {
-            // TODO
-        #ifdef QT_DEBUG
-            qDebug("_copyCursorAddress");
-        #endif
-        }
-    }
-}
-
 void DW_HexView::_goToAddress()
 {
     _goToAddressSlot();
@@ -51,21 +35,30 @@ void DW_HexView::contextMenu(const QPoint &pos)
     {
         QMenu contextMenu(this);
 
-        QAction actionGoToAddress(tr("Go to address"),this);
-        actionGoToAddress.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_HEX_GOTOADDRESS));
+        QMenu menuGoTo(tr("Go to"),this);
+        QMenu menuCopy(tr("Copy"),this);
+        QMenu menuEdit(tr("Edit"),this);
+
+        QAction actionGoToAddress(tr("Address"),this);
+        actionGoToAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_GOTO_ADDRESS));
         connect(&actionGoToAddress,SIGNAL(triggered()),this,SLOT(_goToAddress()));
 
-        contextMenu.addAction(&actionGoToAddress);
-
-        QMenu menuCopy(tr("Copy"),this);
+        menuGoTo.addAction(&actionGoToAddress);
+        contextMenu.addMenu(&menuGoTo);
 
         QAction actionCopyAddress(tr("Copy address"),this);
-        actionCopyAddress.setShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_HEX_COPYCURSORADDRESS));
-        connect(&actionCopyAddress,SIGNAL(triggered()),this,SLOT(_copyCursorAddress()));
+        actionCopyAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_COPY_ADDRESS));
+        connect(&actionCopyAddress,SIGNAL(triggered()),this,SLOT(_copyAddressSlot()));
 
         menuCopy.addAction(&actionCopyAddress);
-
         contextMenu.addMenu(&menuCopy);
+
+        QAction actionEditHex(tr("Hex"),this);
+        actionEditHex.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_EDIT_HEX));
+        connect(&actionEditHex,SIGNAL(triggered()),this,SLOT(_editHex()));
+
+        menuEdit.addAction(&actionEditHex);
+        contextMenu.addMenu(&menuEdit);
 
         contextMenu.exec(pos);
     }

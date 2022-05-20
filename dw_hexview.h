@@ -31,7 +31,6 @@ public:
     explicit DW_HexView(QWidget *pParent=nullptr);
 
 public slots:
-    void _copyCursorAddress(); // TODO remove
     void _goToAddress(); // TODO remove
 
 protected:

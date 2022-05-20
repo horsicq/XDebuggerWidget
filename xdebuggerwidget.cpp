@@ -256,13 +256,14 @@ void XDebuggerWidget::onDataChanged(bool bDataReload)
 
             if(g_pPDCode)
             {
+                g_pPDCode->close();
                 delete g_pPDCode;
                 g_pPDCode=nullptr;
             }
 
-            g_pPDCode=new XProcessDevice(this);  // TODO -> XProcess
+            g_pPDCode=new XProcess(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrCode.nAddress,g_mrCode.nSize,this);
 
-            if(g_pPDCode->openHandle(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrCode.nAddress,g_mrCode.nSize,QIODevice::ReadWrite)) // Windows TODO Linux
+            if(g_pPDCode->open(QIODevice::ReadWrite))
             {
                 XBinary binary(g_pPDCode,true,g_mrCode.nAddress);
                 binary.setArch(g_osInfo.sArch);
@@ -273,11 +274,13 @@ void XDebuggerWidget::onDataChanged(bool bDataReload)
                 disasmOptions.nCurrentIPAddress=nCurrentAddress;
                 disasmOptions.memoryMap=binary.getMemoryMap();
                 ui->widgetDisasm->setData(g_pPDCode,disasmOptions,false);
+                ui->widgetDisasm->setReadonly(false);
 
                 XHexView::OPTIONS hexOptions={};
                 hexOptions.nStartAddress=g_mrCode.nAddress;
                 hexOptions.nStartSelectionOffset=nCurrentAddress-hexOptions.nStartAddress;
                 ui->widgetHex->setData(g_pPDCode,hexOptions,false);
+                ui->widgetHex->setReadonly(false);
             }
         }
         else
@@ -310,18 +313,20 @@ void XDebuggerWidget::onDataChanged(bool bDataReload)
 
             if(g_pPDStack)
             {
+                g_pPDStack->close();
                 delete g_pPDStack;
                 g_pPDStack=nullptr;
             }
 
-            g_pPDStack=new XProcessDevice(this);  // TODO -> XProcess
+            g_pPDStack=new XProcess(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrStack.nAddress,g_mrStack.nSize,this);
 
-            if(g_pPDStack->openHandle(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrStack.nAddress,g_mrStack.nSize,QIODevice::ReadWrite))
+            if(g_pPDStack->open(QIODevice::ReadWrite))
             {
                 XStackView::OPTIONS stackOptions={};
                 stackOptions.nStartAddress=g_mrStack.nAddress;
                 stackOptions.nCurrentAddress=nStackPointer;
                 ui->widgetStack->setData(g_pPDStack,stackOptions,false);
+                ui->widgetStack->setReadonly(false);
 
     //            XHexView::OPTIONS hexOptions={};
     //            hexOptions.nStartAddress=g_mrStack.nAddress;

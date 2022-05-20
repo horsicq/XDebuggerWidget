@@ -134,13 +134,13 @@ private:
     XProcess::MEMORY_REGION g_mrStack;
     XProcess::MEMORY_REGION g_mrHex;
 
-    XProcessDevice *g_pPDCode;  // TODO -> XProcess
-    XProcessDevice *g_pPDStack;  // TODO -> XProcess
-    XProcessDevice *g_pPDHex;  // TODO -> XProcess
+//    XProcessDevice *g_pPDCode;  // TODO -> XProcess
+//    XProcessDevice *g_pPDStack;  // TODO -> XProcess
+//    XProcessDevice *g_pPDHex;  // TODO -> XProcess
 
-//    XProcess *g_pPDCode;
-//    XProcess *g_pPDStack;
-//    XProcess *g_pPDHex;
+    XProcess *g_pPDCode;
+    XProcess *g_pPDStack;
+    XProcess *g_pPDHex;
 };
 
 #endif // XDEBUGGERWIDGET_H

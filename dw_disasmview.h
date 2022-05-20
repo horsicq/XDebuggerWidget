@@ -32,7 +32,6 @@ public:
 
 public slots:
     void _breakpointToggle();
-    void _copyCursorAddress();
     void _goToAddress();
 
 protected:
