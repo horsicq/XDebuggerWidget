@@ -36,7 +36,7 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
 //    g_scRun=nullptr;
 //    g_scStepInto=nullptr;
 //    g_scStepOver=nullptr;
-    g_scBreakpointToggle=nullptr;
+//    g_scBreakpointToggle=nullptr;
 
     g_mrCode={};
     g_mrStack={};
@@ -243,17 +243,8 @@ void XDebuggerWidget::onDataChanged(bool bDataReload)
 {
     if(bDataReload)
     {
-        quint64 nCurrentAddress=0;
-        quint64 nStackPointer=0;
-
-    #ifdef Q_PROCESSOR_X86_32
-        nStackPointer=g_pInfoDB->getCurrentReg(XInfoDB::XREG_ESP).var.v_uint32;
-        nCurrentAddress=g_pInfoDB->getCurrentReg(XInfoDB::XREG_EIP).var.v_uint32;
-    #endif
-    #ifdef Q_PROCESSOR_X86_64
-        nStackPointer=g_pInfoDB->getCurrentReg(XInfoDB::XREG_RSP).var.v_uint64;
-        nCurrentAddress=g_pInfoDB->getCurrentReg(XInfoDB::XREG_RIP).var.v_uint64;
-    #endif
+        quint64 nCurrentAddress=g_pInfoDB->getCurrentInstructionPointer();
+        quint64 nStackPointer=g_pInfoDB->getCurrentStackPointer();
 
         // TODO getMemoryRegions
         // TODO Memory Regions manager
@@ -271,7 +262,7 @@ void XDebuggerWidget::onDataChanged(bool bDataReload)
 
             g_pPDCode=new XProcessDevice(this);  // TODO -> XProcess
 
-            if(g_pPDCode->openHandle(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrCode.nAddress,g_mrCode.nSize,QIODevice::ReadOnly)) // Windows TODO Linux
+            if(g_pPDCode->openHandle(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrCode.nAddress,g_mrCode.nSize,QIODevice::ReadWrite)) // Windows TODO Linux
             {
                 XBinary binary(g_pPDCode,true,g_mrCode.nAddress);
                 binary.setArch(g_osInfo.sArch);
@@ -325,7 +316,7 @@ void XDebuggerWidget::onDataChanged(bool bDataReload)
 
             g_pPDStack=new XProcessDevice(this);  // TODO -> XProcess
 
-            if(g_pPDStack->openHandle(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrStack.nAddress,g_mrStack.nSize,QIODevice::ReadOnly))
+            if(g_pPDStack->openHandle(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrStack.nAddress,g_mrStack.nSize,QIODevice::ReadWrite))
             {
                 XStackView::OPTIONS stackOptions={};
                 stackOptions.nStartAddress=g_mrStack.nAddress;
@@ -542,7 +533,7 @@ void XDebuggerWidget::registerShortcuts(bool bState)
 //        if(!g_scRun)                    g_scRun                     =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_RUN),                    this,SLOT(_run()));
 //        if(!g_scStepInto)               g_scStepInto                =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_STEPINTO),               this,SLOT(_stepInto()));
 //        if(!g_scStepOver)               g_scStepOver                =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_STEPOVER),               this,SLOT(_stepOver()));
-        if(!g_scBreakpointToggle)        g_scBreakpointToggle         =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DISASM_BREAKPOINTTOGGLE),      this,SLOT(_toggleBreakpoint()));
+//        if(!g_scBreakpointToggle)        g_scBreakpointToggle         =new QShortcut(getShortcuts()->getShortcut(XShortcuts::ID_DEBUGGER_DISASM_BREAKPOINTTOGGLE),      this,SLOT(_toggleBreakpoint()));
     }
     else
     {
@@ -552,7 +543,7 @@ void XDebuggerWidget::registerShortcuts(bool bState)
 //        if(g_scRun)                     {delete g_scRun;                    g_scRun=nullptr;}
 //        if(g_scStepInto)                {delete g_scStepInto;               g_scStepInto=nullptr;}
 //        if(g_scStepOver)                {delete g_scStepOver;               g_scStepOver=nullptr;}
-        if(g_scBreakpointToggle)     {delete g_scBreakpointToggle;    g_scBreakpointToggle=nullptr;}
+//        if(g_scBreakpointToggle)     {delete g_scBreakpointToggle;    g_scBreakpointToggle=nullptr;}
     }
 }
 

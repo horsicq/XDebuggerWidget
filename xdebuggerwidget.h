@@ -126,7 +126,7 @@ private:
 //    QShortcut *g_scRun;
 //    QShortcut *g_scStepInto;
 //    QShortcut *g_scStepOver;
-    QShortcut *g_scBreakpointToggle;
+//    QShortcut *g_scBreakpointToggle;
 
     XBinary::OSINFO g_osInfo;
 
