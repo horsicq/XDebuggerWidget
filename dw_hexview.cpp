@@ -46,7 +46,7 @@ void DW_HexView::contextMenu(const QPoint &pos)
         menuGoTo.addAction(&actionGoToAddress);
         contextMenu.addMenu(&menuGoTo);
 
-        QAction actionCopyAddress(tr("Copy address"),this);
+        QAction actionCopyAddress(tr("Address"),this);
         actionCopyAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_COPY_ADDRESS));
         connect(&actionCopyAddress,SIGNAL(triggered()),this,SLOT(_copyAddressSlot()));
 
