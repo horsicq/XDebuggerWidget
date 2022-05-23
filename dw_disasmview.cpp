@@ -51,8 +51,6 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
 {
     // TODO Search
     // TODO Signatures
-    // TODO Copy
-
     if(getXInfoDB())
     {
         QMenu contextMenu(this);
@@ -78,7 +76,7 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
         actionEditHex.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_EDIT_HEX));
         connect(&actionEditHex,SIGNAL(triggered()),this,SLOT(_editHex()));
 
-        menuGoTo.addAction(&actionBreakpointToggle);
+        menuGoTo.addAction(&actionGoToAddress);
         contextMenu.addMenu(&menuGoTo);
 
         menuBreakpoint.addAction(&actionBreakpointToggle);

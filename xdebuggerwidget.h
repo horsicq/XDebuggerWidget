@@ -57,6 +57,13 @@ class XDebuggerWidget : public XShortcutsWidget
         MT_SYMBOLS
     };
 
+    enum SHORTCUT
+    {
+        SC_DISASM_BREAKPOINTTOGGLE,
+        __SC_SIZE,
+        // TODO more
+    };
+
 public:
     explicit XDebuggerWidget(QWidget *pParent=nullptr);
     ~XDebuggerWidget();
@@ -123,20 +130,13 @@ private:
 
     XInfoDB::BREAKPOINT_INFO g_currentBreakPointInfo;
 
-//    QShortcut *g_scRun;
-//    QShortcut *g_scStepInto;
-//    QShortcut *g_scStepOver;
-//    QShortcut *g_scBreakpointToggle;
+    QShortcut *shortCuts[__SC_SIZE];
 
     XBinary::OSINFO g_osInfo;
 
     XProcess::MEMORY_REGION g_mrCode;
     XProcess::MEMORY_REGION g_mrStack;
     XProcess::MEMORY_REGION g_mrHex;
-
-//    XProcessDevice *g_pPDCode;  // TODO -> XProcess
-//    XProcessDevice *g_pPDStack;  // TODO -> XProcess
-//    XProcessDevice *g_pPDHex;  // TODO -> XProcess
 
     XProcess *g_pPDCode;
     XProcess *g_pPDStack;

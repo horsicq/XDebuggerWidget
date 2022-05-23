@@ -26,7 +26,21 @@ DW_StackView::DW_StackView(QWidget *pParent) : XStackView(pParent)
 
 void DW_StackView::contextMenu(const QPoint &pos)
 {
-    Q_UNUSED(pos)
+    if(getXInfoDB())
+    {
+        QMenu contextMenu(this);
+
+        QMenu menuEdit(tr("Edit"),this);
+
+        QAction actionEditHex(tr("Hex"),this);
+        actionEditHex.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_STACK_EDIT_HEX));
+        connect(&actionEditHex,SIGNAL(triggered()),this,SLOT(_editHex()));
+
+        menuEdit.addAction(&actionEditHex);
+        contextMenu.addMenu(&menuEdit);
+
+        contextMenu.exec(pos);
+    }
 }
 
 void DW_StackView::registerShortcuts(bool bState)

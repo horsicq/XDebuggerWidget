@@ -33,10 +33,7 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
 
     g_currentBreakPointInfo={};
 
-//    g_scRun=nullptr;
-//    g_scStepInto=nullptr;
-//    g_scStepOver=nullptr;
-//    g_scBreakpointToggle=nullptr;
+    memset(shortCuts,0,sizeof shortCuts);
 
     g_mrCode={};
     g_mrStack={};
@@ -527,6 +524,21 @@ void XDebuggerWidget::writeToLog(QString sText)
 
 void XDebuggerWidget::registerShortcuts(bool bState)
 {
+    if(bState)
+    {
+        if(!shortCuts[SC_DISASM_BREAKPOINTTOGGLE])          shortCuts[SC_DISASM_BREAKPOINTTOGGLE]           =new QShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_BREAKPOINT_TOGGLE),     this,SLOT(_toggleBreakpoint()));
+    }
+    else
+    {
+        for(qint32 i=0;i<__SC_SIZE;i++)
+        {
+            if(shortCuts[i])
+            {
+                delete shortCuts[i];
+                shortCuts[i]=nullptr;
+            }
+        }
+    }
     // TODO more
     // TODO Check if main window contains the shortcuts
 
