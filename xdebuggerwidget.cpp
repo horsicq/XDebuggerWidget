@@ -376,11 +376,18 @@ void XDebuggerWidget::debugStepInto()
         handleThread.nID=g_currentBreakPointInfo.nThreadID;
         handleThread.hHandle=g_currentBreakPointInfo.pHThread;
 
+    #ifdef Q_OS_LINUX
+        g_pInfoDB->stepInto(handleThread);
+//        g_pInfoDB->resumeThread(handleThread);
+    #endif
 //        g_pInfoDB->setCurrentThread(handleThread);
 //        g_pInfoDB->stepInto();
 //        g_pInfoDB->resumeThread(handleThread);
+
+    #ifdef Q_OS_WIN
         g_pDebugger->stepInto(handleThread);
         g_pDebugger->resumeThread(handleThread);
+#   endif
     }
 }
 
