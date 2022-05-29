@@ -172,19 +172,19 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
     // mb TODO regs
 
     XProcess::HANDLEID handleThread={};
-    handleThread.hHandle=pBreakPointInfo->pHThread;
+//    handleThread.hHandle=pBreakPointInfo->pHThread;
     handleThread.nID=pBreakPointInfo->nThreadID;
-
-    XProcess::HANDLEID handleProcess={};
-    handleProcess.hHandle=pBreakPointInfo->pHProcessMemoryQuery;
-    handleProcess.nID=pBreakPointInfo->nProcessID;
 
     qDebug("Current Address2: %llX",XAbstractDebugger::getCurrentAddress(handleThread));
 
     g_pDebugger->suspendThread(handleThread);
+#ifdef Q_OS_LINUX
+    g_pInfoDB->updateRegs(pBreakPointInfo->nThreadID,ui->widgetRegs->getOptions());
+#endif
+#ifdef Q_OS_WIN
+    // TODO
+#endif
 
-    g_pInfoDB->setCurrentThread(handleThread);
-    g_pInfoDB->updateRegs(ui->widgetRegs->getOptions());
     g_pInfoDB->updateMemoryRegionsList();
     g_pInfoDB->updateModulesList();
     g_pInfoDB->clearRecordInfoCache();
@@ -362,7 +362,7 @@ void XDebuggerWidget::debugRun()
     {
         XProcess::HANDLEID handleThread={};
         handleThread.nID=g_currentBreakPointInfo.nThreadID;
-        handleThread.hHandle=g_currentBreakPointInfo.pHThread;
+//        handleThread.hHandle=g_currentBreakPointInfo.pHThread;
 
         g_pDebugger->resumeThread(handleThread);
     }
@@ -374,10 +374,10 @@ void XDebuggerWidget::debugStepInto()
     {
         XProcess::HANDLEID handleThread={};
         handleThread.nID=g_currentBreakPointInfo.nThreadID;
-        handleThread.hHandle=g_currentBreakPointInfo.pHThread;
+//        handleThread.hHandle=g_currentBreakPointInfo.pHThread;
 
     #ifdef Q_OS_LINUX
-        g_pInfoDB->stepInto(handleThread);
+//        g_pInfoDB->stepInto(handleThread);
 //        g_pInfoDB->resumeThread(handleThread);
     #endif
 //        g_pInfoDB->setCurrentThread(handleThread);
@@ -397,7 +397,7 @@ void XDebuggerWidget::debugStepOver()
     {
         XProcess::HANDLEID handleThread={};
         handleThread.nID=g_currentBreakPointInfo.nThreadID;
-        handleThread.hHandle=g_currentBreakPointInfo.pHThread;
+//        handleThread.hHandle=g_currentBreakPointInfo.pHThread;
 
         g_pDebugger->stepOver(handleThread);
         g_pDebugger->resumeThread(handleThread);
