@@ -171,18 +171,14 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 #endif
     // mb TODO regs
 
-    XProcess::HANDLEID handleThread={};
-//    handleThread.hHandle=pBreakPointInfo->pHThread;
-    handleThread.nID=pBreakPointInfo->nThreadID;
+//    qDebug("Current Address2: %llX",XAbstractDebugger::getCurrentAddress(handleThread));
 
-    qDebug("Current Address2: %llX",XAbstractDebugger::getCurrentAddress(handleThread));
-
-    g_pDebugger->suspendThread(handleThread);
+    g_pInfoDB->suspendThread(pBreakPointInfo->hThread);
 #ifdef Q_OS_LINUX
     g_pInfoDB->updateRegs(pBreakPointInfo->nThreadID,ui->widgetRegs->getOptions());
 #endif
 #ifdef Q_OS_WIN
-    // TODO
+    g_pInfoDB->updateRegs(pBreakPointInfo->hThread,ui->widgetRegs->getOptions());
 #endif
 
     g_pInfoDB->updateMemoryRegionsList();
@@ -240,8 +236,8 @@ void XDebuggerWidget::onDataChanged(bool bDataReload)
 {
     if(bDataReload)
     {
-        quint64 nCurrentAddress=g_pInfoDB->getCurrentInstructionPointer();
-        quint64 nStackPointer=g_pInfoDB->getCurrentStackPointer();
+        quint64 nCurrentAddress=g_pInfoDB->getCurrentInstructionPointerCache();
+        quint64 nStackPointer=g_pInfoDB->getCurrentStackPointerCache();
 
         // TODO getMemoryRegions
         // TODO Memory Regions manager
@@ -257,9 +253,12 @@ void XDebuggerWidget::onDataChanged(bool bDataReload)
                 delete g_pPDCode;
                 g_pPDCode=nullptr;
             }
-
+        #ifdef Q_OS_WIN
+            g_pPDCode=new XProcess(g_currentBreakPointInfo.hProcess,g_mrCode.nAddress,g_mrCode.nSize,this);
+        #endif
+        #ifdef Q_OS_LINUX
             g_pPDCode=new XProcess(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrCode.nAddress,g_mrCode.nSize,this);
-
+        #endif
             if(g_pPDCode->open(QIODevice::ReadWrite))
             {
                 XBinary binary(g_pPDCode,true,g_mrCode.nAddress);
@@ -314,9 +313,12 @@ void XDebuggerWidget::onDataChanged(bool bDataReload)
                 delete g_pPDStack;
                 g_pPDStack=nullptr;
             }
-
+        #ifdef Q_OS_WIN
+            g_pPDStack=new XProcess(g_currentBreakPointInfo.hProcess,g_mrStack.nAddress,g_mrStack.nSize,this);
+        #endif
+        #ifdef Q_OS_LINUX
             g_pPDStack=new XProcess(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrStack.nAddress,g_mrStack.nSize,this);
-
+        #endif
             if(g_pPDStack->open(QIODevice::ReadWrite))
             {
                 XStackView::OPTIONS stackOptions={};
@@ -364,7 +366,7 @@ void XDebuggerWidget::debugRun()
         handleThread.nID=g_currentBreakPointInfo.nThreadID;
 //        handleThread.hHandle=g_currentBreakPointInfo.pHThread;
 
-        g_pDebugger->resumeThread(handleThread);
+        g_pInfoDB->resumeThread(g_currentBreakPointInfo.hThread);
     }
 }
 
@@ -386,7 +388,7 @@ void XDebuggerWidget::debugStepInto()
 
     #ifdef Q_OS_WIN
         g_pDebugger->stepInto(handleThread);
-        g_pDebugger->resumeThread(handleThread);
+        g_pInfoDB->resumeThread(g_currentBreakPointInfo.hThread);
 #   endif
     }
 }
@@ -400,7 +402,7 @@ void XDebuggerWidget::debugStepOver()
 //        handleThread.hHandle=g_currentBreakPointInfo.pHThread;
 
         g_pDebugger->stepOver(handleThread);
-        g_pDebugger->resumeThread(handleThread);
+        g_pInfoDB->resumeThread(g_currentBreakPointInfo.hThread);
     }
 }
 
