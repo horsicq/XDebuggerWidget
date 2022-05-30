@@ -173,11 +173,11 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 
 //    qDebug("Current Address2: %llX",XAbstractDebugger::getCurrentAddress(handleThread));
 
-    g_pInfoDB->suspendThread(pBreakPointInfo->hThread);
 #ifdef Q_OS_LINUX
     g_pInfoDB->updateRegs(pBreakPointInfo->nThreadID,ui->widgetRegs->getOptions());
 #endif
 #ifdef Q_OS_WIN
+    g_pInfoDB->suspendThread(pBreakPointInfo->hThread);
     g_pInfoDB->updateRegs(pBreakPointInfo->hThread,ui->widgetRegs->getOptions());
 #endif
 
@@ -365,8 +365,9 @@ void XDebuggerWidget::debugRun()
         XProcess::HANDLEID handleThread={};
         handleThread.nID=g_currentBreakPointInfo.nThreadID;
 //        handleThread.hHandle=g_currentBreakPointInfo.pHThread;
-
+    #ifdef Q_OS_WIN
         g_pInfoDB->resumeThread(g_currentBreakPointInfo.hThread);
+    #endif
     }
 }
 
@@ -402,7 +403,9 @@ void XDebuggerWidget::debugStepOver()
 //        handleThread.hHandle=g_currentBreakPointInfo.pHThread;
 
         g_pDebugger->stepOver(handleThread);
+    #ifdef Q_OS_WIN
         g_pInfoDB->resumeThread(g_currentBreakPointInfo.hThread);
+    #endif
     }
 }
 
