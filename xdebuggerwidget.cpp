@@ -377,7 +377,7 @@ void XDebuggerWidget::debugStepInto()
 {
     qDebug("void XDebuggerWidget::debugStepInto()");
 
-    if(g_currentBreakPointInfo.hThread)
+    if(g_currentBreakPointInfo.nProcessID)
     {
     #ifdef Q_OS_LINUX
 //        g_pInfoDB->stepInto(handleThread);
