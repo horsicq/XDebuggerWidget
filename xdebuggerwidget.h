@@ -79,6 +79,7 @@ signals:
 
 public slots:
     void debugRun();
+    void debugStop();
     void debugStepInto();
     void debugStepOver();
     void viewCPU();

@@ -362,23 +362,23 @@ void XDebuggerWidget::debugRun()
 {
     if(g_currentBreakPointInfo.nThreadID)
     {
-        XProcess::HANDLEID handleThread={};
-        handleThread.nID=g_currentBreakPointInfo.nThreadID;
-//        handleThread.hHandle=g_currentBreakPointInfo.pHThread;
     #ifdef Q_OS_WIN
         g_pInfoDB->resumeThread(g_currentBreakPointInfo.hThread);
     #endif
     }
 }
 
+void XDebuggerWidget::debugStop()
+{
+    qDebug("TODO: Stop");
+}
+
 void XDebuggerWidget::debugStepInto()
 {
-    if(g_currentBreakPointInfo.nThreadID)
-    {
-        XProcess::HANDLEID handleThread={};
-        handleThread.nID=g_currentBreakPointInfo.nThreadID;
-//        handleThread.hHandle=g_currentBreakPointInfo.pHThread;
+    qDebug("void XDebuggerWidget::debugStepInto()");
 
+    if(g_currentBreakPointInfo.hThread)
+    {
     #ifdef Q_OS_LINUX
 //        g_pInfoDB->stepInto(handleThread);
 //        g_pInfoDB->resumeThread(handleThread);
@@ -388,9 +388,9 @@ void XDebuggerWidget::debugStepInto()
 //        g_pInfoDB->resumeThread(handleThread);
 
     #ifdef Q_OS_WIN
-        g_pDebugger->stepInto(handleThread);
+        g_pInfoDB->stepInto(g_currentBreakPointInfo.hThread);
         g_pInfoDB->resumeThread(g_currentBreakPointInfo.hThread);
-#   endif
+    #endif
     }
 }
 
