@@ -24,11 +24,6 @@ DW_HexView::DW_HexView(QWidget *pParent) : XHexView(pParent)
 {
 }
 
-void DW_HexView::_goToAddress()
-{
-    _goToAddressSlot();
-}
-
 void DW_HexView::contextMenu(const QPoint &pos)
 {
     if(getXInfoDB())
@@ -41,7 +36,7 @@ void DW_HexView::contextMenu(const QPoint &pos)
 
         QAction actionGoToAddress(tr("Address"),this);
         actionGoToAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_GOTO_ADDRESS));
-        connect(&actionGoToAddress,SIGNAL(triggered()),this,SLOT(_goToAddress()));
+        connect(&actionGoToAddress,SIGNAL(triggered()),this,SLOT(_goToAddressSlot()));
 
         menuGoTo.addAction(&actionGoToAddress);
         contextMenu.addMenu(&menuGoTo);

@@ -31,6 +31,22 @@ void DW_StackView::contextMenu(const QPoint &pos)
         QMenu contextMenu(this);
 
         QMenu menuEdit(tr("Edit"),this);
+        QMenu menuGoTo(tr("Go to"),this);
+        QMenu menuCopy(tr("Copy"),this);
+
+        QAction actionGoToAddress(tr("Address"),this);
+        actionGoToAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_GOTO_ADDRESS));
+        connect(&actionGoToAddress,SIGNAL(triggered()),this,SLOT(_goToAddressSlot()));
+
+        menuGoTo.addAction(&actionGoToAddress);
+        contextMenu.addMenu(&menuGoTo);
+
+        QAction actionCopyAddress(tr("Address"),this);
+        actionCopyAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_COPY_ADDRESS));
+        connect(&actionCopyAddress,SIGNAL(triggered()),this,SLOT(_copyAddressSlot()));
+
+        menuCopy.addAction(&actionCopyAddress);
+        contextMenu.addMenu(&menuCopy);
 
         QAction actionEditHex(tr("Hex"),this);
         actionEditHex.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_STACK_EDIT_HEX));

@@ -30,9 +30,6 @@ class DW_HexView : public XHexView
 public:
     explicit DW_HexView(QWidget *pParent=nullptr);
 
-public slots:
-    void _goToAddress(); // TODO remove
-
 protected:
     virtual void contextMenu(const QPoint &pos);
     virtual void registerShortcuts(bool bState);

@@ -111,6 +111,9 @@ private slots:
     void writeToLog(QString sText);
     void on_tabWidgetMain_currentChanged(int nIndex);
     void reload();
+    void followInDisasm(XADDR nAddress);
+    void followInHex(XADDR nAddress);
+    void followInStack(XADDR nAddress);
 
 protected:
     virtual void registerShortcuts(bool bState);
@@ -135,11 +138,11 @@ private:
 
     XBinary::OSINFO g_osInfo;
 
-    XProcess::MEMORY_REGION g_mrCode;
+    XProcess::MEMORY_REGION g_mrDisasm;
     XProcess::MEMORY_REGION g_mrStack;
     XProcess::MEMORY_REGION g_mrHex;
 
-    XProcess *g_pPDCode;
+    XProcess *g_pPDDisasm;
     XProcess *g_pPDStack;
     XProcess *g_pPDHex;
 };
