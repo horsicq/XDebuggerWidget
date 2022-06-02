@@ -244,51 +244,6 @@ void XDebuggerWidget::onDataChanged(bool bDataReload)
         followInStack(nStackPointer);
 
         // TODO Memory Regions manager
-
-        if(!XProcess::isAddressInMemoryRegion(&g_mrDisasm,nInstructionPointer))
-        {
-    //        g_mrCode=XProcess::getMemoryRegion(handleProcessMemoryQuery,g_currentBreakPointInfo.nAddress);
-            g_mrDisasm=XProcess::getMemoryRegionByAddress(g_pInfoDB->getCurrentMemoryRegionsList(),nInstructionPointer);
-
-            if(g_pPDDisasm)
-            {
-                g_pPDDisasm->close();
-                delete g_pPDDisasm;
-                g_pPDDisasm=nullptr;
-            }
-        #ifdef Q_OS_WIN
-            g_pPDDisasm=new XProcess(g_currentBreakPointInfo.hProcess,g_mrDisasm.nAddress,g_mrDisasm.nSize,this);
-        #endif
-        #ifdef Q_OS_LINUX
-            g_pPDCode=new XProcess(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrCode.nAddress,g_mrCode.nSize,this);
-        #endif
-            if(g_pPDDisasm->open(QIODevice::ReadWrite))
-            {
-                XBinary binary(g_pPDDisasm,true,g_mrDisasm.nAddress);
-                binary.setArch(g_osInfo.sArch);
-                binary.setMode(g_osInfo.mode);
-
-                XDisasmView::OPTIONS disasmOptions={};
-                disasmOptions.nInitAddress=nInstructionPointer;
-                disasmOptions.nCurrentIPAddress=nInstructionPointer;
-                disasmOptions.memoryMapRegion=binary.getMemoryMap();
-                ui->widgetDisasm->setData(g_pPDDisasm,disasmOptions,false);
-                ui->widgetDisasm->setReadonly(false);
-
-                XHexView::OPTIONS hexOptions={};
-                hexOptions.nStartAddress=g_mrDisasm.nAddress;
-                hexOptions.nStartSelectionOffset=nInstructionPointer-hexOptions.nStartAddress;
-                ui->widgetHex->setData(g_pPDDisasm,hexOptions,false);
-                ui->widgetHex->setReadonly(false);
-            }
-        }
-        else
-        {
-            ui->widgetDisasm->setCurrentPointerAddress(nInstructionPointer);
-            ui->widgetDisasm->goToAddress(nInstructionPointer,true);
-        }
-
-        ui->widgetDisasm->setSelectionAddress(nInstructionPointer,1);
     }
 
     reload();
@@ -594,7 +549,7 @@ void XDebuggerWidget::followInDisasm(XADDR nAddress)
         g_pPDDisasm=new XProcess(g_currentBreakPointInfo.hProcess,g_mrDisasm.nAddress,g_mrDisasm.nSize,this);
     #endif
     #ifdef Q_OS_LINUX
-        g_pPDCode=new XProcess(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrCode.nAddress,g_mrCode.nSize,this);
+        g_pPDDisasm=new XProcess(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrDisasm.nAddress,g_mrDisasm.nSize,this);
     #endif
         if(g_pPDDisasm->open(QIODevice::ReadWrite))
         {
@@ -632,10 +587,10 @@ void XDebuggerWidget::followInHex(XADDR nAddress)
             g_pPDHex=nullptr;
         }
     #ifdef Q_OS_WIN
-        g_pPDHex=new XProcess(g_currentBreakPointInfo.hProcess,g_mrDisasm.nAddress,g_mrDisasm.nSize,this);
+        g_pPDHex=new XProcess(g_currentBreakPointInfo.hProcess,g_mrHex.nAddress,g_mrHex.nSize,this);
     #endif
     #ifdef Q_OS_LINUX
-        g_pPDHex=new XProcess(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrCode.nAddress,g_mrCode.nSize,this);
+        g_pPDHex=new XProcess(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrHex.nAddress,g_mrHex.nSize,this);
     #endif
         if(g_pPDHex->open(QIODevice::ReadWrite))
         {
