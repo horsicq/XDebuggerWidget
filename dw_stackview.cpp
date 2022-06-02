@@ -33,6 +33,7 @@ void DW_StackView::contextMenu(const QPoint &pos)
         QMenu menuEdit(tr("Edit"),this);
         QMenu menuGoTo(tr("Go to"),this);
         QMenu menuCopy(tr("Copy"),this);
+        QMenu menuFollowIn(tr("Follow in"),this);
 
         QAction actionGoToAddress(tr("Address"),this);
         actionGoToAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_GOTO_ADDRESS));
@@ -54,6 +55,13 @@ void DW_StackView::contextMenu(const QPoint &pos)
 
         menuEdit.addAction(&actionEditHex);
         contextMenu.addMenu(&menuEdit);
+
+        QAction actionFollowInHex(tr("Hex"),this);
+        actionFollowInHex.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_STACK_FOLLOWIN_HEX));
+        connect(&actionEditHex,SIGNAL(triggered()),this,SLOT(followInHexSlot()));
+
+        menuFollowIn.addAction(&actionFollowInHex);
+        contextMenu.addMenu(&menuFollowIn);
 
         contextMenu.exec(pos);
     }
