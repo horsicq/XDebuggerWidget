@@ -33,6 +33,7 @@ void DW_HexView::contextMenu(const QPoint &pos)
         QMenu menuGoTo(tr("Go to"),this);
         QMenu menuCopy(tr("Copy"),this);
         QMenu menuEdit(tr("Edit"),this);
+        QMenu menuFollowIn(tr("Follow in"),this);
 
         QAction actionGoToAddress(tr("Address"),this);
         actionGoToAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_GOTO_ADDRESS));
@@ -54,6 +55,13 @@ void DW_HexView::contextMenu(const QPoint &pos)
 
         menuEdit.addAction(&actionEditHex);
         contextMenu.addMenu(&menuEdit);
+
+        QAction actionFollowInDisasm(tr("Disasm"),this);
+        actionFollowInDisasm.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_FOLLOWIN_DISASM));
+        connect(&actionFollowInDisasm,SIGNAL(triggered()),this,SLOT(_followInDisasmSlot()));
+
+        menuFollowIn.addAction(&actionFollowInDisasm);
+        contextMenu.addMenu(&menuFollowIn);
 
         contextMenu.exec(pos);
     }
