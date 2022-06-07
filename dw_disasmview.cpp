@@ -59,6 +59,7 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
         QMenu menuGoTo(tr("Go to"),this);
         QMenu menuCopy(tr("Copy"),this);
         QMenu menuEdit(tr("Edit"),this);
+        QMenu menuFollowIn(tr("Follow in"),this);
 
         QAction actionBreakpointToggle(tr("Toggle"),this);
         actionBreakpointToggle.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_BREAKPOINT_TOGGLE));
@@ -76,6 +77,10 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
         actionEditHex.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_EDIT_HEX));
         connect(&actionEditHex,SIGNAL(triggered()),this,SLOT(_editHex()));
 
+        QAction actionFollowInHex(tr("Hex"),this);
+        actionFollowInHex.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_FOLLOWIN_HEX));
+        connect(&actionFollowInHex,SIGNAL(triggered()),this,SLOT(_followInHexSlot()));
+
         menuGoTo.addAction(&actionGoToAddress);
         contextMenu.addMenu(&menuGoTo);
 
@@ -87,6 +92,9 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
 
         menuEdit.addAction(&actionEditHex);
         contextMenu.addMenu(&menuEdit);
+
+        menuFollowIn.addAction(&actionFollowInHex);
+        contextMenu.addMenu(&menuFollowIn);
 
         contextMenu.exec(pos);
 

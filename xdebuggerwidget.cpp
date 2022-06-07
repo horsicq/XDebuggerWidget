@@ -51,6 +51,7 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
 //    XDebuggerWidget::registerShortcuts(true);
 //    connect(ui->widgetDisasm,SIGNAL(debugAction(XInfoDB::DEBUG_ACTION)),this,SLOT(addDebugAction(XInfoDB::DEBUG_ACTION)));
 
+    connect(ui->widgetDisasm,SIGNAL(followInHex(XADDR)),this,SLOT(followInHex(XADDR)));
     connect(ui->widgetHex,SIGNAL(followInDisasm(XADDR)),this,SLOT(followInDisasm(XADDR)));
 
     ui->tabWidgetMain->setCurrentIndex(MT_CPU);
@@ -566,16 +567,17 @@ void XDebuggerWidget::followInDisasm(XADDR nAddress)
 
             XDisasmView::OPTIONS disasmOptions={};
             disasmOptions.nInitAddress=nAddress;
-            disasmOptions.nCurrentIPAddress=nAddress;
+            disasmOptions.nCurrentIntructionPointer=g_pInfoDB->getCurrentInstructionPointerCache();
             disasmOptions.memoryMapRegion=binary.getMemoryMap();
+            disasmOptions.bAprox=true;
             ui->widgetDisasm->setData(g_pPDDisasm,disasmOptions,false);
             ui->widgetDisasm->setReadonly(false);
         }
     }
     else
     {
-        ui->widgetDisasm->setCurrentPointerAddress(nAddress);
-        ui->widgetDisasm->goToAddress(nAddress,true);
+        ui->widgetDisasm->setCurrentIntructionPointer(nAddress);
+        ui->widgetDisasm->goToAddress(nAddress,true,true);
     }
 
     ui->widgetDisasm->setSelectionAddress(nAddress,1);
@@ -610,10 +612,10 @@ void XDebuggerWidget::followInHex(XADDR nAddress)
     }
     else
     {
-//        ui->widgetHex->goToAddress(nAddress);
+        ui->widgetHex->goToAddress(nAddress);
     }
 
-//    ui->widgetHex->setSelectionAddress(nAddress,1);
+    ui->widgetHex->setSelectionAddress(nAddress,1);
 }
 
 void XDebuggerWidget::followInStack(XADDR nAddress)
