@@ -641,12 +641,14 @@ void XDebuggerWidget::followInStack(XADDR nAddress)
             XStackView::OPTIONS stackOptions={};
             stackOptions.nStartAddress=g_mrStack.nAddress;
             stackOptions.nCurrentAddress=nAddress;
+            stackOptions.nCurrentStackPointer=nAddress;
             ui->widgetStack->setData(g_pPDStack,stackOptions,false);
             ui->widgetStack->setReadonly(false);
         }
     }
     else
     {
+        ui->widgetStack->setCurrentStackPointer(nAddress);
         ui->widgetStack->goToAddress(nAddress);
     }
 
