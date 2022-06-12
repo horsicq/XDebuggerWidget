@@ -290,8 +290,8 @@ void XDebuggerWidget::debugStepInto()
     if(g_currentBreakPointInfo.nProcessID)
     {
     #ifdef Q_OS_LINUX
-//        g_pInfoDB->stepInto(handleThread);
-//        g_pInfoDB->resumeThread(handleThread);
+        g_pInfoDB->stepIntoById(g_currentBreakPointInfo.nThreadID);
+        g_pInfoDB->resumeAllThreads();
     #endif
 //        g_pInfoDB->setCurrentThread(handleThread);
 //        g_pInfoDB->stepInto();
