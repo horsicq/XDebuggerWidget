@@ -124,6 +124,8 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     connect(g_pDebugger,SIGNAL(eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),this,SLOT(eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),this,SLOT(eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),Qt::DirectConnection);
 
+    connect(this,SIGNAL(testSignal()),g_pDebugger,SLOT(testSlot()),Qt::QueuedConnection);
+
     connect(g_pInfoDB,SIGNAL(dataChanged(bool)),this,SLOT(onDataChanged(bool)));
 
     g_pDebugger->moveToThread(g_pThread);
@@ -292,6 +294,8 @@ void XDebuggerWidget::debugStepInto()
     if(g_currentBreakPointInfo.nProcessID)
     {
     #ifdef Q_OS_LINUX
+
+        emit testSignal();
 
         ptrace(PT_CONTINUE,g_currentBreakPointInfo.nThreadID,0,0);
         qDebug("ptrace failed: %s",strerror(errno));

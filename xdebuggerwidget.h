@@ -76,6 +76,7 @@ signals:
     void errorMessage(QString sErrorMessage);
     void infoMessage(QString sInfoMessage);
     void cleanUpSignal();
+    void testSignal();
 
 public slots:
     void debugRun();
