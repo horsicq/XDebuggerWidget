@@ -58,9 +58,14 @@ void DW_StackView::contextMenu(const QPoint &pos)
 
         QAction actionFollowInHex(tr("Hex"),this);
         actionFollowInHex.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_STACK_FOLLOWIN_HEX));
-        connect(&actionEditHex,SIGNAL(triggered()),this,SLOT(followInHexSlot()));
+        connect(&actionFollowInHex,SIGNAL(triggered()),this,SLOT(_followInHexSlot()));
+
+        QAction actionFollowInDisasm(tr("Disasm"),this);
+        actionFollowInDisasm.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_STACK_FOLLOWIN_DISASM));
+        connect(&actionFollowInDisasm,SIGNAL(triggered()),this,SLOT(_followInDisasmSlot()));
 
         menuFollowIn.addAction(&actionFollowInHex);
+        menuFollowIn.addAction(&actionFollowInDisasm);
         contextMenu.addMenu(&menuFollowIn);
 
         contextMenu.exec(pos);

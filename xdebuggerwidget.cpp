@@ -53,6 +53,8 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
 
     connect(ui->widgetDisasm,SIGNAL(followInHex(XADDR)),this,SLOT(followInHex(XADDR)));
     connect(ui->widgetHex,SIGNAL(followInDisasm(XADDR)),this,SLOT(followInDisasm(XADDR)));
+    connect(ui->widgetStack,SIGNAL(followInHex(XADDR)),this,SLOT(followInHex(XADDR)));
+    connect(ui->widgetStack,SIGNAL(followInDisasm(XADDR)),this,SLOT(followInDisasm(XADDR)));
 
     ui->tabWidgetMain->setCurrentIndex(MT_CPU);
 }
@@ -290,15 +292,22 @@ void XDebuggerWidget::debugStepInto()
     if(g_currentBreakPointInfo.nProcessID)
     {
     #ifdef Q_OS_LINUX
+
+        ptrace(PT_CONTINUE,g_currentBreakPointInfo.nThreadID,0,0);
+        qDebug("ptrace failed: %s",strerror(errno));
+
         g_pInfoDB->stepIntoById(g_currentBreakPointInfo.nThreadID);
-        g_pInfoDB->resumeAllThreads();
+
+        g_pInfoDB->_unlockID(g_currentBreakPointInfo.nThreadID);
+//        g_pInfoDB->resumeAllThreads();
+
     #endif
 //        g_pInfoDB->setCurrentThread(handleThread);
 //        g_pInfoDB->stepInto();
 //        g_pInfoDB->resumeThread(handleThread);
 
     #ifdef Q_OS_WIN
-        g_pInfoDB->stepInto(g_currentBreakPointInfo.hThread);
+        g_pInfoDB->stepIntoByHandle(g_currentBreakPointInfo.hThread);
 //        g_pInfoDB->resumeThread(g_currentBreakPointInfo.hThread);
         g_pInfoDB->resumeAllThreads();
     #endif
@@ -559,6 +568,9 @@ void XDebuggerWidget::followInDisasm(XADDR nAddress)
     #ifdef Q_OS_LINUX
         g_pPDDisasm=new XProcess(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrDisasm.nAddress,g_mrDisasm.nSize,this);
     #endif
+    #ifdef Q_OS_MACOS
+        g_pPDDisasm=new XProcess(g_currentBreakPointInfo.hProcess,g_mrDisasm.nAddress,g_mrDisasm.nSize,this);
+    #endif
         if(g_pPDDisasm->open(QIODevice::ReadWrite))
         {
             XBinary binary(g_pPDDisasm,true,g_mrDisasm.nAddress);
@@ -601,12 +613,15 @@ void XDebuggerWidget::followInHex(XADDR nAddress)
     #ifdef Q_OS_LINUX
         g_pPDHex=new XProcess(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrHex.nAddress,g_mrHex.nSize,this);
     #endif
+    #ifdef Q_OS_MACOS
+        g_pPDHex=new XProcess(g_currentBreakPointInfo.hProcess,g_mrHex.nAddress,g_mrHex.nSize,this);
+    #endif
         if(g_pPDHex->open(QIODevice::ReadWrite))
         {
             XHexView::OPTIONS hexOptions={};
-            hexOptions.nStartAddress=g_mrDisasm.nAddress;
+            hexOptions.nStartAddress=g_mrHex.nAddress;
             hexOptions.nStartSelectionOffset=nAddress-hexOptions.nStartAddress;
-            ui->widgetHex->setData(g_pPDDisasm,hexOptions,false);
+            ui->widgetHex->setData(g_pPDHex,hexOptions,false);
             ui->widgetHex->setReadonly(false);
         }
     }
@@ -635,6 +650,9 @@ void XDebuggerWidget::followInStack(XADDR nAddress)
     #endif
     #ifdef Q_OS_LINUX
         g_pPDStack=new XProcess(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrStack.nAddress,g_mrStack.nSize,this);
+    #endif
+    #ifdef Q_OS_MACOS
+        g_pPDStack=new XProcess(g_currentBreakPointInfo.hProcess,g_mrStack.nAddress,g_mrStack.nSize,this);
     #endif
         if(g_pPDStack->open(QIODevice::ReadWrite))
         {
