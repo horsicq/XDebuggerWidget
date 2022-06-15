@@ -567,13 +567,13 @@ void XDebuggerWidget::followInDisasm(XADDR nAddress)
             g_pPDDisasm=nullptr;
         }
     #ifdef Q_OS_WIN
-        g_pPDDisasm=new XProcess(g_currentBreakPointInfo.hProcess,g_mrDisasm.nAddress,g_mrDisasm.nSize,this);
+        g_pPDDisasm=new XProcess(g_mrDisasm.nAddress,g_mrDisasm.nSize,g_currentBreakPointInfo.hProcess,this);
     #endif
     #ifdef Q_OS_LINUX
-        g_pPDDisasm=new XProcess(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrDisasm.nAddress,g_mrDisasm.nSize,this);
+        g_pPDDisasm=new XProcess(g_mrDisasm.nAddress,g_mrDisasm.nSize,g_currentBreakPointInfo.pHProcessMemoryIO,this);
     #endif
     #ifdef Q_OS_MACOS
-        g_pPDDisasm=new XProcess(g_currentBreakPointInfo.hProcess,g_mrDisasm.nAddress,g_mrDisasm.nSize,this);
+        g_pPDDisasm=new XProcess(g_mrDisasm.nAddress,g_mrDisasm.nSize,g_currentBreakPointInfo.hProcess,this);
     #endif
         if(g_pPDDisasm->open(QIODevice::ReadWrite))
         {
@@ -612,13 +612,13 @@ void XDebuggerWidget::followInHex(XADDR nAddress)
             g_pPDHex=nullptr;
         }
     #ifdef Q_OS_WIN
-        g_pPDHex=new XProcess(g_currentBreakPointInfo.hProcess,g_mrHex.nAddress,g_mrHex.nSize,this);
+        g_pPDHex=new XProcess(g_mrHex.nAddress,g_mrHex.nSize,g_currentBreakPointInfo.hProcess,this);
     #endif
     #ifdef Q_OS_LINUX
-        g_pPDHex=new XProcess(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrHex.nAddress,g_mrHex.nSize,this);
+        g_pPDHex=new XProcess(g_mrHex.nAddress,g_mrHex.nSize,g_currentBreakPointInfo.pHProcessMemoryIO,this);
     #endif
     #ifdef Q_OS_MACOS
-        g_pPDHex=new XProcess(g_currentBreakPointInfo.hProcess,g_mrHex.nAddress,g_mrHex.nSize,this);
+        g_pPDHex=new XProcess(g_mrHex.nAddress,g_mrHex.nSize,g_currentBreakPointInfo.hProcess,this);
     #endif
         if(g_pPDHex->open(QIODevice::ReadWrite))
         {
@@ -650,13 +650,13 @@ void XDebuggerWidget::followInStack(XADDR nAddress)
             g_pPDStack=nullptr;
         }
     #ifdef Q_OS_WIN
-        g_pPDStack=new XProcess(g_currentBreakPointInfo.hProcess,g_mrStack.nAddress,g_mrStack.nSize,this);
+        g_pPDStack=new XProcess(g_mrStack.nAddress,g_mrStack.nSize,g_currentBreakPointInfo.hProcess,this);
     #endif
     #ifdef Q_OS_LINUX
-        g_pPDStack=new XProcess(g_currentBreakPointInfo.pHProcessMemoryIO,g_mrStack.nAddress,g_mrStack.nSize,this);
+        g_pPDStack=new XProcess(g_mrStack.nAddress,g_mrStack.nSize,g_currentBreakPointInfo.pHProcessMemoryIO,this);
     #endif
     #ifdef Q_OS_MACOS
-        g_pPDStack=new XProcess(g_currentBreakPointInfo.hProcess,g_mrStack.nAddress,g_mrStack.nSize,this);
+        g_pPDStack=new XProcess(g_mrStack.nAddress,g_mrStack.nSize,g_currentBreakPointInfo.hProcess,this);
     #endif
         if(g_pPDStack->open(QIODevice::ReadWrite))
         {
