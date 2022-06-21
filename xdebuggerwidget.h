@@ -76,7 +76,15 @@ signals:
     void errorMessage(QString sErrorMessage);
     void infoMessage(QString sInfoMessage);
     void cleanUpSignal();
-    void testSignal();
+    void testSignal(X_ID nThreadId); // TODO remove
+
+#ifdef Q_OS_WIN
+    void debugStepIntoSignal(X_HANDLE hThread);
+#endif
+#ifdef Q_OS_LINUX
+    void debugStepIntoSignal(X_ID nThreadId);
+#endif
+    //    void debugStepOverSignal();
 
 public slots:
     void debugRun();

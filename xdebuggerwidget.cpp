@@ -43,6 +43,8 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     g_pPDHex=nullptr;
 
 //    qRegisterMetaType<XBinary::PROCESS_STATUS>("XBinary::PROCESS_STATUS");
+    qRegisterMetaType<X_ID>("X_ID");
+    qRegisterMetaType<X_HANDLE>("X_HANDLE");
 
     connect(this,SIGNAL(cleanUpSignal()),this,SLOT(cleanUp()));
     connect(this,SIGNAL(infoMessage(QString)),this,SLOT(infoMessageSlot(QString)));
@@ -124,7 +126,17 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     connect(g_pDebugger,SIGNAL(eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),this,SLOT(eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),Qt::DirectConnection);
     connect(g_pDebugger,SIGNAL(eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),this,SLOT(eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO*)),Qt::DirectConnection);
 
-    connect(this,SIGNAL(testSignal()),g_pDebugger,SLOT(testSlot()),Qt::QueuedConnection);
+//    connect(this,SIGNAL(testSignal(X_ID)),g_pDebugger,SLOT(testSlot(X_ID)),Qt::BlockingQueuedConnection);
+
+//    connect(this,SIGNAL(testSignal(X_ID)),g_pDebugger,SLOT(testSlot(X_ID)),Qt::QueuedConnection);
+
+#ifdef Q_OS_WIN
+    connect(this,SIGNAL(debugStepIntoSignal(X_HANDLE)),g_pDebugger,SLOT(stepIntoByHandle(X_HANDLE)),Qt::DirectConnection);
+#endif
+#ifdef Q_OS_LINUX
+//    connect(this,SIGNAL(debugStepIntoSignal(X_ID)),g_pDebugger,SLOT(stepIntoById(X_ID)),Qt::BlockingQueuedConnection);
+    connect(this,SIGNAL(debugStepIntoSignal(X_ID)),g_pDebugger,SLOT(stepIntoById(X_ID)),Qt::QueuedConnection);
+#endif
 
     connect(g_pInfoDB,SIGNAL(dataChanged(bool)),this,SLOT(onDataChanged(bool)));
 
@@ -293,16 +305,36 @@ void XDebuggerWidget::debugStepInto()
 
     if(g_currentBreakPointInfo.nProcessID)
     {
+    #ifdef Q_OS_WINDOWS
+        emit debugStepIntoSignal(g_currentBreakPointInfo.hThread);
+    #endif
+    #ifdef Q_OS_LINUX
+        emit debugStepIntoSignal(g_currentBreakPointInfo.nProcessID);
+    #endif
+//        emit testSignal(g_currentBreakPointInfo.nThreadID);
+
+//        g_pDebugger->stepInto(g_currentBreakPointInfo.hThread);
     #ifdef Q_OS_LINUX
 
-        emit testSignal();
+//        emit testSignal(g_currentBreakPointInfo.nThreadID);
 
-        ptrace(PT_CONTINUE,g_currentBreakPointInfo.nThreadID,0,0);
-        qDebug("ptrace failed: %s",strerror(errno));
+//        ptrace(PT_CONTINUE,g_currentBreakPointInfo.nThreadID,0,0);
+//        qDebug("ptrace failed: %s",strerror(errno));
 
-        g_pInfoDB->stepIntoById(g_currentBreakPointInfo.nThreadID);
+//        user_regs_struct regs={};
+//        errno=0;
+//        ptrace(PTRACE_GETREGS,g_currentBreakPointInfo.nThreadID,nullptr,&regs);
+//        qDebug("ptrace failed: %s",strerror(errno));
 
-        g_pInfoDB->_unlockID(g_currentBreakPointInfo.nThreadID);
+//        ptrace(PTRACE_SEIZE,g_currentBreakPointInfo.nThreadID,nullptr,nullptr);
+//        qDebug("ptrace failed: %s",strerror(errno));
+
+//        ptrace(PTRACE_ATTACH,g_currentBreakPointInfo.nThreadID,nullptr,nullptr);
+//        qDebug("ptrace failed: %s",strerror(errno));
+
+//        g_pInfoDB->stepIntoById(g_currentBreakPointInfo.nThreadID);
+
+//        g_pInfoDB->_unlockID(g_currentBreakPointInfo.nThreadID);
 //        g_pInfoDB->resumeAllThreads();
 
     #endif
@@ -310,11 +342,11 @@ void XDebuggerWidget::debugStepInto()
 //        g_pInfoDB->stepInto();
 //        g_pInfoDB->resumeThread(handleThread);
 
-    #ifdef Q_OS_WIN
-        g_pInfoDB->stepIntoByHandle(g_currentBreakPointInfo.hThread);
-//        g_pInfoDB->resumeThread(g_currentBreakPointInfo.hThread);
-        g_pInfoDB->resumeAllThreads();
-    #endif
+//    #ifdef Q_OS_WIN
+//        g_pInfoDB->stepIntoByHandle(g_currentBreakPointInfo.hThread);
+////        g_pInfoDB->resumeThread(g_currentBreakPointInfo.hThread);
+//        g_pInfoDB->resumeAllThreads();
+//    #endif
     }
 }
 
