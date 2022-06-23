@@ -26,6 +26,10 @@ XDebuggerOptionsWidget::XDebuggerOptionsWidget(QWidget *pParent) :
     ui(new Ui::XDebuggerOptionsWidget)
 {
     ui->setupUi(this);
+
+    g_pOptions=nullptr;
+
+    setProperty("GROUPID",XOptions::GROUPID_DEBUGGER);
 }
 
 XDebuggerOptionsWidget::~XDebuggerOptionsWidget()

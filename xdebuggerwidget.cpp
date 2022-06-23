@@ -130,14 +130,6 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
 //    connect(this,SIGNAL(testSignal(X_ID)),g_pDebugger,SLOT(testSlot(X_ID)),Qt::QueuedConnection);
 
-#ifdef Q_OS_WIN
-    connect(this,SIGNAL(debugStepIntoSignal(X_HANDLE)),g_pDebugger,SLOT(stepIntoByHandle(X_HANDLE)),Qt::DirectConnection);
-#endif
-#ifdef Q_OS_LINUX
-//    connect(this,SIGNAL(debugStepIntoSignal(X_ID)),g_pDebugger,SLOT(stepIntoById(X_ID)),Qt::BlockingQueuedConnection);
-    connect(this,SIGNAL(debugStepIntoSignal(X_ID)),g_pDebugger,SLOT(stepIntoById(X_ID)),Qt::QueuedConnection);
-#endif
-
     connect(g_pInfoDB,SIGNAL(dataChanged(bool)),this,SLOT(onDataChanged(bool)));
 
     g_pDebugger->moveToThread(g_pThread);
@@ -306,10 +298,10 @@ void XDebuggerWidget::debugStepInto()
     if(g_currentBreakPointInfo.nProcessID)
     {
     #ifdef Q_OS_WINDOWS
-        emit debugStepIntoSignal(g_currentBreakPointInfo.hThread);
+        g_pDebugger->stepIntoByHandle(g_currentBreakPointInfo.hThread);
     #endif
     #ifdef Q_OS_LINUX
-        emit debugStepIntoSignal(g_currentBreakPointInfo.nProcessID);
+        g_pDebugger->stepIntoById(g_currentBreakPointInfo.nProcessID);
     #endif
 //        emit testSignal(g_currentBreakPointInfo.nThreadID);
 
