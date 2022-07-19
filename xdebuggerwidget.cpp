@@ -133,6 +133,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     connect(g_pInfoDB,SIGNAL(dataChanged(bool)),this,SLOT(onDataChanged(bool)));
 
     g_pDebugger->moveToThread(g_pThread);
+    g_pInfoDB->moveToThread(g_pThread);
     g_pThread->start();
 
     return bResult;
