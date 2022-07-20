@@ -28,7 +28,7 @@
 #ifdef Q_OS_LINUX
 #include "xlinuxdebugger.h"
 #endif
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
 #include "xosxdebugger.h"
 #endif
 #include "xshortcutswidget.h"
@@ -122,14 +122,14 @@ protected:
 
 private:
     Ui::XDebuggerWidget *ui;
-    QThread *g_pThread;
 #ifdef Q_OS_WIN
+    QThread *g_pThread;
     XWindowsDebugger *g_pDebugger;
 #endif
 #ifdef Q_OS_LINUX
     XLinuxDebugger *g_pDebugger;
 #endif
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     XOSXDebugger *g_pDebugger;
 #endif
     XInfoDB *g_pInfoDB;

@@ -26,8 +26,9 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     ui(new Ui::XDebuggerWidget)
 {
     ui->setupUi(this);
-
+#ifdef Q_OS_WIN
     g_pThread=nullptr;
+#endif
     g_pDebugger=nullptr;
     g_pInfoDB=nullptr;
 
@@ -80,14 +81,14 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
     g_pInfoDB=new XInfoDB;
 
-    g_pThread=new QThread;
 #ifdef Q_OS_WIN
+    g_pThread=new QThread;
     g_pDebugger=new XWindowsDebugger(0,g_pInfoDB);
 #endif
 #ifdef Q_OS_LINUX
     g_pDebugger=new XLinuxDebugger(0,g_pInfoDB);
 #endif
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     g_pDebugger=new XOSXDebugger(0,g_pInfoDB);
 #endif
 
@@ -115,7 +116,9 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
     g_pDebugger->setOptions(options);
 
+#ifdef Q_OS_WIN
     connect(g_pThread,SIGNAL(started()),g_pDebugger,SLOT(process()));
+#endif
 //    connect(pDebugger,SIGNAL(finished()),pDebugger,SLOT(deleteLater()));
 
     connect(g_pDebugger,SIGNAL(eventCreateProcess(XInfoDB::PROCESS_INFO*)),this,SLOT(onCreateProcess(XInfoDB::PROCESS_INFO*)),Qt::DirectConnection);
@@ -132,9 +135,13 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
     connect(g_pInfoDB,SIGNAL(dataChanged(bool)),this,SLOT(onDataChanged(bool)));
 
+#ifdef Q_OS_WIN
     g_pDebugger->moveToThread(g_pThread);
-    g_pInfoDB->moveToThread(g_pThread);
     g_pThread->start();
+#endif
+#if defined(Q_OS_LINUX)||defined(Q_OS_MACOS)
+    g_pDebugger->process();
+#endif
 
     return bResult;
 }
@@ -185,7 +192,7 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 
 //    qDebug("Current Address2: %llX",XAbstractDebugger::getCurrentAddress(handleThread));
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX)||defined(Q_OS_MACOS)
     g_pInfoDB->updateRegsById(pBreakPointInfo->nThreadID,ui->widgetRegs->getOptions());
 #endif
 #ifdef Q_OS_WIN
@@ -432,18 +439,27 @@ void XDebuggerWidget::cleanUp()
     ui->widgetRegs->clear();
     ui->widgetStack->clear();
 
-    if(g_pDebugger&&g_pThread)
+    if(g_pDebugger)
     {
         g_pDebugger->stop();
+        g_pDebugger->wait();
 
+        delete g_pDebugger;
+        g_pDebugger=nullptr;
+    }
+#ifdef Q_OS_WIN
+    if(g_pThread)
+    {
         g_pThread->quit();
         g_pThread->wait();
 
         delete g_pThread;
-        delete g_pDebugger;
-        delete g_pInfoDB;
         g_pThread=nullptr;
-        g_pDebugger=nullptr;
+    }
+#endif
+    if(g_pInfoDB)
+    {
+        delete g_pInfoDB;
         g_pInfoDB=nullptr;
     }
 
