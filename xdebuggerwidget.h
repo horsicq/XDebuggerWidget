@@ -35,6 +35,7 @@
 #include "xinfodb.h"
 
 // TODO WinAPI page/ Widget
+// TODO for Linux send signal to process widget/menu
 
 namespace Ui {
 class XDebuggerWidget;
@@ -81,7 +82,7 @@ signals:
 
 public slots:
     void debugRun();
-    void debugStop();
+    void debugClose();
     void debugStepInto();
     void debugStepOver();
     void viewCPU();

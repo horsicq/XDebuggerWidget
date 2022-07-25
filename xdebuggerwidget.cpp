@@ -294,9 +294,14 @@ void XDebuggerWidget::debugRun()
     }
 }
 
-void XDebuggerWidget::debugStop()
+void XDebuggerWidget::debugClose()
 {
-    qDebug("TODO: Stop");
+    qDebug("TODO: Close");
+
+    if(g_currentBreakPointInfo.nProcessID)
+    {
+        g_pDebugger->stop();
+    }
 }
 
 void XDebuggerWidget::debugStepInto()
@@ -311,42 +316,6 @@ void XDebuggerWidget::debugStepInto()
     #ifdef Q_OS_LINUX
         g_pDebugger->stepIntoById(g_currentBreakPointInfo.nProcessID);
     #endif
-//        emit testSignal(g_currentBreakPointInfo.nThreadID);
-
-//        g_pDebugger->stepInto(g_currentBreakPointInfo.hThread);
-    #ifdef Q_OS_LINUX
-
-//        emit testSignal(g_currentBreakPointInfo.nThreadID);
-
-//        ptrace(PT_CONTINUE,g_currentBreakPointInfo.nThreadID,0,0);
-//        qDebug("ptrace failed: %s",strerror(errno));
-
-//        user_regs_struct regs={};
-//        errno=0;
-//        ptrace(PTRACE_GETREGS,g_currentBreakPointInfo.nThreadID,nullptr,&regs);
-//        qDebug("ptrace failed: %s",strerror(errno));
-
-//        ptrace(PTRACE_SEIZE,g_currentBreakPointInfo.nThreadID,nullptr,nullptr);
-//        qDebug("ptrace failed: %s",strerror(errno));
-
-//        ptrace(PTRACE_ATTACH,g_currentBreakPointInfo.nThreadID,nullptr,nullptr);
-//        qDebug("ptrace failed: %s",strerror(errno));
-
-//        g_pInfoDB->stepIntoById(g_currentBreakPointInfo.nThreadID);
-
-//        g_pInfoDB->_unlockID(g_currentBreakPointInfo.nThreadID);
-//        g_pInfoDB->resumeAllThreads();
-
-    #endif
-//        g_pInfoDB->setCurrentThread(handleThread);
-//        g_pInfoDB->stepInto();
-//        g_pInfoDB->resumeThread(handleThread);
-
-//    #ifdef Q_OS_WIN
-//        g_pInfoDB->stepIntoByHandle(g_currentBreakPointInfo.hThread);
-////        g_pInfoDB->resumeThread(g_currentBreakPointInfo.hThread);
-//        g_pInfoDB->resumeAllThreads();
-//    #endif
     }
 }
 
