@@ -283,44 +283,56 @@ void XDebuggerWidget::on_toolButtonStepOver_clicked()
     debugStepOver();
 }
 
-void XDebuggerWidget::debugRun()
+bool XDebuggerWidget::debugRun()
 {
+    bool bResult=false;
+
     if(g_currentBreakPointInfo.nThreadID)
     {
     #ifdef Q_OS_WIN
 //        g_pInfoDB->resumeThread(g_currentBreakPointInfo.hThread);
-        g_pInfoDB->resumeAllThreads();
+        bResult=g_pInfoDB->resumeAllThreads();
     #endif
     }
+
+    return bResult;
 }
 
-void XDebuggerWidget::debugClose()
+bool XDebuggerWidget::debugClose()
 {
-    qDebug("TODO: Close");
+    bool bResult=false;
 
     if(g_currentBreakPointInfo.nProcessID)
     {
-        g_pDebugger->stop();
+        bResult=g_pDebugger->stop();
     }
+
+    return bResult;
 }
 
-void XDebuggerWidget::debugStepInto()
+bool XDebuggerWidget::debugStepInto()
 {
-    qDebug("void XDebuggerWidget::debugStepInto()");
+    bool bResult=false;
 
     if(g_currentBreakPointInfo.nProcessID)
     {
     #ifdef Q_OS_WINDOWS
-        g_pDebugger->stepIntoByHandle(g_currentBreakPointInfo.hThread);
+        bResult=g_pDebugger->stepIntoByHandle(g_currentBreakPointInfo.hThread);
     #endif
     #ifdef Q_OS_LINUX
-        g_pDebugger->stepIntoById(g_currentBreakPointInfo.nProcessID);
+        bResult=g_pDebugger->stepIntoById(g_currentBreakPointInfo.nProcessID);
     #endif
     }
+
+    return bResult;
 }
 
-void XDebuggerWidget::debugStepOver()
+bool XDebuggerWidget::debugStepOver()
 {
+    bool bResult=false;
+
+    // TODO
+
     if(g_currentBreakPointInfo.nThreadID)
     {
         XProcess::HANDLEID handleThread={};
@@ -333,6 +345,29 @@ void XDebuggerWidget::debugStepOver()
         g_pInfoDB->resumeAllThreads();
     #endif
     }
+
+    return bResult;
+}
+
+bool XDebuggerWidget::animateStepInto()
+{
+    qDebug("bool XDebuggerWidget::animateStepInto()");
+
+    return false;
+}
+
+bool XDebuggerWidget::animateStepOver()
+{
+    qDebug("bool XDebuggerWidget::animateStepOver()");
+
+    return false;
+}
+
+bool XDebuggerWidget::animateStop()
+{
+    qDebug("bool XDebuggerWidget::animateStop()");
+
+    return false;
 }
 
 void XDebuggerWidget::viewCPU()

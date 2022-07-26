@@ -81,10 +81,13 @@ signals:
     //    void debugStepOverSignal();
 
 public slots:
-    void debugRun();
-    void debugClose();
-    void debugStepInto();
-    void debugStepOver();
+    bool debugRun();
+    bool debugClose();
+    bool debugStepInto();
+    bool debugStepOver();
+    bool animateStepInto();
+    bool animateStepOver();
+    bool animateStop();
     void viewCPU();
     void viewLog();
     void viewBreakpoints();
