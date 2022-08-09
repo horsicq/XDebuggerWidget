@@ -316,12 +316,15 @@ bool XDebuggerWidget::debugStepInto()
 
     if(g_currentBreakPointInfo.nProcessID)
     {
-    #ifdef Q_OS_WINDOWS
-        bResult=g_pDebugger->stepIntoByHandle(g_currentBreakPointInfo.hThread);
-    #endif
-    #ifdef Q_OS_LINUX
-        bResult=g_pDebugger->stepIntoById(g_currentBreakPointInfo.nProcessID);
-    #endif
+        if(g_pDebugger)
+        {
+        #ifdef Q_OS_WINDOWS
+            bResult=g_pDebugger->stepIntoByHandle(g_currentBreakPointInfo.hThread);
+        #endif
+        #ifdef Q_OS_LINUX
+            bResult=g_pDebugger->stepIntoById(g_currentBreakPointInfo.nProcessID);
+        #endif
+        }
     }
 
     return bResult;
@@ -331,19 +334,18 @@ bool XDebuggerWidget::debugStepOver()
 {
     bool bResult=false;
 
-    // TODO
-
-    if(g_currentBreakPointInfo.nThreadID)
+    if(g_currentBreakPointInfo.nProcessID)
     {
-        XProcess::HANDLEID handleThread={};
-        handleThread.nID=g_currentBreakPointInfo.nThreadID;
-//        handleThread.hHandle=g_currentBreakPointInfo.pHThread;
-
-        g_pDebugger->stepOver(handleThread);
-    #ifdef Q_OS_WIN
-//        g_pInfoDB->resumeThread(g_currentBreakPointInfo.hThread);
-        g_pInfoDB->resumeAllThreads();
-    #endif
+        // TODO !!!
+        if(g_pDebugger)
+        {
+        #ifdef Q_OS_WINDOWS
+            bResult=g_pDebugger->stepOverByHandle(g_currentBreakPointInfo.hThread);
+        #endif
+        #ifdef Q_OS_LINUX
+            bResult=g_pDebugger->stepOverByHandle(g_currentBreakPointInfo.nProcessID);
+        #endif
+        }
     }
 
     return bResult;
