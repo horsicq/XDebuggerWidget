@@ -343,7 +343,7 @@ bool XDebuggerWidget::debugStepOver()
             bResult=g_pDebugger->stepOverByHandle(g_currentBreakPointInfo.hThread);
         #endif
         #ifdef Q_OS_LINUX
-            bResult=g_pDebugger->stepOverByHandle(g_currentBreakPointInfo.nProcessID);
+            bResult=g_pDebugger->stepOverById(g_currentBreakPointInfo.nProcessID);
         #endif
         }
     }
