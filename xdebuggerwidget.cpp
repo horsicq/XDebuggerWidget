@@ -42,6 +42,8 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     g_pPDDisasm=nullptr;
     g_pPDStack=nullptr;
     g_pPDHex=nullptr;
+    g_state={};
+    g_pTimer=nullptr;
 
 //    qRegisterMetaType<XBinary::PROCESS_STATUS>("XBinary::PROCESS_STATUS");
     qRegisterMetaType<X_ID>("X_ID");
@@ -353,23 +355,17 @@ bool XDebuggerWidget::debugStepOver()
 
 bool XDebuggerWidget::animateStepInto()
 {
-    qDebug("bool XDebuggerWidget::animateStepInto()");
-
-    return false;
+    return animate(ANIMATE_MODE_STEPINTO);
 }
 
 bool XDebuggerWidget::animateStepOver()
 {
-    qDebug("bool XDebuggerWidget::animateStepOver()");
-
-    return false;
+    return animate(ANIMATE_MODE_STEPOVER);
 }
 
 bool XDebuggerWidget::animateStop()
 {
-    qDebug("bool XDebuggerWidget::animateStop()");
-
-    return false;
+    return animate(ANIMATE_MODE_STOP);
 }
 
 void XDebuggerWidget::viewCPU()
@@ -415,6 +411,31 @@ void XDebuggerWidget::viewModules()
 void XDebuggerWidget::viewSymbols()
 {
     ui->tabWidgetMain->setCurrentIndex(MT_SYMBOLS);
+}
+
+bool XDebuggerWidget::animate(ANIMATE_MODE animateMode)
+{
+    if(g_pTimer)
+    {
+        g_pTimer->stop();
+        delete g_pPDHex;
+        g_pPDHex=nullptr;
+    }
+
+    if( (animateMode==ANIMATE_MODE_STEPINTO)||
+        (animateMode==ANIMATE_MODE_STEPOVER))
+    {
+        g_pTimer=new QTimer(this);
+
+        if(animateMode==ANIMATE_MODE_STEPINTO)
+        {
+            connect(g_pTimer,SIGNAL(timeout()),this,SLOT(debugStepInto()));
+        }
+
+        g_pTimer->start(1000); // TODO const
+    }
+
+    return false;
 }
 
 void XDebuggerWidget::_toggleBreakpoint()
@@ -487,6 +508,13 @@ void XDebuggerWidget::cleanUp()
 
     if(g_pPDHex)
     {
+        delete g_pPDHex;
+        g_pPDHex=nullptr;
+    }
+
+    if(g_pTimer)
+    {
+        g_pTimer->stop();
         delete g_pPDHex;
         g_pPDHex=nullptr;
     }
@@ -722,4 +750,19 @@ void XDebuggerWidget::followInStack(XADDR nAddress)
     }
 
     ui->widgetStack->setSelectionAddress(nAddress);
+}
+
+void XDebuggerWidget::on_toolButtonAnimateStepInto_clicked()
+{
+    animateStepInto();
+}
+
+void XDebuggerWidget::on_toolButtonAnimateStepOver_clicked()
+{
+    animateStepOver();
+}
+
+void XDebuggerWidget::on_toolButtonAnimateStop_clicked()
+{
+    animateStop();
 }

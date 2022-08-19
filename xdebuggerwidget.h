@@ -65,6 +65,23 @@ class XDebuggerWidget : public XShortcutsWidget
         // TODO more
     };
 
+    // TODO
+    // TODO stateChanged -> update menus
+    struct STATE
+    {
+        bool bAnimateStepInto;
+        bool bAnimateStepOver;
+        bool bAnimateStop;
+    };
+
+    enum ANIMATE_MODE
+    {
+        ANIMATE_MODE_UNKNOWN=0,
+        ANIMATE_MODE_STEPINTO,
+        ANIMATE_MODE_STEPOVER,
+        ANIMATE_MODE_STOP
+    };
+
 public:
     explicit XDebuggerWidget(QWidget *pParent=nullptr);
     ~XDebuggerWidget();
@@ -98,6 +115,9 @@ public slots:
     void viewModules();
     void viewSymbols();
 
+private:
+    bool animate(ANIMATE_MODE animateMode);
+
 private slots:
     void onCreateProcess(XInfoDB::PROCESS_INFO *pProcessInfo);
     void onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo);
@@ -120,6 +140,9 @@ private slots:
     void followInDisasm(XADDR nAddress);
     void followInHex(XADDR nAddress);
     void followInStack(XADDR nAddress);
+    void on_toolButtonAnimateStepInto_clicked();
+    void on_toolButtonAnimateStepOver_clicked();
+    void on_toolButtonAnimateStop_clicked();
 
 protected:
     virtual void registerShortcuts(bool bState);
@@ -151,6 +174,8 @@ private:
     XProcess *g_pPDDisasm;
     XProcess *g_pPDStack;
     XProcess *g_pPDHex;
+    STATE g_state;
+    QTimer *g_pTimer;
 };
 
 #endif // XDEBUGGERWIDGET_H
