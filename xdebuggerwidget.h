@@ -65,15 +65,6 @@ class XDebuggerWidget : public XShortcutsWidget
         // TODO more
     };
 
-    // TODO
-    // TODO stateChanged -> update menus
-    struct STATE
-    {
-        bool bAnimateStepInto;
-        bool bAnimateStepOver;
-        bool bAnimateStop;
-    };
-
     enum ANIMATE_MODE
     {
         ANIMATE_MODE_UNKNOWN=0,
@@ -83,17 +74,28 @@ class XDebuggerWidget : public XShortcutsWidget
     };
 
 public:
+    // TODO
+    // TODO stateChanged -> update menus
+    struct STATE
+    {
+        bool bAnimateStepInto;
+        bool bAnimateStepOver;
+        bool bAnimateStop;
+    };
+
     explicit XDebuggerWidget(QWidget *pParent=nullptr);
     ~XDebuggerWidget();
 
     bool loadFile(QString sFileName);
     void setGlobal(XShortcuts *pShortcuts,XOptions *pXOptions);
     virtual void adjustView();
+    STATE getState();
 
 signals:
     void errorMessage(QString sErrorMessage);
     void infoMessage(QString sInfoMessage);
     void cleanUpSignal();
+    void stateChanged();
     void testSignal(X_ID nThreadId); // TODO remove
     //    void debugStepOverSignal();
 
@@ -117,6 +119,8 @@ public slots:
 
 private:
     bool animate(ANIMATE_MODE animateMode);
+    void _stateChanged();
+    void _adjustState();
 
 private slots:
     void onCreateProcess(XInfoDB::PROCESS_INFO *pProcessInfo);

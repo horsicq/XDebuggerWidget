@@ -42,8 +42,11 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) :
     g_pPDDisasm=nullptr;
     g_pPDStack=nullptr;
     g_pPDHex=nullptr;
-    g_state={};
     g_pTimer=nullptr;
+
+    g_state={};
+
+    _adjustState();
 
 //    qRegisterMetaType<XBinary::PROCESS_STATUS>("XBinary::PROCESS_STATUS");
     qRegisterMetaType<X_ID>("X_ID");
@@ -145,6 +148,15 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     g_pDebugger->process();
 #endif
 
+    if(bResult)
+    {
+        g_state.bAnimateStepInto=true;
+        g_state.bAnimateStepOver=true;
+        g_state.bAnimateStop=false;
+
+        _stateChanged();
+    }
+
     return bResult;
 }
 
@@ -174,6 +186,11 @@ void XDebuggerWidget::adjustView()
     ui->widgetThreads->adjustView();
 
     XShortcutsWidget::adjustView();
+}
+
+XDebuggerWidget::STATE XDebuggerWidget::getState()
+{
+    return g_state;
 }
 
 void XDebuggerWidget::onCreateProcess(XInfoDB::PROCESS_INFO *pProcessInfo)
@@ -431,11 +448,46 @@ bool XDebuggerWidget::animate(ANIMATE_MODE animateMode)
         {
             connect(g_pTimer,SIGNAL(timeout()),this,SLOT(debugStepInto()));
         }
+        if(animateMode==ANIMATE_MODE_STEPOVER)
+        {
+            connect(g_pTimer,SIGNAL(timeout()),this,SLOT(debugStepOver()));
+        }
 
         g_pTimer->start(1000); // TODO const
     }
 
+    if( (animateMode==ANIMATE_MODE_STEPINTO)||
+        (animateMode==ANIMATE_MODE_STEPOVER))
+    {
+        g_state.bAnimateStepInto=false;
+        g_state.bAnimateStepOver=false;
+        g_state.bAnimateStop=true;
+    }
+    else if(animateMode==ANIMATE_MODE_STOP)
+    {
+        g_state.bAnimateStepInto=true;
+        g_state.bAnimateStepOver=true;
+        g_state.bAnimateStop=false;
+    }
+
+    _stateChanged();
+
     return false;
+}
+
+void XDebuggerWidget::_stateChanged()
+{
+    _adjustState();
+
+    emit stateChanged();
+}
+
+void XDebuggerWidget::_adjustState()
+{
+    // TODO disable context menu
+    ui->toolButtonAnimateStepInto->setEnabled(g_state.bAnimateStepInto);
+    ui->toolButtonAnimateStepOver->setEnabled(g_state.bAnimateStepOver);
+    ui->toolButtonAnimateStop->setEnabled(g_state.bAnimateStop);
 }
 
 void XDebuggerWidget::_toggleBreakpoint()
@@ -518,6 +570,10 @@ void XDebuggerWidget::cleanUp()
         delete g_pPDHex;
         g_pPDHex=nullptr;
     }
+
+    g_state={};
+
+    _stateChanged();
 }
 
 void XDebuggerWidget::errorMessageSlot(QString sErrorMessage)
