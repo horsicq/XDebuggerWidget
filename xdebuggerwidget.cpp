@@ -277,8 +277,9 @@ void XDebuggerWidget::onDataChanged(bool bDataReload)
         quint64 nInstructionPointer=g_pInfoDB->getCurrentInstructionPointerCache();
         quint64 nStackPointer=g_pInfoDB->getCurrentStackPointerCache();
 
+        // TODO Check tab
         followInDisasm(nInstructionPointer);
-        followInHex(nInstructionPointer);
+        followInHex(nInstructionPointer); // TODO
         followInStack(nStackPointer);
 
         // TODO Memory Regions manager
@@ -435,8 +436,8 @@ bool XDebuggerWidget::animate(ANIMATE_MODE animateMode)
     if(g_pTimer)
     {
         g_pTimer->stop();
-        delete g_pPDHex;
-        g_pPDHex=nullptr;
+        delete g_pTimer;
+        g_pTimer=nullptr;
     }
 
     if( (animateMode==ANIMATE_MODE_STEPINTO)||
@@ -484,10 +485,45 @@ void XDebuggerWidget::_stateChanged()
 
 void XDebuggerWidget::_adjustState()
 {
-    // TODO disable context menu
+    // TODO set tab CPU if debug or animate, or trace
     ui->toolButtonAnimateStepInto->setEnabled(g_state.bAnimateStepInto);
     ui->toolButtonAnimateStepOver->setEnabled(g_state.bAnimateStepOver);
     ui->toolButtonAnimateStop->setEnabled(g_state.bAnimateStop);
+
+    if(g_state.bAnimateStop)
+    {
+        ui->widgetDisasm->setContextMenuEnable(false);
+        ui->widgetHex->setContextMenuEnable(false);
+        ui->widgetStack->setContextMenuEnable(false);
+        // TODO registers
+
+        ui->tabWidgetMain->setTabEnabled(MT_CPU,true);
+        ui->tabWidgetMain->setTabEnabled(MT_LOG,false);
+        ui->tabWidgetMain->setTabEnabled(MT_BREAKPOINTS,false);
+        ui->tabWidgetMain->setTabEnabled(MT_MEMORYMAP,false);
+        ui->tabWidgetMain->setTabEnabled(MT_CALLSTACK,false);
+        ui->tabWidgetMain->setTabEnabled(MT_THREADS,false);
+        ui->tabWidgetMain->setTabEnabled(MT_HANDLES,false);
+        ui->tabWidgetMain->setTabEnabled(MT_MODULES,false);
+        ui->tabWidgetMain->setTabEnabled(MT_SYMBOLS,false);
+    }
+    else
+    {
+        ui->widgetDisasm->setContextMenuEnable(true);
+        ui->widgetHex->setContextMenuEnable(true);
+        ui->widgetStack->setContextMenuEnable(true);
+        // TODO registers
+
+        ui->tabWidgetMain->setTabEnabled(MT_CPU,true);
+        ui->tabWidgetMain->setTabEnabled(MT_LOG,true);
+        ui->tabWidgetMain->setTabEnabled(MT_BREAKPOINTS,true);
+        ui->tabWidgetMain->setTabEnabled(MT_MEMORYMAP,true);
+        ui->tabWidgetMain->setTabEnabled(MT_CALLSTACK,true);
+        ui->tabWidgetMain->setTabEnabled(MT_THREADS,true);
+        ui->tabWidgetMain->setTabEnabled(MT_HANDLES,true);
+        ui->tabWidgetMain->setTabEnabled(MT_MODULES,true);
+        ui->tabWidgetMain->setTabEnabled(MT_SYMBOLS,true);
+    }
 }
 
 void XDebuggerWidget::_toggleBreakpoint()

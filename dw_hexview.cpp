@@ -26,44 +26,47 @@ DW_HexView::DW_HexView(QWidget *pParent) : XHexView(pParent)
 
 void DW_HexView::contextMenu(const QPoint &pos)
 {
-    if(getXInfoDB())
+    if(isContextMenuEnable())
     {
-        QMenu contextMenu(this);
+        if(getXInfoDB())
+        {
+            QMenu contextMenu(this);
 
-        QMenu menuGoTo(tr("Go to"),this);
-        QMenu menuCopy(tr("Copy"),this);
-        QMenu menuEdit(tr("Edit"),this);
-        QMenu menuFollowIn(tr("Follow in"),this);
+            QMenu menuGoTo(tr("Go to"),this);
+            QMenu menuCopy(tr("Copy"),this);
+            QMenu menuEdit(tr("Edit"),this);
+            QMenu menuFollowIn(tr("Follow in"),this);
 
-        QAction actionGoToAddress(tr("Address"),this);
-        actionGoToAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_GOTO_ADDRESS));
-        connect(&actionGoToAddress,SIGNAL(triggered()),this,SLOT(_goToAddressSlot()));
+            QAction actionGoToAddress(tr("Address"),this);
+            actionGoToAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_GOTO_ADDRESS));
+            connect(&actionGoToAddress,SIGNAL(triggered()),this,SLOT(_goToAddressSlot()));
 
-        menuGoTo.addAction(&actionGoToAddress);
-        contextMenu.addMenu(&menuGoTo);
+            menuGoTo.addAction(&actionGoToAddress);
+            contextMenu.addMenu(&menuGoTo);
 
-        QAction actionCopyAddress(tr("Address"),this);
-        actionCopyAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_COPY_ADDRESS));
-        connect(&actionCopyAddress,SIGNAL(triggered()),this,SLOT(_copyAddressSlot()));
+            QAction actionCopyAddress(tr("Address"),this);
+            actionCopyAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_COPY_ADDRESS));
+            connect(&actionCopyAddress,SIGNAL(triggered()),this,SLOT(_copyAddressSlot()));
 
-        menuCopy.addAction(&actionCopyAddress);
-        contextMenu.addMenu(&menuCopy);
+            menuCopy.addAction(&actionCopyAddress);
+            contextMenu.addMenu(&menuCopy);
 
-        QAction actionEditHex(tr("Hex"),this);
-        actionEditHex.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_EDIT_HEX));
-        connect(&actionEditHex,SIGNAL(triggered()),this,SLOT(_editHex()));
+            QAction actionEditHex(tr("Hex"),this);
+            actionEditHex.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_EDIT_HEX));
+            connect(&actionEditHex,SIGNAL(triggered()),this,SLOT(_editHex()));
 
-        menuEdit.addAction(&actionEditHex);
-        contextMenu.addMenu(&menuEdit);
+            menuEdit.addAction(&actionEditHex);
+            contextMenu.addMenu(&menuEdit);
 
-        QAction actionFollowInDisasm(tr("Disasm"),this);
-        actionFollowInDisasm.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_FOLLOWIN_DISASM));
-        connect(&actionFollowInDisasm,SIGNAL(triggered()),this,SLOT(_followInDisasmSlot()));
+            QAction actionFollowInDisasm(tr("Disasm"),this);
+            actionFollowInDisasm.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_HEX_FOLLOWIN_DISASM));
+            connect(&actionFollowInDisasm,SIGNAL(triggered()),this,SLOT(_followInDisasmSlot()));
 
-        menuFollowIn.addAction(&actionFollowInDisasm);
-        contextMenu.addMenu(&menuFollowIn);
+            menuFollowIn.addAction(&actionFollowInDisasm);
+            contextMenu.addMenu(&menuFollowIn);
 
-        contextMenu.exec(pos);
+            contextMenu.exec(pos);
+        }
     }
 }
 
