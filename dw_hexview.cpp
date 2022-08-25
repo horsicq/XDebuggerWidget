@@ -32,6 +32,7 @@ void DW_HexView::contextMenu(const QPoint &pos)
         {
             QMenu contextMenu(this);
 
+            // TODO more
             QMenu menuGoTo(tr("Go to"),this);
             QMenu menuCopy(tr("Copy"),this);
             QMenu menuEdit(tr("Edit"),this);

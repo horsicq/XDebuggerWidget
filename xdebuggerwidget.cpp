@@ -386,6 +386,24 @@ bool XDebuggerWidget::animateStop()
     return animate(ANIMATE_MODE_STOP);
 }
 
+bool XDebuggerWidget::traceStepInto()
+{
+    // TODO
+    return false;
+}
+
+bool XDebuggerWidget::traceStepOver()
+{
+    // TODO
+    return false;
+}
+
+bool XDebuggerWidget::traceStop()
+{
+    // TODO
+    return false;
+}
+
 void XDebuggerWidget::viewCPU()
 {
     ui->tabWidgetMain->setCurrentIndex(MT_CPU);
@@ -857,4 +875,19 @@ void XDebuggerWidget::on_toolButtonAnimateStepOver_clicked()
 void XDebuggerWidget::on_toolButtonAnimateStop_clicked()
 {
     animateStop();
+}
+
+void XDebuggerWidget::on_toolButtonTraceStepInto_clicked()
+{
+    traceStepInto();
+}
+
+void XDebuggerWidget::on_toolButtonTraceStepOver_clicked()
+{
+    traceStepOver();
+}
+
+void XDebuggerWidget::on_toolButtonTraceStop_clicked()
+{
+    traceStop();
 }

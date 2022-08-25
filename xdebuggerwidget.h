@@ -107,6 +107,9 @@ public slots:
     bool animateStepInto();
     bool animateStepOver();
     bool animateStop();
+    bool traceStepInto();
+    bool traceStepOver();
+    bool traceStop();
     void viewCPU();
     void viewLog();
     void viewBreakpoints();
@@ -147,6 +150,9 @@ private slots:
     void on_toolButtonAnimateStepInto_clicked();
     void on_toolButtonAnimateStepOver_clicked();
     void on_toolButtonAnimateStop_clicked();
+    void on_toolButtonTraceStepInto_clicked();
+    void on_toolButtonTraceStepOver_clicked();
+    void on_toolButtonTraceStop_clicked();
 
 protected:
     virtual void registerShortcuts(bool bState);
