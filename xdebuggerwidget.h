@@ -65,12 +65,20 @@ class XDebuggerWidget : public XShortcutsWidget
         // TODO more
     };
 
-    enum ANIMATE_MODE
+    enum CM
     {
-        ANIMATE_MODE_UNKNOWN=0,
-        ANIMATE_MODE_STEPINTO,
-        ANIMATE_MODE_STEPOVER,
-        ANIMATE_MODE_STOP
+        CM_UNKNOWN=0,
+        CM_READY,
+        CM_DEBUG_RUN,
+        CM_DEBUG_CLOSE,
+        CM_DEBUG_STEPINTO,
+        CM_DEBUG_STEPOVER,
+        CM_ANIMATE_STEPINTO,
+        CM_ANIMATE_STEPOVER,
+        CM_ANIMATE_STOP,
+        CM_TRACE_STEPINTO,
+        CM_TRACE_STEPOVER,
+        CM_TRACE_STOP
     };
 
 public:
@@ -81,6 +89,9 @@ public:
         bool bAnimateStepInto;
         bool bAnimateStepOver;
         bool bAnimateStop;
+        bool bTraceStepInto;
+        bool bTraceStepOver;
+        bool bTraceStop;
     };
 
     explicit XDebuggerWidget(QWidget *pParent=nullptr);
@@ -110,6 +121,7 @@ public slots:
     bool traceStepInto();
     bool traceStepOver();
     bool traceStop();
+    bool command(CM commandMode);
     void viewCPU();
     void viewLog();
     void viewBreakpoints();
@@ -121,7 +133,6 @@ public slots:
     void viewSymbols();
 
 private:
-    bool animate(ANIMATE_MODE animateMode);
     void _stateChanged();
     void _adjustState();
 

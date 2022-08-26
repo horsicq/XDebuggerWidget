@@ -150,11 +150,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
     if(bResult)
     {
-        g_state.bAnimateStepInto=true;
-        g_state.bAnimateStepOver=true;
-        g_state.bAnimateStop=false;
-
-        _stateChanged();
+        command(CM_READY);
     }
 
     return bResult;
@@ -305,103 +301,150 @@ void XDebuggerWidget::on_toolButtonStepOver_clicked()
 
 bool XDebuggerWidget::debugRun()
 {
-    bool bResult=false;
-
-    if(g_currentBreakPointInfo.nThreadID)
-    {
-    #ifdef Q_OS_WIN
-//        g_pInfoDB->resumeThread(g_currentBreakPointInfo.hThread);
-        bResult=g_pInfoDB->resumeAllThreads();
-    #endif
-    }
-
-    return bResult;
+    return command(CM_DEBUG_RUN);
 }
 
 bool XDebuggerWidget::debugClose()
 {
-    bool bResult=false;
-
-    if(g_currentBreakPointInfo.nProcessID)
-    {
-        bResult=g_pDebugger->stop();
-    }
-
-    return bResult;
+    return command(CM_DEBUG_CLOSE);
 }
 
 bool XDebuggerWidget::debugStepInto()
 {
-    bool bResult=false;
-
-    if(g_currentBreakPointInfo.nProcessID)
-    {
-        if(g_pDebugger)
-        {
-        #ifdef Q_OS_WINDOWS
-            bResult=g_pDebugger->stepIntoByHandle(g_currentBreakPointInfo.hThread);
-        #endif
-        #ifdef Q_OS_LINUX
-            bResult=g_pDebugger->stepIntoById(g_currentBreakPointInfo.nProcessID);
-        #endif
-        }
-    }
-
-    return bResult;
+    return command(CM_DEBUG_STEPINTO);
 }
 
 bool XDebuggerWidget::debugStepOver()
 {
-    bool bResult=false;
-
-    if(g_currentBreakPointInfo.nProcessID)
-    {
-        // TODO !!!
-        if(g_pDebugger)
-        {
-        #ifdef Q_OS_WINDOWS
-            bResult=g_pDebugger->stepOverByHandle(g_currentBreakPointInfo.hThread);
-        #endif
-        #ifdef Q_OS_LINUX
-            bResult=g_pDebugger->stepOverById(g_currentBreakPointInfo.nProcessID);
-        #endif
-        }
-    }
-
-    return bResult;
+    return command(CM_DEBUG_STEPOVER);
 }
 
 bool XDebuggerWidget::animateStepInto()
 {
-    return animate(ANIMATE_MODE_STEPINTO);
+    return command(CM_ANIMATE_STEPINTO);
 }
 
 bool XDebuggerWidget::animateStepOver()
 {
-    return animate(ANIMATE_MODE_STEPOVER);
+    return command(CM_ANIMATE_STEPOVER);
 }
 
 bool XDebuggerWidget::animateStop()
 {
-    return animate(ANIMATE_MODE_STOP);
+    return command(CM_ANIMATE_STOP);
 }
 
 bool XDebuggerWidget::traceStepInto()
 {
-    // TODO
-    return false;
+    return command(CM_TRACE_STEPINTO);
 }
 
 bool XDebuggerWidget::traceStepOver()
 {
-    // TODO
-    return false;
+    return command(CM_TRACE_STEPOVER);
 }
 
 bool XDebuggerWidget::traceStop()
 {
-    // TODO
-    return false;
+    return command(CM_TRACE_STOP);
+}
+
+bool XDebuggerWidget::command(CM commandMode)
+{
+    bool bResult=false;
+
+    if(g_currentBreakPointInfo.nProcessID)
+    {
+        if(g_pDebugger)
+        {
+            if(commandMode==CM_DEBUG_RUN)
+            {
+                bResult=g_pInfoDB->resumeAllThreads();
+            }
+            else if(commandMode==CM_DEBUG_STEPINTO)
+            {
+            #ifdef Q_OS_WINDOWS
+                bResult=g_pDebugger->stepIntoByHandle(g_currentBreakPointInfo.hThread);
+            #endif
+            #ifdef Q_OS_LINUX
+                bResult=g_pDebugger->stepIntoById(g_currentBreakPointInfo.nProcessID);
+            #endif
+            }
+            else if(commandMode==CM_DEBUG_STEPOVER)
+            {
+            #ifdef Q_OS_WINDOWS
+                bResult=g_pDebugger->stepOverByHandle(g_currentBreakPointInfo.hThread);
+            #endif
+            #ifdef Q_OS_LINUX
+                bResult=g_pDebugger->stepOverById(g_currentBreakPointInfo.nProcessID);
+            #endif
+            }
+            else if(commandMode==CM_DEBUG_CLOSE)
+            {
+                bResult=g_pDebugger->stop();
+            }
+        }
+    }
+
+    if( (commandMode==CM_ANIMATE_STEPINTO)||
+        (commandMode==CM_ANIMATE_STEPOVER)||
+        (commandMode==CM_ANIMATE_STOP))
+    {
+        if(g_pTimer)
+        {
+            g_pTimer->stop();
+            delete g_pTimer;
+            g_pTimer=nullptr;
+
+            bResult=true;
+        }
+    }
+
+    if( (commandMode==CM_ANIMATE_STEPINTO)||
+        (commandMode==CM_ANIMATE_STEPOVER))
+    {
+        g_pTimer=new QTimer(this);
+
+        if(commandMode==CM_ANIMATE_STEPINTO)
+        {
+            connect(g_pTimer,SIGNAL(timeout()),this,SLOT(debugStepInto()));
+        }
+        if(commandMode==CM_ANIMATE_STEPOVER)
+        {
+            connect(g_pTimer,SIGNAL(timeout()),this,SLOT(debugStepOver()));
+        }
+
+        g_pTimer->start(1000); // TODO const
+
+        bResult=true;
+    }
+
+    if(     (commandMode==CM_ANIMATE_STEPINTO)||
+            (commandMode==CM_ANIMATE_STEPOVER))
+    {
+        g_state.bAnimateStepInto=false;
+        g_state.bAnimateStepOver=false;
+        g_state.bAnimateStop=true;
+        g_state.bTraceStepInto=false;
+        g_state.bTraceStepOver=false;
+        g_state.bTraceStop=false;
+
+        _stateChanged();
+    }
+    else if((commandMode==CM_READY)||
+            (commandMode==CM_ANIMATE_STOP))
+    {
+        g_state.bAnimateStepInto=true;
+        g_state.bAnimateStepOver=true;
+        g_state.bAnimateStop=false;
+        g_state.bTraceStepInto=true;
+        g_state.bTraceStepOver=true;
+        g_state.bTraceStop=false;
+
+        _stateChanged();
+    }
+
+    return bResult;
 }
 
 void XDebuggerWidget::viewCPU()
@@ -449,51 +492,6 @@ void XDebuggerWidget::viewSymbols()
     ui->tabWidgetMain->setCurrentIndex(MT_SYMBOLS);
 }
 
-bool XDebuggerWidget::animate(ANIMATE_MODE animateMode)
-{
-    if(g_pTimer)
-    {
-        g_pTimer->stop();
-        delete g_pTimer;
-        g_pTimer=nullptr;
-    }
-
-    if( (animateMode==ANIMATE_MODE_STEPINTO)||
-        (animateMode==ANIMATE_MODE_STEPOVER))
-    {
-        g_pTimer=new QTimer(this);
-
-        if(animateMode==ANIMATE_MODE_STEPINTO)
-        {
-            connect(g_pTimer,SIGNAL(timeout()),this,SLOT(debugStepInto()));
-        }
-        if(animateMode==ANIMATE_MODE_STEPOVER)
-        {
-            connect(g_pTimer,SIGNAL(timeout()),this,SLOT(debugStepOver()));
-        }
-
-        g_pTimer->start(1000); // TODO const
-    }
-
-    if( (animateMode==ANIMATE_MODE_STEPINTO)||
-        (animateMode==ANIMATE_MODE_STEPOVER))
-    {
-        g_state.bAnimateStepInto=false;
-        g_state.bAnimateStepOver=false;
-        g_state.bAnimateStop=true;
-    }
-    else if(animateMode==ANIMATE_MODE_STOP)
-    {
-        g_state.bAnimateStepInto=true;
-        g_state.bAnimateStepOver=true;
-        g_state.bAnimateStop=false;
-    }
-
-    _stateChanged();
-
-    return false;
-}
-
 void XDebuggerWidget::_stateChanged()
 {
     _adjustState();
@@ -503,12 +501,15 @@ void XDebuggerWidget::_stateChanged()
 
 void XDebuggerWidget::_adjustState()
 {
-    // TODO set tab CPU if debug or animate, or trace
+    // TODO set tab CPU if debug or animate, or trace -> command
     ui->toolButtonAnimateStepInto->setEnabled(g_state.bAnimateStepInto);
     ui->toolButtonAnimateStepOver->setEnabled(g_state.bAnimateStepOver);
     ui->toolButtonAnimateStop->setEnabled(g_state.bAnimateStop);
+    ui->toolButtonTraceStepInto->setEnabled(g_state.bTraceStepInto);
+    ui->toolButtonTraceStepOver->setEnabled(g_state.bTraceStepOver);
+    ui->toolButtonTraceStop->setEnabled(g_state.bTraceStop);
 
-    if(g_state.bAnimateStop)
+    if(g_state.bAnimateStop||g_state.bTraceStop)
     {
         ui->widgetDisasm->setContextMenuEnable(false);
         ui->widgetHex->setContextMenuEnable(false);
