@@ -121,7 +121,7 @@ public slots:
     bool traceStepInto();
     bool traceStepOver();
     bool traceStop();
-    bool command(CM commandMode);
+    bool command(XDebuggerWidget::CM commandMode);
     void viewCPU();
     void viewLog();
     void viewBreakpoints();
