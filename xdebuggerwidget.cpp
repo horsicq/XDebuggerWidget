@@ -364,19 +364,37 @@ bool XDebuggerWidget::command(CM commandMode)
             else if(commandMode==CM_DEBUG_STEPINTO)
             {
             #ifdef Q_OS_WINDOWS
-                bResult=g_pDebugger->stepIntoByHandle(g_currentBreakPointInfo.hThread);
+                bResult=g_pDebugger->stepIntoByHandle(g_currentBreakPointInfo.hThread,XInfoDB::BPI_STEPINTO);
             #endif
             #ifdef Q_OS_LINUX
-                bResult=g_pDebugger->stepIntoById(g_currentBreakPointInfo.nProcessID);
+                bResult=g_pDebugger->stepIntoById(g_currentBreakPointInfo.nProcessID,XInfoDB::BPI_STEPINTO);
             #endif
             }
             else if(commandMode==CM_DEBUG_STEPOVER)
             {
             #ifdef Q_OS_WINDOWS
-                bResult=g_pDebugger->stepOverByHandle(g_currentBreakPointInfo.hThread);
+                bResult=g_pDebugger->stepOverByHandle(g_currentBreakPointInfo.hThread,XInfoDB::BPI_STEPOVER);
             #endif
             #ifdef Q_OS_LINUX
-                bResult=g_pDebugger->stepOverById(g_currentBreakPointInfo.nProcessID);
+                bResult=g_pDebugger->stepOverById(g_currentBreakPointInfo.nProcessID,XInfoDB::BPI_STEPOVER);
+            #endif
+            }
+            else if(commandMode==CM_TRACE_STEPINTO)
+            {
+            #ifdef Q_OS_WINDOWS
+                bResult=g_pDebugger->stepIntoByHandle(g_currentBreakPointInfo.hThread,XInfoDB::BPI_TRACEINTO);
+            #endif
+            #ifdef Q_OS_LINUX
+                bResult=g_pDebugger->stepIntoById(g_currentBreakPointInfo.nProcessID,XInfoDB::BPI_TRACEINTO);
+            #endif
+            }
+            else if(commandMode==CM_TRACE_STEPOVER)
+            {
+            #ifdef Q_OS_WINDOWS
+                bResult=g_pDebugger->stepOverByHandle(g_currentBreakPointInfo.hThread,XInfoDB::BPI_TRACEOVER);
+            #endif
+            #ifdef Q_OS_LINUX
+                bResult=g_pDebugger->stepOverById(g_currentBreakPointInfo.nProcessID,XInfoDB::BPI_TRACEOVER);
             #endif
             }
             else if(commandMode==CM_DEBUG_CLOSE)
