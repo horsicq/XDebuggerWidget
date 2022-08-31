@@ -36,6 +36,9 @@
        <property name="title">
         <string>Debug</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <property name="spacing">
          <number>0</number>
@@ -105,6 +108,9 @@
        <property name="title">
         <string>Animate</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <property name="spacing">
          <number>0</number>
@@ -173,6 +179,9 @@
       <widget class="QGroupBox" name="groupBoxTrace">
        <property name="title">
         <string>Trace</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <property name="spacing">
@@ -307,7 +316,7 @@
               <x>0</x>
               <y>0</y>
               <width>1118</width>
-              <height>69</height>
+              <height>79</height>
              </rect>
             </property>
            </widget>
