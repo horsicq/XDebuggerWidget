@@ -752,7 +752,7 @@ void XDebuggerWidget::reload()
     }
     else if(nIndex==MT_SYMBOLS)
     {
-        ui->widgetSymbols->reload();
+        ui->widgetSymbols->reload(true);
     }
 }
 

@@ -36,6 +36,7 @@
 
 // TODO WinAPI page/ Widget
 // TODO for Linux send signal to process widget/menu
+// TODO Dialog on open Command line/ symbols
 
 namespace Ui {
 class XDebuggerWidget;
