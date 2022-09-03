@@ -359,7 +359,8 @@ bool XDebuggerWidget::command(CM commandMode)
         {
             if(commandMode==CM_DEBUG_RUN)
             {
-                bResult=g_pInfoDB->resumeAllThreads();
+//                bResult=g_pInfoDB->resumeAllThreads();
+                bResult=g_pDebugger->run();
             }
             else if(commandMode==CM_DEBUG_STEPINTO)
             {
