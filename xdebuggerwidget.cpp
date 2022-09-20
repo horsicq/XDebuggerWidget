@@ -364,7 +364,7 @@ bool XDebuggerWidget::command(CM commandMode)
             }
             else if(commandMode==CM_DEBUG_STEPINTO)
             {
-            #ifdef Q_OS_WINDOWS
+            #ifdef Q_OS_WIN
                 bResult=g_pDebugger->stepIntoByHandle(g_currentBreakPointInfo.hThread,XInfoDB::BPI_STEPINTO);
             #endif
             #ifdef Q_OS_LINUX
@@ -373,7 +373,7 @@ bool XDebuggerWidget::command(CM commandMode)
             }
             else if(commandMode==CM_DEBUG_STEPOVER)
             {
-            #ifdef Q_OS_WINDOWS
+            #ifdef Q_OS_WIN
                 bResult=g_pDebugger->stepOverByHandle(g_currentBreakPointInfo.hThread,XInfoDB::BPI_STEPOVER);
             #endif
             #ifdef Q_OS_LINUX
@@ -382,7 +382,7 @@ bool XDebuggerWidget::command(CM commandMode)
             }
             else if(commandMode==CM_TRACE_STEPINTO)
             {
-            #ifdef Q_OS_WINDOWS
+            #ifdef Q_OS_WIN
                 bResult=g_pDebugger->stepIntoByHandle(g_currentBreakPointInfo.hThread,XInfoDB::BPI_TRACEINTO);
             #endif
             #ifdef Q_OS_LINUX
@@ -391,7 +391,7 @@ bool XDebuggerWidget::command(CM commandMode)
             }
             else if(commandMode==CM_TRACE_STEPOVER)
             {
-            #ifdef Q_OS_WINDOWS
+            #ifdef Q_OS_WIN
                 bResult=g_pDebugger->stepOverByHandle(g_currentBreakPointInfo.hThread,XInfoDB::BPI_TRACEOVER);
             #endif
             #ifdef Q_OS_LINUX
@@ -788,7 +788,6 @@ void XDebuggerWidget::followInDisasm(XADDR nAddress)
 
             XDisasmView::OPTIONS disasmOptions={};
             disasmOptions.nInitAddress=nAddress;
-            disasmOptions.nCurrentIntructionPointer=g_pInfoDB->getCurrentInstructionPointerCache();
             disasmOptions.memoryMapRegion=binary.getMemoryMap();
             disasmOptions.bAprox=true;
             ui->widgetDisasm->setData(g_pPDDisasm,disasmOptions,false);
@@ -797,7 +796,6 @@ void XDebuggerWidget::followInDisasm(XADDR nAddress)
     }
     else
     {
-        ui->widgetDisasm->setCurrentIntructionPointer(nAddress);
         ui->widgetDisasm->goToAddress(nAddress,true,true);
     }
 
