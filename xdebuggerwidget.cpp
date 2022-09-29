@@ -81,6 +81,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     bool bResult=true; // TODO check
 
     // TODO Check function
+    // TODO Dialog
 
     cleanUp();
 
