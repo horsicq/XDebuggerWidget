@@ -3,10 +3,6 @@ DEPENDPATH += $$PWD
 
 DEFINES += USE_XPROCESS
 
-FORMS += \
-    $$PWD/xdebuggeroptionswidget.ui \
-    $$PWD/xdebuggerwidget.ui
-
 HEADERS += \
     $$PWD/dw_breakpointswidget.h \
     $$PWD/dw_disasmview.h \
@@ -32,6 +28,10 @@ SOURCES += \
     $$PWD/dw_threadswidget.cpp \
     $$PWD/xdebuggeroptionswidget.cpp \
     $$PWD/xdebuggerwidget.cpp
+
+FORMS += \
+    $$PWD/xdebuggeroptionswidget.ui \
+    $$PWD/xdebuggerwidget.ui
 
 !contains(XCONFIG, xspecdebugger) {
     XCONFIG += xspecdebugger
