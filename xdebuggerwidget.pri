@@ -98,6 +98,11 @@ FORMS += \
     include($$PWD/../XInfoDB/xinfodb.pri)
 }
 
+!contains(XCONFIG, allformatwidgets) {
+    XCONFIG += allformatwidgets
+    include($$PWD/../FormatWidgets/allformatwidgets.pri)
+}
+
 #TODO callstack
 
 DISTFILES += \
