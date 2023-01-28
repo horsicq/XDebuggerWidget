@@ -595,8 +595,13 @@ void XDebuggerWidget::cleanUp()
 
     if(g_pDebugger)
     {
-        g_pDebugger->stop();
-        g_pDebugger->wait();
+        if(g_pInfoDB)
+        {
+            if (g_pInfoDB->getThreadInfos()->count()) {
+                g_pDebugger->stop();
+                g_pDebugger->wait();
+            }
+        }
 
         delete g_pDebugger;
         g_pDebugger=nullptr;
@@ -611,6 +616,7 @@ void XDebuggerWidget::cleanUp()
         g_pThread=nullptr;
     }
 #endif
+    // TODO reset all widgets
     if(g_pInfoDB)
     {
         delete g_pInfoDB;
