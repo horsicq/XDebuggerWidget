@@ -139,7 +139,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
 //    connect(this,SIGNAL(testSignal(X_ID)),g_pDebugger,SLOT(testSlot(X_ID)),Qt::QueuedConnection);
 
-    connect(g_pInfoDB,SIGNAL(dataChanged(bool)),this,SLOT(onDataChanged(bool)));
+    connect(g_pInfoDB,SIGNAL(reloadSignal(bool)),this,SLOT(onReloadSignal(bool)));
 
 #ifdef Q_OS_WIN
     g_pDebugger->moveToThread(g_pThread);
@@ -267,7 +267,7 @@ void XDebuggerWidget::eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pShare
     emit infoMessage(sString);
 }
 
-void XDebuggerWidget::onDataChanged(bool bDataReload)
+void XDebuggerWidget::onReloadSignal(bool bDataReload)
 {
     if(bDataReload)
     {

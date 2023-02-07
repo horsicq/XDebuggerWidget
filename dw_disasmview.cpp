@@ -35,7 +35,7 @@ void DW_DisasmView::_breakpointToggle()
         {
             if(getXInfoDB()->breakpointToggle(nAddress))
             {
-                getXInfoDB()->reload(false);
+                getXInfoDB()->reload(true);
             }
         }
     }
