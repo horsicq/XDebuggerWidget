@@ -29,7 +29,7 @@ void DW_DisasmView::_breakpointToggle()
 {
     if(getXInfoDB())
     {
-        qint64 nAddress=getSelectionInitAddress();
+        XADDR nAddress=getSelectionInitAddress();
 
         if(nAddress!=-1)
         {

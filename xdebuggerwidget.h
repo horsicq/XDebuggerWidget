@@ -136,6 +136,8 @@ public slots:
 private:
     void _stateChanged();
     void _adjustState();
+    void _clearProcessMemory();
+    XProcess *_getProcessMemory(XADDR nAddress, qint64 nSize);
 
 private slots:
     void onCreateProcess(XInfoDB::PROCESS_INFO *pProcessInfo);
@@ -189,13 +191,12 @@ private:
 
     XBinary::OSINFO g_osInfo;
 
+    QList<XProcess *> g_listRegions;
+
     XProcess::MEMORY_REGION g_mrDisasm;
     XProcess::MEMORY_REGION g_mrStack;
     XProcess::MEMORY_REGION g_mrHex;
 
-    XProcess *g_pPDDisasm;
-    XProcess *g_pPDStack;
-    XProcess *g_pPDHex;
     STATE g_state;
     QTimer *g_pTimer;
 };
