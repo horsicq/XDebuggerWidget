@@ -83,6 +83,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     cleanUp();
 
     g_pInfoDB=new XInfoDB;
+    g_pInfoDB->setDebuggerState(true);
 
 #ifdef Q_OS_WIN
     g_pThread=new QThread;
