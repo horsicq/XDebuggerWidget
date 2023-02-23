@@ -23,16 +23,15 @@
 
 #include "xregistersview.h"
 
-class DW_RegistersView : public XRegistersView
-{
+class DW_RegistersView : public XRegistersView {
     Q_OBJECT
 
 public:
-    explicit DW_RegistersView(QWidget *pParent=nullptr);
+    explicit DW_RegistersView(QWidget *pParent = nullptr);
 
 protected:
     virtual void contextMenu(const QPoint &pos);
     virtual void registerShortcuts(bool bState);
 };
 
-#endif // DW_REGISTERSVIEW_H
+#endif  // DW_REGISTERSVIEW_H

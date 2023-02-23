@@ -23,15 +23,13 @@
 
 #include "xprocessmemorymapwidget.h"
 
-class DW_ProcessMemoryMapWidget : public XProcessMemoryMapWidget
-{
+class DW_ProcessMemoryMapWidget : public XProcessMemoryMapWidget {
     Q_OBJECT
 
 public:
-    explicit DW_ProcessMemoryMapWidget(QWidget *pParent=nullptr);
+    explicit DW_ProcessMemoryMapWidget(QWidget *pParent = nullptr);
 
 signals:
-
 };
 
-#endif // DW_PROCESSMEMORYMAPWIDGET_H
+#endif  // DW_PROCESSMEMORYMAPWIDGET_H

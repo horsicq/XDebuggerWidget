@@ -21,15 +21,13 @@
 #include "xdebuggeroptionswidget.h"
 #include "ui_xdebuggeroptionswidget.h"
 
-XDebuggerOptionsWidget::XDebuggerOptionsWidget(QWidget *pParent) :
-    QWidget(pParent),
-    ui(new Ui::XDebuggerOptionsWidget)
+XDebuggerOptionsWidget::XDebuggerOptionsWidget(QWidget *pParent) : QWidget(pParent), ui(new Ui::XDebuggerOptionsWidget)
 {
     ui->setupUi(this);
 
-    g_pOptions=nullptr;
+    g_pOptions = nullptr;
 
-    setProperty("GROUPID",XOptions::GROUPID_DEBUGGER);
+    setProperty("GROUPID", XOptions::GROUPID_DEBUGGER);
 }
 
 XDebuggerOptionsWidget::~XDebuggerOptionsWidget()
@@ -39,31 +37,31 @@ XDebuggerOptionsWidget::~XDebuggerOptionsWidget()
 
 void XDebuggerOptionsWidget::setOptions(XOptions *pOptions)
 {
-    g_pOptions=pOptions;
+    g_pOptions = pOptions;
 
     reload();
 }
 
 void XDebuggerOptionsWidget::save()
 {
-    g_pOptions->getCheckBox(ui->checkBoxDebuggerBreakSystem,XOptions::ID_DEBUGGER_BREAKPOINT_SYSTEM);
-    g_pOptions->getCheckBox(ui->checkBoxDebuggerBreakPointEntryPoint,XOptions::ID_DEBUGGER_BREAKPOINT_ENTRYPOINT);
-    g_pOptions->getCheckBox(ui->checkBoxDebuggerBreakPointDLLMain,XOptions::ID_DEBUGGER_BREAKPOINT_DLLMAIN);
-    g_pOptions->getCheckBox(ui->checkBoxDebuggerBreakPointTLSFunctions,XOptions::ID_DEBUGGER_BREAKPOINT_TLSFUNCTIONS);
+    g_pOptions->getCheckBox(ui->checkBoxDebuggerBreakSystem, XOptions::ID_DEBUGGER_BREAKPOINT_SYSTEM);
+    g_pOptions->getCheckBox(ui->checkBoxDebuggerBreakPointEntryPoint, XOptions::ID_DEBUGGER_BREAKPOINT_ENTRYPOINT);
+    g_pOptions->getCheckBox(ui->checkBoxDebuggerBreakPointDLLMain, XOptions::ID_DEBUGGER_BREAKPOINT_DLLMAIN);
+    g_pOptions->getCheckBox(ui->checkBoxDebuggerBreakPointTLSFunctions, XOptions::ID_DEBUGGER_BREAKPOINT_TLSFUNCTIONS);
 }
 
 void XDebuggerOptionsWidget::setDefaultValues(XOptions *pOptions)
 {
-    pOptions->addID(XOptions::ID_DEBUGGER_BREAKPOINT_SYSTEM,true);
-    pOptions->addID(XOptions::ID_DEBUGGER_BREAKPOINT_ENTRYPOINT,true);
-    pOptions->addID(XOptions::ID_DEBUGGER_BREAKPOINT_DLLMAIN,true);
-    pOptions->addID(XOptions::ID_DEBUGGER_BREAKPOINT_TLSFUNCTIONS,true);
+    pOptions->addID(XOptions::ID_DEBUGGER_BREAKPOINT_SYSTEM, true);
+    pOptions->addID(XOptions::ID_DEBUGGER_BREAKPOINT_ENTRYPOINT, true);
+    pOptions->addID(XOptions::ID_DEBUGGER_BREAKPOINT_DLLMAIN, true);
+    pOptions->addID(XOptions::ID_DEBUGGER_BREAKPOINT_TLSFUNCTIONS, true);
 }
 
 void XDebuggerOptionsWidget::reload()
 {
-    g_pOptions->setCheckBox(ui->checkBoxDebuggerBreakSystem,XOptions::ID_DEBUGGER_BREAKPOINT_SYSTEM);
-    g_pOptions->setCheckBox(ui->checkBoxDebuggerBreakPointEntryPoint,XOptions::ID_DEBUGGER_BREAKPOINT_ENTRYPOINT);
-    g_pOptions->setCheckBox(ui->checkBoxDebuggerBreakPointDLLMain,XOptions::ID_DEBUGGER_BREAKPOINT_DLLMAIN);
-    g_pOptions->setCheckBox(ui->checkBoxDebuggerBreakPointTLSFunctions,XOptions::ID_DEBUGGER_BREAKPOINT_TLSFUNCTIONS);
+    g_pOptions->setCheckBox(ui->checkBoxDebuggerBreakSystem, XOptions::ID_DEBUGGER_BREAKPOINT_SYSTEM);
+    g_pOptions->setCheckBox(ui->checkBoxDebuggerBreakPointEntryPoint, XOptions::ID_DEBUGGER_BREAKPOINT_ENTRYPOINT);
+    g_pOptions->setCheckBox(ui->checkBoxDebuggerBreakPointDLLMain, XOptions::ID_DEBUGGER_BREAKPOINT_DLLMAIN);
+    g_pOptions->setCheckBox(ui->checkBoxDebuggerBreakPointTLSFunctions, XOptions::ID_DEBUGGER_BREAKPOINT_TLSFUNCTIONS);
 }

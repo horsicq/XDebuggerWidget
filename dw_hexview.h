@@ -23,16 +23,15 @@
 
 #include "xhexview.h"
 
-class DW_HexView : public XHexView
-{
+class DW_HexView : public XHexView {
     Q_OBJECT
 
 public:
-    explicit DW_HexView(QWidget *pParent=nullptr);
+    explicit DW_HexView(QWidget *pParent = nullptr);
 
 protected:
     virtual void contextMenu(const QPoint &pos);
     virtual void registerShortcuts(bool bState);
 };
 
-#endif // DW_HEXVIEW_H
+#endif  // DW_HEXVIEW_H

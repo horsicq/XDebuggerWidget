@@ -23,16 +23,15 @@
 
 #include "xbreakpointswidget.h"
 
-class DW_BreakPointsWidget : public XBreakPointsWidget
-{
+class DW_BreakPointsWidget : public XBreakPointsWidget {
     Q_OBJECT
 
 public:
-    explicit DW_BreakPointsWidget(QWidget *pParent=nullptr);
+    explicit DW_BreakPointsWidget(QWidget *pParent = nullptr);
 
 protected:
     virtual void contextMenu(const QPoint &pos);
     virtual void registerShortcuts(bool bState);
 };
 
-#endif // DW_BREAKPOINTSWIDGET_H
+#endif  // DW_BREAKPOINTSWIDGET_H

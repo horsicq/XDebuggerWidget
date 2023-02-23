@@ -23,16 +23,15 @@
 
 #include "xthreadswidget.h"
 
-class DW_ThreadsWidget : public XThreadsWidget
-{
+class DW_ThreadsWidget : public XThreadsWidget {
     Q_OBJECT
 
 public:
-    explicit DW_ThreadsWidget(QWidget *pParent=nullptr);
+    explicit DW_ThreadsWidget(QWidget *pParent = nullptr);
 
 protected:
     virtual void contextMenu(const QPoint &pos);
     virtual void registerShortcuts(bool bState);
 };
 
-#endif // DW_THREADSWIDGET_H
+#endif  // DW_THREADSWIDGET_H

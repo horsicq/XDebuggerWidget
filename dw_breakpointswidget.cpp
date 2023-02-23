@@ -22,7 +22,6 @@
 
 DW_BreakPointsWidget::DW_BreakPointsWidget(QWidget *pParent) : XBreakPointsWidget(pParent)
 {
-
 }
 
 void DW_BreakPointsWidget::contextMenu(const QPoint &pos)

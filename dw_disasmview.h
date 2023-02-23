@@ -23,12 +23,11 @@
 
 #include "xdisasmview.h"
 
-class DW_DisasmView : public XDisasmView
-{
+class DW_DisasmView : public XDisasmView {
     Q_OBJECT
 
 public:
-    explicit DW_DisasmView(QWidget *pParent=nullptr);
+    explicit DW_DisasmView(QWidget *pParent = nullptr);
 
 public slots:
     void _breakpointToggle();
@@ -39,4 +38,4 @@ protected:
     virtual void registerShortcuts(bool bState);
 };
 
-#endif // DW_DISASMVIEW_H
+#endif  // DW_DISASMVIEW_H

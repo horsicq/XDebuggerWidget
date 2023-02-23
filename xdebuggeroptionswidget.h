@@ -28,12 +28,11 @@ namespace Ui {
 class XDebuggerOptionsWidget;
 }
 
-class XDebuggerOptionsWidget : public QWidget
-{
+class XDebuggerOptionsWidget : public QWidget {
     Q_OBJECT
 
 public:
-    explicit XDebuggerOptionsWidget(QWidget *pParent=nullptr);
+    explicit XDebuggerOptionsWidget(QWidget *pParent = nullptr);
     ~XDebuggerOptionsWidget();
 
     void setOptions(XOptions *pOptions);
@@ -49,4 +48,4 @@ private:
     XOptions *g_pOptions;
 };
 
-#endif // XDEBUGGEROPTIONSWIDGET_H
+#endif  // XDEBUGGEROPTIONSWIDGET_H

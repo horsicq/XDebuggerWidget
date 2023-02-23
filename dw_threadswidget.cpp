@@ -22,15 +22,12 @@
 
 DW_ThreadsWidget::DW_ThreadsWidget(QWidget *pParent) : XThreadsWidget(pParent)
 {
-
 }
 
 void DW_ThreadsWidget::contextMenu(const QPoint &pos)
 {
-
 }
 
 void DW_ThreadsWidget::registerShortcuts(bool bState)
 {
-
 }

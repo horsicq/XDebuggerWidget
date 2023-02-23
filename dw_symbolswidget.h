@@ -23,14 +23,13 @@
 
 #include "xsymbolswidget.h"
 
-class DW_SymbolsWidget : public XSymbolsWidget
-{
+class DW_SymbolsWidget : public XSymbolsWidget {
 public:
-    explicit DW_SymbolsWidget(QWidget *pParent=nullptr);
+    explicit DW_SymbolsWidget(QWidget *pParent = nullptr);
 
 protected:
     virtual void contextMenu(const QPoint &pos);
     virtual void registerShortcuts(bool bState);
 };
 
-#endif // DW_SYMBOLSWIDGET_H
+#endif  // DW_SYMBOLSWIDGET_H

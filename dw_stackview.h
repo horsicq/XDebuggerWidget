@@ -23,16 +23,15 @@
 
 #include "xstackview.h"
 
-class DW_StackView : public XStackView
-{
+class DW_StackView : public XStackView {
     Q_OBJECT
 
 public:
-    explicit DW_StackView(QWidget *pParent=nullptr);
+    explicit DW_StackView(QWidget *pParent = nullptr);
 
 protected:
     virtual void contextMenu(const QPoint &pos);
     virtual void registerShortcuts(bool bState);
 };
 
-#endif // DW_STACKVIEW_H
+#endif  // DW_STACKVIEW_H

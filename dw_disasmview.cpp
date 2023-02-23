@@ -22,19 +22,15 @@
 
 DW_DisasmView::DW_DisasmView(QWidget *pParent) : XDisasmView(pParent)
 {
-
 }
 
 void DW_DisasmView::_breakpointToggle()
 {
-    if(getXInfoDB())
-    {
-        XADDR nAddress=getSelectionInitAddress();
+    if (getXInfoDB()) {
+        XADDR nAddress = getSelectionInitAddress();
 
-        if(nAddress!=-1)
-        {
-            if(getXInfoDB()->breakpointToggle(nAddress))
-            {
+        if (nAddress != -1) {
+            if (getXInfoDB()->breakpointToggle(nAddress)) {
                 getXInfoDB()->reload(true);
             }
         }
@@ -51,37 +47,35 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
 {
     // TODO Search
     // TODO Signatures
-    if(isContextMenuEnable())
-    {
-        if(getXInfoDB())
-        {
+    if (isContextMenuEnable()) {
+        if (getXInfoDB()) {
             QMenu contextMenu(this);
 
-            QMenu menuBreakpoint(tr("Breakpoint"),this);
-            QMenu menuGoTo(tr("Go to"),this);
-            QMenu menuCopy(tr("Copy"),this);
-            QMenu menuEdit(tr("Edit"),this);
-            QMenu menuFollowIn(tr("Follow in"),this);
+            QMenu menuBreakpoint(tr("Breakpoint"), this);
+            QMenu menuGoTo(tr("Go to"), this);
+            QMenu menuCopy(tr("Copy"), this);
+            QMenu menuEdit(tr("Edit"), this);
+            QMenu menuFollowIn(tr("Follow in"), this);
 
-            QAction actionBreakpointToggle(tr("Toggle"),this);
+            QAction actionBreakpointToggle(tr("Toggle"), this);
             actionBreakpointToggle.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_BREAKPOINT_TOGGLE));
-            connect(&actionBreakpointToggle,SIGNAL(triggered()),this,SLOT(_breakpointToggle()));
+            connect(&actionBreakpointToggle, SIGNAL(triggered()), this, SLOT(_breakpointToggle()));
 
-            QAction actionGoToAddress(tr("Address"),this);
+            QAction actionGoToAddress(tr("Address"), this);
             actionGoToAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_GOTO_ADDRESS));
-            connect(&actionGoToAddress,SIGNAL(triggered()),this,SLOT(_goToAddressSlot()));
+            connect(&actionGoToAddress, SIGNAL(triggered()), this, SLOT(_goToAddressSlot()));
 
-            QAction actionCopyAddress(tr("Address"),this);
+            QAction actionCopyAddress(tr("Address"), this);
             actionCopyAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_COPY_ADDRESS));
-            connect(&actionCopyAddress,SIGNAL(triggered()),this,SLOT(_copyAddressSlot()));
+            connect(&actionCopyAddress, SIGNAL(triggered()), this, SLOT(_copyAddressSlot()));
 
-            QAction actionEditHex(tr("Hex"),this);
+            QAction actionEditHex(tr("Hex"), this);
             actionEditHex.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_EDIT_HEX));
-            connect(&actionEditHex,SIGNAL(triggered()),this,SLOT(_editHex()));
+            connect(&actionEditHex, SIGNAL(triggered()), this, SLOT(_editHex()));
 
-            QAction actionFollowInHex(tr("Hex"),this);
+            QAction actionFollowInHex(tr("Hex"), this);
             actionFollowInHex.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_FOLLOWIN_HEX));
-            connect(&actionFollowInHex,SIGNAL(triggered()),this,SLOT(_followInHexSlot()));
+            connect(&actionFollowInHex, SIGNAL(triggered()), this, SLOT(_followInHexSlot()));
 
             menuGoTo.addAction(&actionGoToAddress);
             contextMenu.addMenu(&menuGoTo);
@@ -100,15 +94,15 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
 
             contextMenu.exec(pos);
 
-    //        qint64 nAddress=getSelectionInitAddress();
-    //        if(!g_pDebugger->isSoftwareBreakpointPresent(nAddress))
-    //        {
-    //            actionToggle.setText(tr("Set Breakpoint"));
-    //        }
-    //        else
-    //        {
-    //            actionToggle.setText(tr("Remove Breakpoint"));
-    //        }
+            //        qint64 nAddress=getSelectionInitAddress();
+            //        if(!g_pDebugger->isSoftwareBreakpointPresent(nAddress))
+            //        {
+            //            actionToggle.setText(tr("Set Breakpoint"));
+            //        }
+            //        else
+            //        {
+            //            actionToggle.setText(tr("Remove Breakpoint"));
+            //        }
         }
     }
 }

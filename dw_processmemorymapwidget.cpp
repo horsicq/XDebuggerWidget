@@ -22,5 +22,4 @@
 
 DW_ProcessMemoryMapWidget::DW_ProcessMemoryMapWidget(QWidget *pParent) : XProcessMemoryMapWidget(pParent)
 {
-
 }

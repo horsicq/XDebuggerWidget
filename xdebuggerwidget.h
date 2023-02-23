@@ -42,13 +42,11 @@ namespace Ui {
 class XDebuggerWidget;
 }
 
-class XDebuggerWidget : public XShortcutsWidget
-{
+class XDebuggerWidget : public XShortcutsWidget {
     Q_OBJECT
 
-    enum MT
-    {
-        MT_CPU=0,
+    enum MT {
+        MT_CPU = 0,
         MT_LOG,
         MT_BREAKPOINTS,
         MT_MEMORYMAP,
@@ -59,16 +57,14 @@ class XDebuggerWidget : public XShortcutsWidget
         MT_SYMBOLS
     };
 
-    enum SHORTCUT
-    {
+    enum SHORTCUT {
         SC_DISASM_BREAKPOINTTOGGLE,
         __SC_SIZE,
         // TODO more
     };
 
-    enum CM
-    {
-        CM_UNKNOWN=0,
+    enum CM {
+        CM_UNKNOWN = 0,
         CM_READY,
         CM_DEBUG_RUN,
         CM_DEBUG_CLOSE,
@@ -85,8 +81,7 @@ class XDebuggerWidget : public XShortcutsWidget
 public:
     // TODO
     // TODO stateChanged -> update menus
-    struct STATE
-    {
+    struct STATE {
         bool bAnimateStepInto;
         bool bAnimateStepOver;
         bool bAnimateStop;
@@ -95,11 +90,11 @@ public:
         bool bTraceStop;
     };
 
-    explicit XDebuggerWidget(QWidget *pParent=nullptr);
+    explicit XDebuggerWidget(QWidget *pParent = nullptr);
     ~XDebuggerWidget();
 
     bool loadFile(QString sFileName);
-    void setGlobal(XShortcuts *pShortcuts,XOptions *pXOptions);
+    void setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions);
     virtual void adjustView();
     STATE getState();
 
@@ -108,7 +103,7 @@ signals:
     void infoMessage(QString sInfoMessage);
     void cleanUpSignal();
     void stateChanged();
-    void testSignal(X_ID nThreadId); // TODO remove
+    void testSignal(X_ID nThreadId);  // TODO remove
     //    void debugStepOverSignal();
 
 public slots:
@@ -201,4 +196,4 @@ private:
     QTimer *g_pTimer;
 };
 
-#endif // XDEBUGGERWIDGET_H
+#endif  // XDEBUGGERWIDGET_H
