@@ -1,4 +1,4 @@
-/* Copyright (c) 2021-2022 hors<horsicq@gmail.com>
+/* Copyright (c) 2021-2023 hors<horsicq@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,8 @@
 #include "xsymbolswidget.h"
 
 class DW_SymbolsWidget : public XSymbolsWidget {
+    Q_OBJECT
+
 public:
     explicit DW_SymbolsWidget(QWidget *pParent = nullptr);
 
