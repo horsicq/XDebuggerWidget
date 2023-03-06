@@ -73,42 +73,19 @@ XDebuggerWidget::~XDebuggerWidget()
 
 bool XDebuggerWidget::loadFile(QString sFileName)
 {
-    bool bResult = true;  // TODO check
+    bool bResult = false;  // TODO check
 
     // TODO Check function
-    // TODO Dialog
 
-    cleanUp();
+    bool bSkipLoadDialog = true;
 
-    g_pInfoDB = new XInfoDB;
-    g_pInfoDB->setDebuggerState(true);
-
-#ifdef Q_OS_WIN
-    g_pThread = new QThread;
-    g_pDebugger = new XWindowsDebugger(0, g_pInfoDB);
-#endif
-#ifdef Q_OS_LINUX
-    g_pDebugger = new XLinuxDebugger(0, g_pInfoDB);
-#endif
-#ifdef Q_OS_MACOS
-    g_pDebugger = new XOSXDebugger(0, g_pInfoDB);
-#endif
-
-    ui->widgetDisasm->setXInfoDB(g_pDebugger->getXInfoDB());
-    ui->widgetHex->setXInfoDB(g_pDebugger->getXInfoDB());
-    ui->widgetRegs->setXInfoDB(g_pDebugger->getXInfoDB());
-    ui->widgetStack->setXInfoDB(g_pDebugger->getXInfoDB());
-
-    ui->widgetProcessModules->setXInfoDB(g_pDebugger->getXInfoDB(), false);
-    ui->widgetProcessMemoryMap->setXInfoDB(g_pDebugger->getXInfoDB(), false);
-    ui->widgetBreakpoints->setXInfoDB(g_pDebugger->getXInfoDB(), false);
-    ui->widgetSymbols->setXInfoDB(g_pDebugger->getXInfoDB(), false);
-    ui->widgetThreads->setXInfoDB(g_pDebugger->getXInfoDB(), false);
-
-    g_osInfo = XProcess::getOsInfo();
+    if (bSkipLoadDialog) {
+        bResult = true;
+    }
 
     XAbstractDebugger::OPTIONS options = {};
 
+    // TODO auto analyse
     options.bShowConsole = true;
     options.sFileName = sFileName;
     options.bBreakpointOnSystem = getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_SYSTEM).toBool();
@@ -116,39 +93,78 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     options.bBreakPointOnDLLMain = getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_DLLMAIN).toBool();
     options.bBreakPointOnTLSFunction = getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_TLSFUNCTIONS).toBool();
 
-    g_pDebugger->setOptions(options);
+    if (!bSkipLoadDialog) {
+        XDebuggerLoadDialog debuggerLoadDialog(this, &options);
 
-#ifdef Q_OS_WIN
-    connect(g_pThread, SIGNAL(started()), g_pDebugger, SLOT(process()));
-#endif
-    //    connect(pDebugger,SIGNAL(finished()),pDebugger,SLOT(deleteLater()));
-
-    connect(g_pDebugger, SIGNAL(eventCreateProcess(XInfoDB::PROCESS_INFO *)), this, SLOT(onCreateProcess(XInfoDB::PROCESS_INFO *)), Qt::DirectConnection);
-    connect(g_pDebugger, SIGNAL(eventBreakPoint(XInfoDB::BREAKPOINT_INFO *)), this, SLOT(onBreakPoint(XInfoDB::BREAKPOINT_INFO *)), Qt::DirectConnection);
-    connect(g_pDebugger, SIGNAL(eventExitProcess(XInfoDB::EXITPROCESS_INFO *)), this, SLOT(onExitProcess(XInfoDB::EXITPROCESS_INFO *)), Qt::DirectConnection);
-    connect(g_pDebugger, SIGNAL(eventCreateThread(XInfoDB::THREAD_INFO *)), this, SLOT(eventCreateThread(XInfoDB::THREAD_INFO *)), Qt::DirectConnection);
-    connect(g_pDebugger, SIGNAL(eventExitThread(XInfoDB::EXITTHREAD_INFO *)), this, SLOT(eventExitThread(XInfoDB::EXITTHREAD_INFO *)), Qt::DirectConnection);
-    connect(g_pDebugger, SIGNAL(eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO *)), this, SLOT(eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO *)),
-            Qt::DirectConnection);
-    connect(g_pDebugger, SIGNAL(eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *)), this, SLOT(eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *)),
-            Qt::DirectConnection);
-
-    //    connect(this,SIGNAL(testSignal(X_ID)),g_pDebugger,SLOT(testSlot(X_ID)),Qt::BlockingQueuedConnection);
-
-    //    connect(this,SIGNAL(testSignal(X_ID)),g_pDebugger,SLOT(testSlot(X_ID)),Qt::QueuedConnection);
-
-    connect(g_pInfoDB, SIGNAL(reloadSignal(bool)), this, SLOT(onReloadSignal(bool)));
-
-#ifdef Q_OS_WIN
-    g_pDebugger->moveToThread(g_pThread);
-    g_pThread->start();
-#endif
-#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
-    g_pDebugger->process();
-#endif
+        if (debuggerLoadDialog.exec() == QDialog::Accepted) {
+            bResult = true;
+        }
+    }
 
     if (bResult) {
-        command(CM_READY);
+        cleanUp();
+
+        g_pInfoDB = new XInfoDB;
+        g_pInfoDB->setDebuggerState(true);
+
+    #ifdef Q_OS_WIN
+        g_pThread = new QThread;
+        g_pDebugger = new XWindowsDebugger(0, g_pInfoDB);
+    #endif
+    #ifdef Q_OS_LINUX
+        g_pDebugger = new XLinuxDebugger(0, g_pInfoDB);
+    #endif
+    #ifdef Q_OS_MACOS
+        g_pDebugger = new XOSXDebugger(0, g_pInfoDB);
+    #endif
+
+        ui->widgetDisasm->setXInfoDB(g_pDebugger->getXInfoDB());
+        ui->widgetHex->setXInfoDB(g_pDebugger->getXInfoDB());
+        ui->widgetRegs->setXInfoDB(g_pDebugger->getXInfoDB());
+        ui->widgetStack->setXInfoDB(g_pDebugger->getXInfoDB());
+
+        ui->widgetProcessModules->setXInfoDB(g_pDebugger->getXInfoDB(), false);
+        ui->widgetProcessMemoryMap->setXInfoDB(g_pDebugger->getXInfoDB(), false);
+        ui->widgetBreakpoints->setXInfoDB(g_pDebugger->getXInfoDB(), false);
+        ui->widgetSymbols->setXInfoDB(g_pDebugger->getXInfoDB(), false);
+        ui->widgetThreads->setXInfoDB(g_pDebugger->getXInfoDB(), false);
+
+        g_osInfo = XProcess::getOsInfo();
+
+        g_pDebugger->setOptions(options);
+
+    #ifdef Q_OS_WIN
+        connect(g_pThread, SIGNAL(started()), g_pDebugger, SLOT(process()));
+    #endif
+        //    connect(pDebugger,SIGNAL(finished()),pDebugger,SLOT(deleteLater()));
+
+        connect(g_pDebugger, SIGNAL(eventCreateProcess(XInfoDB::PROCESS_INFO *)), this, SLOT(onCreateProcess(XInfoDB::PROCESS_INFO *)), Qt::DirectConnection);
+        connect(g_pDebugger, SIGNAL(eventBreakPoint(XInfoDB::BREAKPOINT_INFO *)), this, SLOT(onBreakPoint(XInfoDB::BREAKPOINT_INFO *)), Qt::DirectConnection);
+        connect(g_pDebugger, SIGNAL(eventExitProcess(XInfoDB::EXITPROCESS_INFO *)), this, SLOT(onExitProcess(XInfoDB::EXITPROCESS_INFO *)), Qt::DirectConnection);
+        connect(g_pDebugger, SIGNAL(eventCreateThread(XInfoDB::THREAD_INFO *)), this, SLOT(eventCreateThread(XInfoDB::THREAD_INFO *)), Qt::DirectConnection);
+        connect(g_pDebugger, SIGNAL(eventExitThread(XInfoDB::EXITTHREAD_INFO *)), this, SLOT(eventExitThread(XInfoDB::EXITTHREAD_INFO *)), Qt::DirectConnection);
+        connect(g_pDebugger, SIGNAL(eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO *)), this, SLOT(eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO *)),
+                Qt::DirectConnection);
+        connect(g_pDebugger, SIGNAL(eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *)), this, SLOT(eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *)),
+                Qt::DirectConnection);
+
+        //    connect(this,SIGNAL(testSignal(X_ID)),g_pDebugger,SLOT(testSlot(X_ID)),Qt::BlockingQueuedConnection);
+
+        //    connect(this,SIGNAL(testSignal(X_ID)),g_pDebugger,SLOT(testSlot(X_ID)),Qt::QueuedConnection);
+
+        connect(g_pInfoDB, SIGNAL(reloadSignal(bool)), this, SLOT(onReloadSignal(bool)));
+
+    #ifdef Q_OS_WIN
+        g_pDebugger->moveToThread(g_pThread);
+        g_pThread->start();
+    #endif
+    #if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
+        g_pDebugger->process();
+    #endif
+
+        if (bResult) {
+            command(CM_READY);
+        }
     }
 
     return bResult;
@@ -275,8 +291,6 @@ void XDebuggerWidget::onReloadSignal(bool bDataReload)
         followInDisasm(nInstructionPointer);
         followInHex(nInstructionPointer);  // TODO
         followInStack(nStackPointer);
-
-        // TODO Memory Regions manager
     }
 
     reload();
@@ -795,6 +809,10 @@ void XDebuggerWidget::followInHex(XADDR nAddress)
 
 void XDebuggerWidget::followInStack(XADDR nAddress)
 {
+#ifdef Q_OS_WIN
+    XProcess::getCallStack(ui->widgetStack->getXInfoDB()->getProcessInfo()->hProcess, ui->widgetStack->getXInfoDB()->getProcessInfo()->hMainThread);
+#endif
+
     if (!XProcess::isAddressInMemoryRegion(&g_mrStack, nAddress)) {
         g_mrStack = XProcess::getMemoryRegionByAddress(g_pInfoDB->getCurrentMemoryRegionsList(), nAddress);
 

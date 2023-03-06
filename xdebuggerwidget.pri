@@ -13,6 +13,7 @@ HEADERS += \
     $$PWD/dw_stackview.h \
     $$PWD/dw_symbolswidget.h \
     $$PWD/dw_threadswidget.h \
+    $$PWD/xdebuggerloaddialog.h \
     $$PWD/xdebuggeroptionswidget.h \
     $$PWD/xdebuggerwidget.h
 
@@ -26,10 +27,12 @@ SOURCES += \
     $$PWD/dw_stackview.cpp \
     $$PWD/dw_symbolswidget.cpp \
     $$PWD/dw_threadswidget.cpp \
+    $$PWD/xdebuggerloaddialog.cpp \
     $$PWD/xdebuggeroptionswidget.cpp \
     $$PWD/xdebuggerwidget.cpp
 
 FORMS += \
+    $$PWD/xdebuggerloaddialog.ui \
     $$PWD/xdebuggeroptionswidget.ui \
     $$PWD/xdebuggerwidget.ui
 
