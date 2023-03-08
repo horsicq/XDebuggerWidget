@@ -863,3 +863,8 @@ void XDebuggerWidget::on_toolButtonTraceStop_clicked()
 {
     traceStop();
 }
+
+void XDebuggerWidget::on_comboBoxHexRegion_currentIndexChanged(int nIndex)
+{
+    // TODO
+}

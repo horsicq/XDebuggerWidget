@@ -81,6 +81,11 @@ FORMS += \
     include($$PWD/../XHandlesWidget/xhandleswidget.pri)
 }
 
+!contains(XCONFIG, xcallstackwidget) {
+    XCONFIG += xcallstackwidget
+    include($$PWD/../XCallStackWidget/xcallstackwidget.pri)
+}
+
 !contains(XCONFIG, xsymbolswidget) {
     XCONFIG += xsymbolswidget
     include($$PWD/../XSymbolsWidget/xsymbolswidget.pri)

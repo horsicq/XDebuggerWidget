@@ -163,6 +163,7 @@ private slots:
     void on_toolButtonTraceStepInto_clicked();
     void on_toolButtonTraceStepOver_clicked();
     void on_toolButtonTraceStop_clicked();
+    void on_comboBoxHexRegion_currentIndexChanged(int nIndex);
 
 protected:
     virtual void registerShortcuts(bool bState);
