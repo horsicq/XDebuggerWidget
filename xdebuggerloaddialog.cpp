@@ -21,9 +21,7 @@
 #include "xdebuggerloaddialog.h"
 #include "ui_xdebuggerloaddialog.h"
 
-XDebuggerLoadDialog::XDebuggerLoadDialog(QWidget *pParent, XAbstractDebugger::OPTIONS *pOptions) :
-    QDialog(pParent),
-    ui(new Ui::XDebuggerLoadDialog)
+XDebuggerLoadDialog::XDebuggerLoadDialog(QWidget *pParent, XAbstractDebugger::OPTIONS *pOptions) : QDialog(pParent), ui(new Ui::XDebuggerLoadDialog)
 {
     ui->setupUi(this);
 
@@ -40,11 +38,9 @@ void XDebuggerLoadDialog::on_pushButtonCancel_clicked()
     reject();
 }
 
-
 void XDebuggerLoadDialog::on_pushButtonOK_clicked()
 {
     // TODO
 
     accept();
 }
-

@@ -28,8 +28,7 @@ namespace Ui {
 class XDebuggerLoadDialog;
 }
 
-class XDebuggerLoadDialog : public QDialog
-{
+class XDebuggerLoadDialog : public QDialog {
     Q_OBJECT
 
 public:
@@ -45,4 +44,4 @@ private:
     XAbstractDebugger::OPTIONS *g_pOptions;
 };
 
-#endif // XDEBUGGERLOADDIALOG_H
+#endif  // XDEBUGGERLOADDIALOG_H

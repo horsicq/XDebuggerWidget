@@ -107,16 +107,16 @@ bool XDebuggerWidget::loadFile(QString sFileName)
         g_pInfoDB = new XInfoDB;
         g_pInfoDB->setDebuggerState(true);
 
-    #ifdef Q_OS_WIN
+#ifdef Q_OS_WIN
         g_pThread = new QThread;
         g_pDebugger = new XWindowsDebugger(0, g_pInfoDB);
-    #endif
-    #ifdef Q_OS_LINUX
+#endif
+#ifdef Q_OS_LINUX
         g_pDebugger = new XLinuxDebugger(0, g_pInfoDB);
-    #endif
-    #ifdef Q_OS_MACOS
+#endif
+#ifdef Q_OS_MACOS
         g_pDebugger = new XOSXDebugger(0, g_pInfoDB);
-    #endif
+#endif
 
         ui->widgetDisasm->setXInfoDB(g_pDebugger->getXInfoDB());
         ui->widgetHex->setXInfoDB(g_pDebugger->getXInfoDB());
@@ -133,9 +133,9 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
         g_pDebugger->setOptions(options);
 
-    #ifdef Q_OS_WIN
+#ifdef Q_OS_WIN
         connect(g_pThread, SIGNAL(started()), g_pDebugger, SLOT(process()));
-    #endif
+#endif
         //    connect(pDebugger,SIGNAL(finished()),pDebugger,SLOT(deleteLater()));
 
         connect(g_pDebugger, SIGNAL(eventCreateProcess(XInfoDB::PROCESS_INFO *)), this, SLOT(onCreateProcess(XInfoDB::PROCESS_INFO *)), Qt::DirectConnection);
@@ -154,13 +154,13 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
         connect(g_pInfoDB, SIGNAL(reloadSignal(bool)), this, SLOT(onReloadSignal(bool)));
 
-    #ifdef Q_OS_WIN
+#ifdef Q_OS_WIN
         g_pDebugger->moveToThread(g_pThread);
         g_pThread->start();
-    #endif
-    #if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
+#endif
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
         g_pDebugger->process();
-    #endif
+#endif
 
         if (bResult) {
             command(CM_READY);
