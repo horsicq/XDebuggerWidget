@@ -222,13 +222,13 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
     //    qDebug("Current Address2: %llX",XAbstractDebugger::getCurrentAddress(handleThread));
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
-    g_pInfoDB->updateRegsById(pBreakPointInfo->nThreadID, ui->widgetRegs->getOptions());
+    updateRegsById(pBreakPointInfo->nThreadID, ui->widgetRegs->getOptions());
 #endif
 #ifdef Q_OS_WIN
     //    g_pInfoDB->suspendThread(pBreakPointInfo->hThread);
     g_pInfoDB->updateRegsByHandle(pBreakPointInfo->hThread, ui->widgetRegs->getOptions());
 #endif
-
+    // TODO reloads signals
     g_pInfoDB->updateMemoryRegionsList();
     g_pInfoDB->updateModulesList();
     g_pInfoDB->clearRecordInfoCache();
