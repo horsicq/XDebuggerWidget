@@ -46,6 +46,8 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) : XShortcutsWidget(pParent), 
     //    qRegisterMetaType<XBinary::PROCESS_STATUS>("XBinary::PROCESS_STATUS");
     qRegisterMetaType<X_ID>("X_ID");
     qRegisterMetaType<X_HANDLE>("X_HANDLE");
+    qRegisterMetaType<X_HANDLE_IO>("X_HANDLE_IO");
+    qRegisterMetaType<X_HANDLE_MQ>("X_HANDLE_MQ");
 
     connect(this, SIGNAL(cleanUpSignal()), this, SLOT(cleanUp()));
     connect(this, SIGNAL(infoMessage(QString)), this, SLOT(infoMessageSlot(QString)));
@@ -152,7 +154,11 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
         //    connect(this,SIGNAL(testSignal(X_ID)),g_pDebugger,SLOT(testSlot(X_ID)),Qt::QueuedConnection);
 
-        connect(g_pInfoDB, SIGNAL(reloadSignal(bool)), this, SLOT(onReloadSignal(bool)));
+        connect(g_pInfoDB, SIGNAL(reloadSignal(bool)), this, SLOT(onReloadSignal(bool))); // TODO remove
+
+        connect(g_pInfoDB, SIGNAL(memoryRegionsListChanged()), this, SLOT(memoryRegionsListChangedSlot()));
+        connect(g_pInfoDB, SIGNAL(modulesListChanged()), this, SLOT(modulesListChangedSlot()));
+        connect(g_pInfoDB, SIGNAL(registersListChanged()), this, SLOT(registersListChangedSlot()));
 
 #ifdef Q_OS_WIN
         g_pDebugger->moveToThread(g_pThread);
@@ -233,7 +239,7 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
     g_pInfoDB->updateModulesList();
     g_pInfoDB->clearRecordInfoCache();
 
-    g_pInfoDB->reload(true);
+//    g_pInfoDB->reload(true);
 }
 
 void XDebuggerWidget::onExitProcess(XInfoDB::EXITPROCESS_INFO *pExitProcessInfo)
@@ -282,6 +288,7 @@ void XDebuggerWidget::eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pShare
 
 void XDebuggerWidget::onReloadSignal(bool bDataReload)
 {
+    qDebug("void XDebuggerWidget::onReloadSignal(bool bDataReload)");
     // TODO rework
     if (bDataReload) {
         quint64 nInstructionPointer = g_pInfoDB->getCurrentInstructionPointerCache();
@@ -293,7 +300,7 @@ void XDebuggerWidget::onReloadSignal(bool bDataReload)
         followInStack(nStackPointer);
     }
 
-    reload();
+    reload(); // TODO Check remove
 }
 
 void XDebuggerWidget::on_toolButtonRun_clicked()
@@ -797,6 +804,7 @@ void XDebuggerWidget::followInHex(XADDR nAddress)
             XHexView::OPTIONS hexOptions = {};
             hexOptions.nStartAddress = g_mrHex.nAddress;
             hexOptions.nStartSelectionOffset = nAddress - hexOptions.nStartAddress;
+            hexOptions.addressMode = XHexView::MODE_ADDRESS;
             ui->widgetHex->setData(pProcessMemory, hexOptions, false);
             ui->widgetHex->setReadonly(false);
         }
@@ -867,4 +875,55 @@ void XDebuggerWidget::on_toolButtonTraceStop_clicked()
 void XDebuggerWidget::on_comboBoxHexRegion_currentIndexChanged(int nIndex)
 {
     // TODO
+}
+
+void XDebuggerWidget::memoryRegionsListChangedSlot()
+{
+    qDebug("void XDebuggerWidget::memoryRegionsListChangedSlot()");
+
+    QList<XProcess::MEMORY_REGION> *pListMR = g_pInfoDB->getCurrentMemoryRegionsList();
+
+    ui->comboBoxHexRegion->blockSignals(true);
+
+    ui->comboBoxHexRegion->clear();
+
+    qint32 nNumberOfRecirds = pListMR->count();
+
+    for (qint32 i = 0; i < nNumberOfRecirds; i++) {
+        QString sString = XProcess::memoryRegionToString(pListMR->at(i));
+
+        ui->comboBoxHexRegion->addItem(sString);
+
+        // TODO
+    }
+
+    ui->comboBoxHexRegion->blockSignals(false);
+}
+
+void XDebuggerWidget::modulesListChangedSlot()
+{
+    // TODO change Threads
+    qDebug("void XDebuggerWidget::modulesListChangedSlot()");
+}
+
+void XDebuggerWidget::registersListChangedSlot()
+{
+    qDebug("void XDebuggerWidget::registersListChangedSlot()");
+    updateWidget(MT_CPU); // TODO update if active or there are changes
+}
+
+void XDebuggerWidget::updateWidget(MT mt)
+{
+    // TODO Hashes
+    if (mt == MT_CPU) {
+        quint64 nInstructionPointer = g_pInfoDB->getCurrentInstructionPointerCache();
+        quint64 nStackPointer = g_pInfoDB->getCurrentStackPointerCache();
+
+        // TODO Check tab
+        followInDisasm(nInstructionPointer);
+        followInHex(nInstructionPointer);  // TODO
+        followInStack(nStackPointer);
+
+        ui->widgetRegs->reload();
+    }
 }

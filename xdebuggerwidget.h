@@ -143,7 +143,7 @@ private slots:
     void eventExitThread(XInfoDB::EXITTHREAD_INFO *pExitThreadInfo);
     void eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pSharedObjectInfo);
     void eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pSharedObjectInfo);
-    void onReloadSignal(bool bDataReload);
+    void onReloadSignal(bool bDataReload); // TODO Check remove
     void on_toolButtonRun_clicked();
     void on_toolButtonStepInto_clicked();
     void on_toolButtonStepOver_clicked();
@@ -164,6 +164,10 @@ private slots:
     void on_toolButtonTraceStepOver_clicked();
     void on_toolButtonTraceStop_clicked();
     void on_comboBoxHexRegion_currentIndexChanged(int nIndex);
+    void memoryRegionsListChangedSlot();
+    void modulesListChangedSlot();
+    void registersListChangedSlot();
+    void updateWidget(MT mt);
 
 protected:
     virtual void registerShortcuts(bool bState);
