@@ -128,7 +128,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
         ui->widgetProcessModules->setXInfoDB(g_pDebugger->getXInfoDB(), false);
         ui->widgetProcessMemoryMap->setXInfoDB(g_pDebugger->getXInfoDB(), false);
         ui->widgetBreakpoints->setXInfoDB(g_pDebugger->getXInfoDB(), false);
-        ui->widgetSymbols->setXInfoDB(g_pDebugger->getXInfoDB(), false);
+        ui->widgetSymbols->setData(g_pDebugger->getXInfoDB(), XSymbolsWidget::MODE_ALL, QVariant(), false);
         ui->widgetThreads->setXInfoDB(g_pDebugger->getXInfoDB(), false);
 
         g_osInfo = XProcess::getOsInfo();
