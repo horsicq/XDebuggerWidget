@@ -232,11 +232,12 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 #endif
 #ifdef Q_OS_WIN
     //    g_pInfoDB->suspendThread(pBreakPointInfo->hThread);
-    g_pInfoDB->updateRegsByHandle(pBreakPointInfo->hThread, ui->widgetRegs->getOptions());
+    g_pInfoDB->updateRegsByHandle(pBreakPointInfo->hThread, ui->widgetRegs->getOptions()); // TODO get All reg options
 #endif
     // TODO reloads signals
     g_pInfoDB->updateMemoryRegionsList();
     g_pInfoDB->updateModulesList();
+    g_pInfoDB->updateThreadsList();
     g_pInfoDB->clearRecordInfoCache();
 
 //    g_pInfoDB->reload(true);
