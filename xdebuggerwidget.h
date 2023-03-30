@@ -166,6 +166,7 @@ private slots:
     void on_comboBoxHexRegion_currentIndexChanged(int nIndex);
     void memoryRegionsListChangedSlot();
     void modulesListChangedSlot();
+    void threadsListChangedSlot();
     void registersListChangedSlot();
     void updateWidget(MT mt);
 

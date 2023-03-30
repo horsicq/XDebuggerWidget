@@ -158,6 +158,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
         connect(g_pInfoDB, SIGNAL(memoryRegionsListChanged()), this, SLOT(memoryRegionsListChangedSlot()));
         connect(g_pInfoDB, SIGNAL(modulesListChanged()), this, SLOT(modulesListChangedSlot()));
+        connect(g_pInfoDB, SIGNAL(threadsListChanged()), this, SLOT(threadsListChangedSlot()));
         connect(g_pInfoDB, SIGNAL(registersListChanged()), this, SLOT(registersListChangedSlot()));
 
 #ifdef Q_OS_WIN
@@ -226,6 +227,9 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
     // mb TODO regs
 
     //    qDebug("Current Address2: %llX",XAbstractDebugger::getCurrentAddress(handleThread));
+    g_pInfoDB->updateMemoryRegionsList();
+    g_pInfoDB->updateModulesList();
+    g_pInfoDB->updateThreadsList();
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
     g_pInfoDB->updateRegsById(pBreakPointInfo->nThreadID, ui->widgetRegs->getOptions());
@@ -235,9 +239,7 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
     g_pInfoDB->updateRegsByHandle(pBreakPointInfo->hThread, ui->widgetRegs->getOptions()); // TODO get All reg options
 #endif
     // TODO reloads signals
-    g_pInfoDB->updateMemoryRegionsList();
-    g_pInfoDB->updateModulesList();
-    g_pInfoDB->updateThreadsList();
+
     g_pInfoDB->clearRecordInfoCache();
 
 //    g_pInfoDB->reload(true);
@@ -905,6 +907,11 @@ void XDebuggerWidget::modulesListChangedSlot()
 {
     // TODO change Threads
     qDebug("void XDebuggerWidget::modulesListChangedSlot()");
+}
+
+void XDebuggerWidget::threadsListChangedSlot()
+{
+    qDebug("void XDebuggerWidget::threadsListChangedSlot()");
 }
 
 void XDebuggerWidget::registersListChangedSlot()
