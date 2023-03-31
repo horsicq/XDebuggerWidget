@@ -31,6 +31,7 @@
 #ifdef Q_OS_MACOS
 #include "xosxdebugger.h"
 #endif
+#include "xdebuggerconsole.h"
 #include "xshortcutswidget.h"
 #include "xinfodb.h"
 #include "xdebuggerloaddialog.h"

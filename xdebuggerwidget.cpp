@@ -231,12 +231,21 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
     g_pInfoDB->updateModulesList();
     g_pInfoDB->updateThreadsList();
 
+    XInfoDB::XREG_OPTIONS regOptions = {};
+    regOptions.bIP = true;
+    regOptions.bDebug = true;
+    regOptions.bFlags = true;
+    regOptions.bFloat = true;
+    regOptions.bGeneral = true;
+    regOptions.bSegments = true;
+    regOptions.bXMM = true;
+
 #if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
     g_pInfoDB->updateRegsById(pBreakPointInfo->nThreadID, ui->widgetRegs->getOptions());
 #endif
 #ifdef Q_OS_WIN
     //    g_pInfoDB->suspendThread(pBreakPointInfo->hThread);
-    g_pInfoDB->updateRegsByHandle(pBreakPointInfo->hThread, ui->widgetRegs->getOptions()); // TODO get All reg options
+    g_pInfoDB->updateRegsByHandle(pBreakPointInfo->hThread, regOptions);
 #endif
     // TODO reloads signals
 
