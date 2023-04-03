@@ -119,7 +119,6 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 #ifdef Q_OS_MACOS
         g_pDebugger = new XOSXDebugger(0, g_pInfoDB);
 #endif
-
         ui->widgetDisasm->setXInfoDB(g_pDebugger->getXInfoDB());
         ui->widgetHex->setXInfoDB(g_pDebugger->getXInfoDB());
         ui->widgetRegs->setXInfoDB(g_pDebugger->getXInfoDB());
@@ -944,3 +943,24 @@ void XDebuggerWidget::updateWidget(MT mt)
         ui->widgetRegs->reload();
     }
 }
+
+void XDebuggerWidget::on_pushButtonCommandRun_clicked()
+{
+    QString sCommand = ui->lineEditCommand->text();
+
+    XDebuggerConsole::COMMAND_RESULT commandResult = {};
+
+    XDebuggerConsole::commandControl(&commandResult, sCommand, g_pDebugger);
+
+    qint32 nNumberOfTexts = commandResult.listTexts.count();
+    qint32 nNumberOfErrors = commandResult.listErrors.count();
+
+    for (qint32 i = 0; i < nNumberOfTexts; i++) {
+        infoMessageSlot(commandResult.listTexts.at(i));
+    }
+
+    for (qint32 i = 0; i < nNumberOfErrors; i++) {
+        errorMessageSlot(commandResult.listErrors.at(i));
+    }
+}
+

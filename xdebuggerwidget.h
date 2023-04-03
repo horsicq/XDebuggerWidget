@@ -170,6 +170,7 @@ private slots:
     void threadsListChangedSlot();
     void registersListChangedSlot();
     void updateWidget(MT mt);
+    void on_pushButtonCommandRun_clicked();
 
 protected:
     virtual void registerShortcuts(bool bState);

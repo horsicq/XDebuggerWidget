@@ -248,6 +248,43 @@
       </widget>
      </item>
      <item>
+      <widget class="QGroupBox" name="groupBoxCommand">
+       <property name="title">
+        <string>Command</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="lineEditCommand"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButtonCommandRun">
+          <property name="maximumSize">
+           <size>
+            <width>24</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="text">
+           <string notr="true">&gt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -395,8 +432,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>682</width>
-                 <height>253</height>
+                 <width>566</width>
+                 <height>484</height>
                 </rect>
                </property>
                <property name="sizePolicy">
