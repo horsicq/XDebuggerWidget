@@ -153,7 +153,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
 
         //    connect(this,SIGNAL(testSignal(X_ID)),g_pDebugger,SLOT(testSlot(X_ID)),Qt::QueuedConnection);
 
-        connect(g_pInfoDB, SIGNAL(reloadSignal(bool)), this, SLOT(onReloadSignal(bool))); // TODO remove
+        connect(g_pInfoDB, SIGNAL(reloadSignal(bool)), this, SLOT(onReloadSignal(bool)));  // TODO remove
 
         connect(g_pInfoDB, SIGNAL(memoryRegionsListChanged()), this, SLOT(memoryRegionsListChangedSlot()));
         connect(g_pInfoDB, SIGNAL(modulesListChanged()), this, SLOT(modulesListChangedSlot()));
@@ -250,7 +250,7 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 
     g_pInfoDB->clearRecordInfoCache();
 
-//    g_pInfoDB->reload(true);
+    //    g_pInfoDB->reload(true);
 }
 
 void XDebuggerWidget::onExitProcess(XInfoDB::EXITPROCESS_INFO *pExitProcessInfo)
@@ -311,7 +311,7 @@ void XDebuggerWidget::onReloadSignal(bool bDataReload)
         followInStack(nStackPointer);
     }
 
-    reload(); // TODO Check remove
+    reload();  // TODO Check remove
 }
 
 void XDebuggerWidget::on_toolButtonRun_clicked()
@@ -925,7 +925,7 @@ void XDebuggerWidget::threadsListChangedSlot()
 void XDebuggerWidget::registersListChangedSlot()
 {
     qDebug("void XDebuggerWidget::registersListChangedSlot()");
-    updateWidget(MT_CPU); // TODO update if active or there are changes
+    updateWidget(MT_CPU);  // TODO update if active or there are changes
 }
 
 void XDebuggerWidget::updateWidget(MT mt)
@@ -963,4 +963,3 @@ void XDebuggerWidget::on_pushButtonCommandRun_clicked()
         errorMessageSlot(commandResult.listErrors.at(i));
     }
 }
-

@@ -22,7 +22,7 @@
 
 DW_HexView::DW_HexView(QWidget *pParent) : XHexView(pParent)
 {
-//    setAddressMode(MODE_ADDRESS);
+    //    setAddressMode(MODE_ADDRESS);
 }
 
 void DW_HexView::contextMenu(const QPoint &pos)
