@@ -586,7 +586,7 @@ XProcess *XDebuggerWidget::_getProcessMemory(XADDR nAddress, qint64 nSize)
     qint32 nCount = g_listRegions.count();
 
     for (qint32 i = 0; i < nCount; i++) {
-        if ((g_listRegions.at(i)->getInitOffset() == nAddress) && (g_listRegions.at(i)->size() == nSize)) {
+        if ((g_listRegions.at(i)->getInitLocation() == nAddress) && (g_listRegions.at(i)->size() == nSize)) {
             pResult = g_listRegions.at(i);
             bCreateNew = false;
             break;
