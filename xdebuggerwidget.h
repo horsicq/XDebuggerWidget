@@ -103,7 +103,7 @@ public:
 signals:
     void errorMessage(QString sErrorMessage);
     void infoMessage(QString sInfoMessage);
-    void cleanUpSignal();
+    void resetWidgetsSignal();
     void stateChanged();
     void testSignal(X_ID nThreadId);  // TODO remove
     //    void debugStepOverSignal();
@@ -150,6 +150,7 @@ private slots:
     void on_toolButtonStepOver_clicked();
     void _toggleBreakpoint();
     void cleanUp();
+    void resetWidgets();
     void errorMessageSlot(QString sErrorMessage);
     void infoMessageSlot(QString sInfoMessage);
     void writeToLog(QString sText);

@@ -30,9 +30,13 @@ void DW_DisasmView::_breakpointToggle()
         XADDR nAddress = getSelectionInitAddress();
 
         if (nAddress != -1) {
+            qint64 nSelectionSize = getSelectionInitSize();
+
             if (getXInfoDB()->breakpointToggle(nAddress)) {
                 getXInfoDB()->reload(true);
             }
+
+            setSelectionAddress(nAddress, nSelectionSize);
         }
     }
 }

@@ -49,7 +49,7 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) : XShortcutsWidget(pParent), 
     qRegisterMetaType<X_HANDLE_IO>("X_HANDLE_IO");
     qRegisterMetaType<X_HANDLE_MQ>("X_HANDLE_MQ");
 
-    connect(this, SIGNAL(cleanUpSignal()), this, SLOT(cleanUp()));
+    connect(this, SIGNAL(resetWidgetsSignal()), this, SLOT(resetWidgets()));
     connect(this, SIGNAL(infoMessage(QString)), this, SLOT(infoMessageSlot(QString)));
     connect(this, SIGNAL(errorMessage(QString)), this, SLOT(errorMessageSlot(QString)));
     //    ui->widgetDisasm->installEventFilter(this);
@@ -67,7 +67,6 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) : XShortcutsWidget(pParent), 
 XDebuggerWidget::~XDebuggerWidget()
 {
     //    qDebug("XDebuggerWidget::~XDebuggerWidget()");
-
     cleanUp();
 
     delete ui;
@@ -104,6 +103,7 @@ bool XDebuggerWidget::loadFile(QString sFileName)
     }
 
     if (bResult) {
+        resetWidgets();
         cleanUp();
 
         g_pInfoDB = new XInfoDB;
@@ -260,9 +260,7 @@ void XDebuggerWidget::onExitProcess(XInfoDB::EXITPROCESS_INFO *pExitProcessInfo)
 
     emit infoMessage(sString);
 
-    emit cleanUpSignal();
-
-    // TODO Clear screen
+    emit resetWidgetsSignal();
 }
 
 void XDebuggerWidget::eventCreateThread(XInfoDB::THREAD_INFO *pThreadInfo)
@@ -638,13 +636,6 @@ void XDebuggerWidget::cleanUp()
     qDebug("void XDebuggerWidget::cleanUp()");
 #endif
 
-    ui->tabWidgetMain->setCurrentIndex(MT_CPU);
-
-    ui->widgetDisasm->clear();
-    ui->widgetHex->clear();
-    ui->widgetRegs->clear();
-    ui->widgetStack->clear();
-
     if (g_pDebugger) {
         if (g_pInfoDB) {
             if (g_pInfoDB->getThreadInfos()->count()) {
@@ -686,6 +677,16 @@ void XDebuggerWidget::cleanUp()
     g_state = {};
 
     _stateChanged();
+}
+
+void XDebuggerWidget::resetWidgets()
+{
+    ui->tabWidgetMain->setCurrentIndex(MT_CPU);
+
+    ui->widgetDisasm->clear();
+    ui->widgetHex->clear();
+    ui->widgetRegs->clear();
+    ui->widgetStack->clear();
 }
 
 void XDebuggerWidget::errorMessageSlot(QString sErrorMessage)
