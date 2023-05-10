@@ -817,7 +817,7 @@ void XDebuggerWidget::followInHex(XADDR nAddress)
             hexOptions.nStartAddress = g_mrHex.nAddress;
             hexOptions.nStartSelectionOffset = nAddress - hexOptions.nStartAddress;
             hexOptions.addressMode = XHexView::MODE_ADDRESS;
-            ui->widgetHex->setData(pProcessMemory, hexOptions, false);
+            ui->widgetHex->setData(pProcessMemory, hexOptions, false, nullptr); // TODO XInfoDB !!!
             ui->widgetHex->setReadonly(false);
         }
     } else {
@@ -843,7 +843,7 @@ void XDebuggerWidget::followInStack(XADDR nAddress)
             stackOptions.nStartAddress = g_mrStack.nAddress;
             stackOptions.nCurrentAddress = nAddress;
             stackOptions.nCurrentStackPointer = nAddress;
-            ui->widgetStack->setData(pProcessMemory, stackOptions, false);
+            ui->widgetStack->setData(pProcessMemory, stackOptions, false); // TODO XInfoDB !!!
             ui->widgetStack->setReadonly(false);
         }
     } else {
