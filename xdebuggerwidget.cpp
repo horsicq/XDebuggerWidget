@@ -250,7 +250,7 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 
     g_pInfoDB->clearRecordInfoCache();
 
-    //    g_pInfoDB->reload(true);
+    g_pInfoDB->reload(true); // TODO Check
 }
 
 void XDebuggerWidget::onExitProcess(XInfoDB::EXITPROCESS_INFO *pExitProcessInfo)
@@ -703,6 +703,7 @@ void XDebuggerWidget::infoMessageSlot(QString sInfoMessage)
 
 void XDebuggerWidget::writeToLog(QString sText)
 {
+    // TODO Show in title count of new messages
     ui->plainTextEditLog->appendPlainText(sText);
 }
 
@@ -963,4 +964,6 @@ void XDebuggerWidget::on_pushButtonCommandRun_clicked()
     for (qint32 i = 0; i < nNumberOfErrors; i++) {
         errorMessageSlot(commandResult.listErrors.at(i));
     }
+
+    reload();
 }
