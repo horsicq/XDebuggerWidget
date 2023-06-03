@@ -250,7 +250,7 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 
     g_pInfoDB->clearRecordInfoCache();
 
-    g_pInfoDB->reload(true); // TODO Check
+    g_pInfoDB->reload(true);  // TODO Check
 }
 
 void XDebuggerWidget::onExitProcess(XInfoDB::EXITPROCESS_INFO *pExitProcessInfo)
