@@ -72,7 +72,7 @@ XDebuggerWidget::~XDebuggerWidget()
     delete ui;
 }
 
-bool XDebuggerWidget::loadFile(QString sFileName)
+bool XDebuggerWidget::loadFile(const QString &sFileName)
 {
     bool bResult = false;  // TODO check
 

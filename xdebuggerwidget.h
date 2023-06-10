@@ -95,7 +95,7 @@ public:
     explicit XDebuggerWidget(QWidget *pParent = nullptr);
     ~XDebuggerWidget();
 
-    bool loadFile(QString sFileName);
+    bool loadFile(const QString &sFileName);
     void setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions);
     virtual void adjustView();
     STATE getState();
