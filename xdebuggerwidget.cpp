@@ -230,15 +230,6 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
     g_pInfoDB->updateModulesList();
     g_pInfoDB->updateThreadsList();
 
-    XInfoDB::XREG_OPTIONS regOptions = {};
-    regOptions.bIP = true;
-    regOptions.bDebug = true;
-    regOptions.bFlags = true;
-    regOptions.bFloat = true;
-    regOptions.bGeneral = true;
-    regOptions.bSegments = true;
-    regOptions.bXMM = true;
-
 #if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
     g_pInfoDB->updateRegsById(pBreakPointInfo->nThreadID, ui->widgetRegs->getOptions());
 #endif
@@ -887,6 +878,7 @@ void XDebuggerWidget::on_toolButtonTraceStop_clicked()
 
 void XDebuggerWidget::on_comboBoxHexRegion_currentIndexChanged(int nIndex)
 {
+    Q_UNUSED(nIndex)
     // TODO
 }
 

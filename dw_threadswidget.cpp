@@ -26,8 +26,10 @@ DW_ThreadsWidget::DW_ThreadsWidget(QWidget *pParent) : XThreadsWidget(pParent)
 
 void DW_ThreadsWidget::contextMenu(const QPoint &pos)
 {
+    Q_UNUSED(pos)
 }
 
 void DW_ThreadsWidget::registerShortcuts(bool bState)
 {
+    Q_UNUSED(bState)
 }

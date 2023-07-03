@@ -26,8 +26,10 @@ DW_SymbolsWidget::DW_SymbolsWidget(QWidget *pParent) : XSymbolsWidget(pParent)
 
 void DW_SymbolsWidget::contextMenu(const QPoint &pos)
 {
+    Q_UNUSED(pos)
 }
 
 void DW_SymbolsWidget::registerShortcuts(bool bState)
 {
+    Q_UNUSED(bState)
 }
