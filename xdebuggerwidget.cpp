@@ -235,7 +235,7 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 #endif
 #ifdef Q_OS_WIN
     //    g_pInfoDB->suspendThread(pBreakPointInfo->hThread);
-    g_pInfoDB->updateRegsByHandle(pBreakPointInfo->hThread, regOptions);
+    g_pInfoDB->updateRegsByHandle(pBreakPointInfo->hThread, ui->widgetRegs->getOptions());
 #endif
     // TODO reloads signals
 
