@@ -22,19 +22,82 @@
 
 DW_RegistersView::DW_RegistersView(QWidget *pParent) : XRegistersView(pParent)
 {
+    memset(shortCuts, 0, sizeof shortCuts);
 }
 
 void DW_RegistersView::contextMenu(const QPoint &pos)
 {
-    Q_UNUSED(pos)
+    QMenu contextMenu(this);
 
-    // TODO
-    XRegistersView::contextMenu(pos);
+    qint32 nIndex = -1;
+    XInfoDB::XREG reg = pointToReg(pos, &nIndex);
+
+    if (nIndex != -1) {
+        qDebug("Index: %d", nIndex);
+    }
+
+    QMenu menuView(tr("View"), this);
+
+    QAction actionGeneral(QString("General"), this);
+    actionGeneral.setCheckable(true);
+    actionGeneral.setChecked(getOptions().bGeneral);
+    connect(&actionGeneral, SIGNAL(triggered()), this, SLOT(_actionViewGeneral()));
+    menuView.addAction(&actionGeneral);
+
+    QAction actionIP(QString("IP"), this);
+    actionIP.setCheckable(true);
+    actionIP.setChecked(getOptions().bIP);
+    connect(&actionIP, SIGNAL(triggered()), this, SLOT(_actionViewIP()));
+    menuView.addAction(&actionIP);
+
+#ifdef Q_PROCESSOR_X86
+    QAction actionFlags(QString("Flags"), this);
+    actionFlags.setCheckable(true);
+    actionFlags.setChecked(getOptions().bFlags);
+    connect(&actionFlags, SIGNAL(triggered()), this, SLOT(_actionViewFlags()));
+    menuView.addAction(&actionFlags);
+
+    QAction actionSegments(QString("Segments"), this);
+    actionSegments.setCheckable(true);
+    actionSegments.setChecked(getOptions().bSegments);
+    connect(&actionSegments, SIGNAL(triggered()), this, SLOT(_actionViewSegments()));
+    menuView.addAction(&actionSegments);
+
+    QAction actionDebug(QString("Debug"), this);
+    actionDebug.setCheckable(true);
+    actionDebug.setChecked(getOptions().bDebug);
+    connect(&actionDebug, SIGNAL(triggered()), this, SLOT(_actionViewDebug()));
+    menuView.addAction(&actionDebug);
+
+    QAction actionFloat(QString("Float"), this);
+    actionFloat.setCheckable(true);
+    actionFloat.setChecked(getOptions().bFloat);
+    connect(&actionFloat, SIGNAL(triggered()), this, SLOT(_actionViewFloat()));
+    menuView.addAction(&actionFloat);
+
+    QAction actionXMM(QString("XMM"), this);
+    actionXMM.setCheckable(true);
+    actionXMM.setChecked(getOptions().bXMM);
+    connect(&actionXMM, SIGNAL(triggered()), this, SLOT(_actionViewXMM()));
+    menuView.addAction(&actionXMM);
+#endif
+
+    contextMenu.addMenu(&menuView);
+
+    contextMenu.exec(viewport()->mapToGlobal(pos));
 }
 
 void DW_RegistersView::registerShortcuts(bool bState)
 {
-    Q_UNUSED(bState)
-
-    // TODO
+    if (bState) {
+        if (!shortCuts[SC_REGISTERS_EDIT])
+            shortCuts[SC_REGISTERS_EDIT] = new QShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_REGISTERS_EDIT), this, SLOT(_actionEdit()));
+    } else {
+        for (qint32 i = 0; i < __SC_SIZE; i++) {
+            if (shortCuts[i]) {
+                delete shortCuts[i];
+                shortCuts[i] = nullptr;
+            }
+        }
+    }
 }

@@ -179,6 +179,7 @@ bool XDebuggerWidget::loadFile(const QString &sFileName)
 void XDebuggerWidget::setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions)
 {
     setActive(true);
+    ui->widgetRegs->setActive(true);
 
     ui->widgetDisasm->setGlobal(pShortcuts, pXOptions);
     ui->widgetHex->setGlobal(pShortcuts, pXOptions);
@@ -202,6 +203,21 @@ void XDebuggerWidget::adjustView()
     ui->widgetThreads->adjustView();
 
     XShortcutsWidget::adjustView();
+}
+
+void XDebuggerWidget::reloadShortcuts()
+{
+    ui->widgetDisasm->reloadShortcuts();
+    ui->widgetHex->reloadShortcuts();
+    ui->widgetRegs->reloadShortcuts();
+    ui->widgetStack->reloadShortcuts();
+    ui->widgetProcessModules->reloadShortcuts();
+    ui->widgetProcessMemoryMap->reloadShortcuts();
+    ui->widgetBreakpoints->reloadShortcuts();
+    ui->widgetSymbols->reloadShortcuts();
+    ui->widgetThreads->adjustView();
+
+    XShortcutsWidget::reloadShortcuts();
 }
 
 XDebuggerWidget::STATE XDebuggerWidget::getState()

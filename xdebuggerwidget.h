@@ -98,6 +98,7 @@ public:
     bool loadFile(const QString &sFileName);
     void setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions);
     virtual void adjustView();
+    virtual void reloadShortcuts();
     STATE getState();
 
 signals:

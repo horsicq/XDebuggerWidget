@@ -26,12 +26,21 @@
 class DW_RegistersView : public XRegistersView {
     Q_OBJECT
 
+    enum SHORTCUT {
+        SC_REGISTERS_EDIT,
+        __SC_SIZE,
+        // TODO more
+    };
+
 public:
     explicit DW_RegistersView(QWidget *pParent = nullptr);
 
 protected:
     virtual void contextMenu(const QPoint &pos);
     virtual void registerShortcuts(bool bState);
+
+private:
+    QShortcut *shortCuts[__SC_SIZE];
 };
 
 #endif  // DW_REGISTERSVIEW_H
