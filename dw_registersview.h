@@ -39,6 +39,14 @@ protected:
     virtual void contextMenu(const QPoint &pos);
     virtual void registerShortcuts(bool bState);
 
+private slots:
+    void _followInDisasmSlot();
+    void _followInHexSlot();
+
+signals:
+    void followInHex(XADDR nAddress);
+    void followInDisasm(XADDR nAddress);
+
 private:
     QShortcut *shortCuts[__SC_SIZE];
 };

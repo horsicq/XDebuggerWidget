@@ -29,11 +29,37 @@ void DW_RegistersView::contextMenu(const QPoint &pos)
 {
     QMenu contextMenu(this);
 
+    QAction actionEdit(QString("Edit"), this);
+    QMenu menuFollowIn(tr("Follow in"), this);
+    QAction actionFollowInDisasm(tr("Disasm"), this);
+    QAction actionFollowInHex(tr("Hex"), this);
+
     qint32 nIndex = -1;
     XInfoDB::XREG reg = pointToReg(pos, &nIndex);
 
     if (nIndex != -1) {
-        qDebug("Index: %d", nIndex);
+        actionEdit.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_REGISTERS_EDIT));
+        connect(&actionEdit, SIGNAL(triggered()), this, SLOT(_actionEdit()));
+        contextMenu.addAction(&actionEdit);
+#ifdef Q_PROCESSOR_X86_32
+        XADDR nAddress = getXinfoDB()->getCurrentRegCache(reg).var.v_uint32;
+#endif
+#ifdef Q_PROCESSOR_X86_64
+        XADDR nAddress = getXinfoDB()->getCurrentRegCache(reg).var.v_uint64;
+#endif
+        if (getXinfoDB()->isAddressValid(nAddress)) {
+            actionFollowInDisasm.setProperty("ADDRESS", nAddress);
+            actionFollowInDisasm.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_REGISTERS_FOLLOWIN_DISASM));
+            connect(&actionFollowInDisasm, SIGNAL(triggered()), this, SLOT(_followInDisasmSlot()));
+
+            actionFollowInHex.setProperty("ADDRESS", nAddress);
+            actionFollowInHex.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_REGISTERS_FOLLOWIN_HEX));
+            connect(&actionFollowInHex, SIGNAL(triggered()), this, SLOT(_followInHexSlot()));
+
+            menuFollowIn.addAction(&actionFollowInDisasm);
+            menuFollowIn.addAction(&actionFollowInHex);
+            contextMenu.addMenu(&menuFollowIn);
+        }
     }
 
     QMenu menuView(tr("View"), this);
@@ -99,5 +125,27 @@ void DW_RegistersView::registerShortcuts(bool bState)
                 shortCuts[i] = nullptr;
             }
         }
+    }
+}
+
+void DW_RegistersView::_followInDisasmSlot()
+{
+    QAction *pAction = qobject_cast<QAction *>(sender());
+
+    if (pAction) {
+        XADDR nAddress = pAction->property("ADDRESS").toULongLong();
+
+        emit followInDisasm(nAddress);
+    }
+}
+
+void DW_RegistersView::_followInHexSlot()
+{
+    QAction *pAction = qobject_cast<QAction *>(sender());
+
+    if (pAction) {
+        XADDR nAddress = pAction->property("ADDRESS").toULongLong();
+
+        emit followInHex(nAddress);
     }
 }

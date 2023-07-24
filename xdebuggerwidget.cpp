@@ -60,6 +60,8 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) : XShortcutsWidget(pParent), 
     connect(ui->widgetHex, SIGNAL(followInDisasm(XADDR)), this, SLOT(followInDisasm(XADDR)));
     connect(ui->widgetStack, SIGNAL(followInHex(XADDR)), this, SLOT(followInHex(XADDR)));
     connect(ui->widgetStack, SIGNAL(followInDisasm(XADDR)), this, SLOT(followInDisasm(XADDR)));
+    connect(ui->widgetRegs, SIGNAL(followInHex(XADDR)), this, SLOT(followInHex(XADDR)));
+    connect(ui->widgetRegs, SIGNAL(followInDisasm(XADDR)), this, SLOT(followInDisasm(XADDR)));
 
     ui->tabWidgetMain->setCurrentIndex(MT_CPU);
 }
