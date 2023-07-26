@@ -302,7 +302,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidgetMain">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabCPU">
       <attribute name="title">
@@ -379,9 +379,6 @@
             <property name="bottomMargin">
              <number>0</number>
             </property>
-            <item>
-             <widget class="QComboBox" name="comboBoxHexRegion"/>
-            </item>
             <item>
              <widget class="DW_HexView" name="widgetHex" native="true">
               <property name="sizePolicy">

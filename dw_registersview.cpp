@@ -60,6 +60,15 @@ void DW_RegistersView::contextMenu(const QPoint &pos)
             menuFollowIn.addAction(&actionFollowInHex);
             contextMenu.addMenu(&menuFollowIn);
         }
+
+        // TODO Follow in stack if address
+        // TODO Copy value
+        // TODO Zero value
+        // TODO Set to 1
+        // TODO invert
+        // TODO increment
+        // TODO decrement
+        contextMenu.addSeparator();
     }
 
     QMenu menuView(tr("View"), this);
