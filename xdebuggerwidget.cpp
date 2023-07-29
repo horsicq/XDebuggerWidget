@@ -156,7 +156,7 @@ bool XDebuggerWidget::loadFile(const QString &sFileName)
 
         connect(g_pInfoDB, SIGNAL(reloadSignal(bool)), this, SLOT(onReloadSignal(bool)));  // TODO remove
 
-        //connect(g_pInfoDB, SIGNAL(memoryRegionsListChanged()), this, SLOT(memoryRegionsListChangedSlot()));
+        // connect(g_pInfoDB, SIGNAL(memoryRegionsListChanged()), this, SLOT(memoryRegionsListChangedSlot()));
         connect(g_pInfoDB, SIGNAL(modulesListChanged()), this, SLOT(modulesListChangedSlot()));
         connect(g_pInfoDB, SIGNAL(threadsListChanged()), this, SLOT(threadsListChangedSlot()));
         connect(g_pInfoDB, SIGNAL(registersListChanged()), this, SLOT(registersListChangedSlot()));
@@ -899,9 +899,9 @@ void XDebuggerWidget::on_comboBoxHexRegion_currentIndexChanged(int nIndex)
     // TODO
 }
 
-//void XDebuggerWidget::memoryRegionsListChangedSlot()
+// void XDebuggerWidget::memoryRegionsListChangedSlot()
 //{
-//    qDebug("void XDebuggerWidget::memoryRegionsListChangedSlot()");
+//     qDebug("void XDebuggerWidget::memoryRegionsListChangedSlot()");
 
 //    QList<XProcess::MEMORY_REGION> *pListMR = g_pInfoDB->getCurrentMemoryRegionsList();
 

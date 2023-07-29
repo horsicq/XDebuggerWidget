@@ -167,7 +167,7 @@ private slots:
     void on_toolButtonTraceStepOver_clicked();
     void on_toolButtonTraceStop_clicked();
     void on_comboBoxHexRegion_currentIndexChanged(int nIndex);
-//    void memoryRegionsListChangedSlot();
+    //    void memoryRegionsListChangedSlot();
     void modulesListChangedSlot();
     void threadsListChangedSlot();
     void registersListChangedSlot();
