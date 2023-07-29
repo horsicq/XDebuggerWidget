@@ -152,7 +152,6 @@ bool XDebuggerWidget::loadFile(const QString &sFileName)
                 Qt::DirectConnection);
 
         //    connect(this,SIGNAL(testSignal(X_ID)),g_pDebugger,SLOT(testSlot(X_ID)),Qt::BlockingQueuedConnection);
-
         //    connect(this,SIGNAL(testSignal(X_ID)),g_pDebugger,SLOT(testSlot(X_ID)),Qt::QueuedConnection);
 
         connect(g_pInfoDB, SIGNAL(reloadSignal(bool)), this, SLOT(onReloadSignal(bool)));  // TODO remove
