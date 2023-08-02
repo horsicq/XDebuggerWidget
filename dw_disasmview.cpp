@@ -67,7 +67,7 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
 
             QAction actionGoToAddress(tr("Address"), this);
             actionGoToAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_GOTO_ADDRESS));
-            connect(&actionGoToAddress, SIGNAL(triggered()), this, SLOT(_goToAddressSlot()));
+            connect(&actionGoToAddress, SIGNAL(triggered()), this, SLOT(_goToAddressSlot())); // TODO go to custom slot
 
             QAction actionCopyAddress(tr("Address"), this);
             actionCopyAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_COPY_ADDRESS));
