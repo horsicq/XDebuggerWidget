@@ -826,7 +826,7 @@ void XDebuggerWidget::followInHex(XADDR nAddress)
             hexOptions.nStartAddress = g_mrHex.nAddress;
             hexOptions.nStartSelectionOffset = nAddress - hexOptions.nStartAddress;
             hexOptions.addressMode = XHexView::LOCMODE_ADDRESS;
-            ui->widgetHex->setData(pProcessMemory, hexOptions, false, nullptr);  // TODO XInfoDB !!!
+            ui->widgetHex->setData(pProcessMemory, hexOptions, false);
             ui->widgetHex->setReadonly(false);
         }
     } else {
