@@ -180,7 +180,6 @@ bool XDebuggerWidget::loadFile(const QString &sFileName)
 void XDebuggerWidget::setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions)
 {
     setActive(true);
-    ui->widgetRegs->setActive(true);
 
     ui->widgetDisasm->setGlobal(pShortcuts, pXOptions);
     ui->widgetHex->setGlobal(pShortcuts, pXOptions);
