@@ -26,6 +26,9 @@ XDebuggerLoadDialog::XDebuggerLoadDialog(QWidget *pParent, XAbstractDebugger::OP
     ui->setupUi(this);
 
     g_pOptions = pOptions;
+
+    ui->lineEditFilename->setText(pOptions->sFileName);
+    ui->lineEditArguments->setText(pOptions->sArguments);
 }
 
 XDebuggerLoadDialog::~XDebuggerLoadDialog()
@@ -40,7 +43,8 @@ void XDebuggerLoadDialog::on_pushButtonCancel_clicked()
 
 void XDebuggerLoadDialog::on_pushButtonOK_clicked()
 {
-    // TODO
+    g_pOptions->sFileName = ui->lineEditFilename->text();
+    g_pOptions->sArguments = ui->lineEditArguments->text();
 
     accept();
 }

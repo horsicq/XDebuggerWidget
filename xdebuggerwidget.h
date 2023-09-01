@@ -95,7 +95,7 @@ public:
     explicit XDebuggerWidget(QWidget *pParent = nullptr);
     ~XDebuggerWidget();
 
-    bool loadFile(const QString &sFileName);
+    bool loadFile(const QString &sFileName, bool bShowLoadDialog);
     void setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions);
     virtual void adjustView();
     virtual void reloadShortcuts();
@@ -166,7 +166,6 @@ private slots:
     void on_toolButtonTraceStepInto_clicked();
     void on_toolButtonTraceStepOver_clicked();
     void on_toolButtonTraceStop_clicked();
-    void on_comboBoxHexRegion_currentIndexChanged(int nIndex);
     //    void memoryRegionsListChangedSlot();
     void modulesListChangedSlot();
     void threadsListChangedSlot();

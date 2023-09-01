@@ -74,15 +74,13 @@ XDebuggerWidget::~XDebuggerWidget()
     delete ui;
 }
 
-bool XDebuggerWidget::loadFile(const QString &sFileName)
+bool XDebuggerWidget::loadFile(const QString &sFileName, bool bShowLoadDialog)
 {
     bool bResult = false;  // TODO check
 
     // TODO Check function
 
-    bool bSkipLoadDialog = true;
-
-    if (bSkipLoadDialog) {
+    if (!bShowLoadDialog) {
         bResult = true;
     }
 
@@ -91,12 +89,14 @@ bool XDebuggerWidget::loadFile(const QString &sFileName)
     // TODO auto analyse
     options.bShowConsole = true;
     options.sFileName = sFileName;
+    options.sDirectory = XBinary::getFileDirectory(sFileName);
+
     options.bBreakpointOnSystem = getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_SYSTEM).toBool();
     options.bBreakpointOnProgramEntryPoint = getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_ENTRYPOINT).toBool();
     options.bBreakPointOnDLLMain = getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_DLLMAIN).toBool();
     options.bBreakPointOnTLSFunction = getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_TLSFUNCTIONS).toBool();
 
-    if (!bSkipLoadDialog) {
+    if (bShowLoadDialog) {
         XDebuggerLoadDialog debuggerLoadDialog(this, &options);
 
         if (debuggerLoadDialog.exec() == QDialog::Accepted) {
@@ -890,12 +890,6 @@ void XDebuggerWidget::on_toolButtonTraceStepOver_clicked()
 void XDebuggerWidget::on_toolButtonTraceStop_clicked()
 {
     traceStop();
-}
-
-void XDebuggerWidget::on_comboBoxHexRegion_currentIndexChanged(int nIndex)
-{
-    Q_UNUSED(nIndex)
-    // TODO
 }
 
 // void XDebuggerWidget::memoryRegionsListChangedSlot()
