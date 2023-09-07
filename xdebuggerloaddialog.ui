@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>530</width>
-    <height>258</height>
+    <height>396</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
     <widget class="QGroupBox" name="groupBoxFilename">
      <property name="title">
@@ -67,6 +67,124 @@
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBoxDirectory">
+     <property name="title">
+      <string>Directory</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="lineEditDirectory"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QGroupBox" name="groupBoxOptions">
+       <property name="title">
+        <string>Options</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QCheckBox" name="checkBoxShowConsole">
+          <property name="text">
+           <string>Show console</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBoxBreakpoints">
+       <property name="title">
+        <string>Breakpoints</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QCheckBox" name="checkBoxBreakpointSystem">
+          <property name="text">
+           <string>System</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBoxBreakpointEntryPoint">
+          <property name="text">
+           <string>Entry point</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBoxBreakpointDLLMain">
+          <property name="text">
+           <string>DLL main</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBoxBreakpointTLSFunctions">
+          <property name="text">
+           <string>TLS functions</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <spacer name="verticalSpacer">

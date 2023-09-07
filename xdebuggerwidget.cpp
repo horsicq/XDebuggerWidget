@@ -87,14 +87,35 @@ bool XDebuggerWidget::loadFile(const QString &sFileName, bool bShowLoadDialog)
     XAbstractDebugger::OPTIONS options = {};
 
     // TODO auto analyse
-    options.bShowConsole = true;
+    QSet<XBinary::FT> ftTypes = XFormats::getFileTypes(sFileName);
+
+    if (ftTypes.contains(XBinary::FT_PE)) {
+        QFile file;
+        file.setFileName(sFileName);
+
+        if (file.open(QIODevice::ReadOnly)) {
+            XPE pe(&file);
+
+            if (pe.isValid()) {
+                options.bShowConsole = pe.isConsole();
+                if (pe.isDll()) {
+                    options.bBreakpointDLLMain = true;
+                } else {
+                    options.bBreakpointEntryPoint = true;
+                }
+
+                if (pe.isTLSCallbacksPresent()) {
+                    options.bBreakpointTLSFunction = true;
+                }
+            }
+
+            file.close();
+        }
+    }
+
+    options.bBreakpointSystem = true;
     options.sFileName = sFileName;
     options.sDirectory = XBinary::getFileDirectory(sFileName);
-
-    options.bBreakpointOnSystem = getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_SYSTEM).toBool();
-    options.bBreakpointOnProgramEntryPoint = getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_ENTRYPOINT).toBool();
-    options.bBreakPointOnDLLMain = getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_DLLMAIN).toBool();
-    options.bBreakPointOnTLSFunction = getGlobalOptions()->getValue(XOptions::ID_DEBUGGER_BREAKPOINT_TLSFUNCTIONS).toBool();
 
     if (bShowLoadDialog) {
         XDebuggerLoadDialog debuggerLoadDialog(this, &options);

@@ -29,6 +29,12 @@ XDebuggerLoadDialog::XDebuggerLoadDialog(QWidget *pParent, XAbstractDebugger::OP
 
     ui->lineEditFilename->setText(pOptions->sFileName);
     ui->lineEditArguments->setText(pOptions->sArguments);
+    ui->lineEditDirectory->setText(pOptions->sDirectory);
+    ui->checkBoxShowConsole->setChecked(pOptions->bShowConsole);
+    ui->checkBoxBreakpointDLLMain->setChecked(pOptions->bBreakpointDLLMain);
+    ui->checkBoxBreakpointEntryPoint->setChecked(pOptions->bBreakpointEntryPoint);
+    ui->checkBoxBreakpointSystem->setChecked(pOptions->bBreakpointSystem);
+    ui->checkBoxBreakpointTLSFunctions->setChecked(pOptions->bBreakpointTLSFunction);
 }
 
 XDebuggerLoadDialog::~XDebuggerLoadDialog()
@@ -45,6 +51,12 @@ void XDebuggerLoadDialog::on_pushButtonOK_clicked()
 {
     g_pOptions->sFileName = ui->lineEditFilename->text();
     g_pOptions->sArguments = ui->lineEditArguments->text();
+    g_pOptions->sDirectory = ui->lineEditDirectory->text();
+    g_pOptions->bShowConsole = ui->checkBoxShowConsole->isChecked();
+    g_pOptions->bBreakpointDLLMain = ui->checkBoxBreakpointDLLMain->isChecked();
+    g_pOptions->bBreakpointTLSFunction = ui->checkBoxBreakpointTLSFunctions->isChecked();
+    g_pOptions->bBreakpointEntryPoint = ui->checkBoxBreakpointEntryPoint->isChecked();
+    g_pOptions->bBreakpointSystem = ui->checkBoxBreakpointSystem->isChecked();
 
     accept();
 }
