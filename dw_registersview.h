@@ -28,6 +28,7 @@ class DW_RegistersView : public XRegistersView {
 
     enum SHORTCUT {
         SC_REGISTERS_EDIT,
+        SC_REGISTERS_CLEAR,
         __SC_SIZE,
         // TODO more
     };

@@ -30,6 +30,7 @@ void DW_RegistersView::contextMenu(const QPoint &pos)
     QMenu contextMenu(this);
 
     QAction actionEdit(QString("Edit"), this);
+    QAction actionClear(QString("Clear"), this);
     QMenu menuFollowIn(tr("Follow in"), this);
     QAction actionFollowInDisasm(tr("Disasm"), this);
     QAction actionFollowInHex(tr("Hex"), this);
@@ -41,6 +42,9 @@ void DW_RegistersView::contextMenu(const QPoint &pos)
         actionEdit.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_REGISTERS_EDIT));
         connect(&actionEdit, SIGNAL(triggered()), this, SLOT(_actionEdit()));
         contextMenu.addAction(&actionEdit);
+        actionClear.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_REGISTERS_CLEAR));
+        connect(&actionClear, SIGNAL(triggered()), this, SLOT(_actionClear()));
+        contextMenu.addAction(&actionClear);
 #ifdef Q_PROCESSOR_X86_32
         XADDR nAddress = getXinfoDB()->getCurrentRegCache(reg).var.v_uint32;
 #endif
@@ -127,6 +131,8 @@ void DW_RegistersView::registerShortcuts(bool bState)
     if (bState) {
         if (!shortCuts[SC_REGISTERS_EDIT])
             shortCuts[SC_REGISTERS_EDIT] = new QShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_REGISTERS_EDIT), this, SLOT(_actionEdit()));
+        if (!shortCuts[SC_REGISTERS_CLEAR])
+            shortCuts[SC_REGISTERS_CLEAR] = new QShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_REGISTERS_CLEAR), this, SLOT(_actionClear()));
     } else {
         for (qint32 i = 0; i < __SC_SIZE; i++) {
             if (shortCuts[i]) {
