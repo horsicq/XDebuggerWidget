@@ -119,6 +119,12 @@ void DW_RegistersView::contextMenu(const QPoint &pos)
     actionXMM.setChecked(getOptions().bXMM);
     connect(&actionXMM, SIGNAL(triggered()), this, SLOT(_actionViewXMM()));
     menuView.addAction(&actionXMM);
+
+    QAction actionYMM(QString("YMM"), this);
+    actionYMM.setCheckable(true);
+    actionYMM.setChecked(getOptions().bYMM);
+    connect(&actionYMM, SIGNAL(triggered()), this, SLOT(_actionViewYMM()));
+    menuView.addAction(&actionYMM);
 #endif
 
     contextMenu.addMenu(&menuView);
