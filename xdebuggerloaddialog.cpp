@@ -30,16 +30,35 @@ XDebuggerLoadDialog::XDebuggerLoadDialog(QWidget *pParent, XAbstractDebugger::OP
     ui->lineEditFilename->setText(pOptions->sFileName);
     ui->lineEditArguments->setText(pOptions->sArguments);
     ui->lineEditDirectory->setText(pOptions->sDirectory);
-    ui->checkBoxShowConsole->setChecked(pOptions->bShowConsole);
-    ui->checkBoxBreakpointDLLMain->setChecked(pOptions->bBreakpointDLLMain);
-    ui->checkBoxBreakpointEntryPoint->setChecked(pOptions->bBreakpointEntryPoint);
-    ui->checkBoxBreakpointSystem->setChecked(pOptions->bBreakpointSystem);
-    ui->checkBoxBreakpointTLSFunctions->setChecked(pOptions->bBreakpointTLSFunction);
+
+    _setupCheckBox(ui->checkBoxShowConsole, XAbstractDebugger::OPTIONS_TYPE_SHOWCONSOLE);
+    _setupCheckBox(ui->checkBoxBreakpointDLLMain, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTDLLMAIN);
+    _setupCheckBox(ui->checkBoxBreakpointEntryPoint, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTENTRYPOINT);
+    _setupCheckBox(ui->checkBoxBreakpointSystem, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTSYSTEM);
+    _setupCheckBox(ui->checkBoxBreakpointTLSFunctions, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTTLSFUNCTION);
 }
 
 XDebuggerLoadDialog::~XDebuggerLoadDialog()
 {
     delete ui;
+}
+
+void XDebuggerLoadDialog::_setupCheckBox(QCheckBox *pCheckBox, XAbstractDebugger::OPTIONS_TYPE optionsStype)
+{
+    if (g_pOptions->records[optionsStype].bValid) {
+        pCheckBox->show();
+        pCheckBox->setChecked(g_pOptions->records[optionsStype].varValue.toBool());
+    } else {
+        pCheckBox->hide();
+    }
+}
+
+void XDebuggerLoadDialog::_getCheckBoxValue(QCheckBox *pCheckBox, XAbstractDebugger::OPTIONS_TYPE optionsStype)
+{
+    if (g_pOptions->records[optionsStype].bValid) {
+        pCheckBox->setChecked(g_pOptions->records[optionsStype].varValue.toBool());
+        g_pOptions->records[optionsStype].varValue = pCheckBox->isChecked();
+    }
 }
 
 void XDebuggerLoadDialog::on_pushButtonCancel_clicked()
@@ -52,11 +71,11 @@ void XDebuggerLoadDialog::on_pushButtonOK_clicked()
     g_pOptions->sFileName = ui->lineEditFilename->text();
     g_pOptions->sArguments = ui->lineEditArguments->text();
     g_pOptions->sDirectory = ui->lineEditDirectory->text();
-    g_pOptions->bShowConsole = ui->checkBoxShowConsole->isChecked();
-    g_pOptions->bBreakpointDLLMain = ui->checkBoxBreakpointDLLMain->isChecked();
-    g_pOptions->bBreakpointTLSFunction = ui->checkBoxBreakpointTLSFunctions->isChecked();
-    g_pOptions->bBreakpointEntryPoint = ui->checkBoxBreakpointEntryPoint->isChecked();
-    g_pOptions->bBreakpointSystem = ui->checkBoxBreakpointSystem->isChecked();
+    _getCheckBoxValue(ui->checkBoxShowConsole, XAbstractDebugger::OPTIONS_TYPE_SHOWCONSOLE);
+    _getCheckBoxValue(ui->checkBoxBreakpointDLLMain, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTDLLMAIN);
+    _getCheckBoxValue(ui->checkBoxBreakpointEntryPoint, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTENTRYPOINT);
+    _getCheckBoxValue(ui->checkBoxBreakpointSystem, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTSYSTEM);
+    _getCheckBoxValue(ui->checkBoxBreakpointTLSFunctions, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTTLSFUNCTION);
 
     accept();
 }

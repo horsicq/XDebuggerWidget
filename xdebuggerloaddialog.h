@@ -35,6 +35,10 @@ public:
     explicit XDebuggerLoadDialog(QWidget *pParent, XAbstractDebugger::OPTIONS *pOptions);
     ~XDebuggerLoadDialog();
 
+private:
+    void _setupCheckBox(QCheckBox *pCheckBox, XAbstractDebugger::OPTIONS_TYPE optionsStype);
+    void _getCheckBoxValue(QCheckBox *pCheckBox, XAbstractDebugger::OPTIONS_TYPE optionsStype);
+
 private slots:
     void on_pushButtonCancel_clicked();
     void on_pushButtonOK_clicked();

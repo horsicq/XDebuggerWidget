@@ -97,15 +97,22 @@ bool XDebuggerWidget::loadFile(const QString &sFileName, bool bShowLoadDialog)
             XPE pe(&file);
 
             if (pe.isValid()) {
-                options.bShowConsole = pe.isConsole();
+                if (pe.isConsole()) {
+                    options.records[XAbstractDebugger::OPTIONS_TYPE_SHOWCONSOLE].bValid = true;
+                    options.records[XAbstractDebugger::OPTIONS_TYPE_SHOWCONSOLE].varValue = true;
+                }
+
                 if (pe.isDll()) {
-                    options.bBreakpointDLLMain = true;
+                    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTDLLMAIN].bValid = true;
+                    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTDLLMAIN].varValue = true;
                 } else {
-                    options.bBreakpointEntryPoint = true;
+                    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTENTRYPOINT].bValid = true;
+                    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTENTRYPOINT].varValue = true;
                 }
 
                 if (pe.isTLSCallbacksPresent()) {
-                    options.bBreakpointTLSFunction = true;
+                    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTTLSFUNCTION].bValid = true;
+                    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTTLSFUNCTION].varValue = true;
                 }
             }
 
@@ -113,7 +120,8 @@ bool XDebuggerWidget::loadFile(const QString &sFileName, bool bShowLoadDialog)
         }
     }
 
-    options.bBreakpointSystem = true;
+    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTSYSTEM].bValid = true;
+    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTSYSTEM].varValue = true;
     options.sFileName = sFileName;
     options.sDirectory = XBinary::getFileDirectory(sFileName);
 
