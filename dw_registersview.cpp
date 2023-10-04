@@ -39,12 +39,18 @@ void DW_RegistersView::contextMenu(const QPoint &pos)
     XInfoDB::XREG reg = pointToReg(pos, &nIndex);
 
     if (nIndex != -1) {
-        actionEdit.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_REGISTERS_EDIT));
-        connect(&actionEdit, SIGNAL(triggered()), this, SLOT(_actionEdit()));
-        contextMenu.addAction(&actionEdit);
-        actionClear.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_REGISTERS_CLEAR));
-        connect(&actionClear, SIGNAL(triggered()), this, SLOT(_actionClear()));
-        contextMenu.addAction(&actionClear);
+        if (isClearEnable(reg)) {
+            actionEdit.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_REGISTERS_EDIT));
+            connect(&actionEdit, SIGNAL(triggered()), this, SLOT(_actionEdit()));
+            contextMenu.addAction(&actionEdit);
+        }
+
+        if (isClearEnable(reg)) {
+            actionClear.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_REGISTERS_CLEAR));
+            connect(&actionClear, SIGNAL(triggered()), this, SLOT(_actionClear()));
+            contextMenu.addAction(&actionClear);
+        }
+
 #ifdef Q_PROCESSOR_X86_32
         XADDR nAddress = getXinfoDB()->getCurrentRegCache(reg).var.v_uint32;
 #endif

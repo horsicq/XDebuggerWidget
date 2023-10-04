@@ -56,6 +56,7 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
             QMenu contextMenu(this);
 
             QMenu menuBreakpoint(tr("Breakpoint"), this);
+            QMenu menuBreakpointHardware(tr("Hardware"), this);
             QMenu menuGoTo(tr("Go to"), this);
             QMenu menuCopy(tr("Copy"), this);
             QMenu menuEdit(tr("Edit"), this);
@@ -85,6 +86,7 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
             contextMenu.addMenu(&menuGoTo);
 
             menuBreakpoint.addAction(&actionBreakpointToggle);
+            menuBreakpoint.addMenu(&menuBreakpointHardware);
             contextMenu.addMenu(&menuBreakpoint);
 
             menuCopy.addAction(&actionCopyAddress);
