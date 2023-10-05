@@ -31,6 +31,10 @@ public:
 
 public slots:
     void _breakpointToggle();
+    void _breakpointHardware0();
+    void _breakpointHardware1();
+    void _breakpointHardware2();
+    void _breakpointHardware3();
     void _goToAddress();
 
 protected:

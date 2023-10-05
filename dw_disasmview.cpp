@@ -41,6 +41,26 @@ void DW_DisasmView::_breakpointToggle()
     }
 }
 
+void DW_DisasmView::_breakpointHardware0()
+{
+
+}
+
+void DW_DisasmView::_breakpointHardware1()
+{
+
+}
+
+void DW_DisasmView::_breakpointHardware2()
+{
+
+}
+
+void DW_DisasmView::_breakpointHardware3()
+{
+
+}
+
 void DW_DisasmView::_goToAddress()
 {
     // TODO another modules
@@ -82,10 +102,28 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
             actionFollowInHex.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_FOLLOWIN_HEX));
             connect(&actionFollowInHex, SIGNAL(triggered()), this, SLOT(_followInHexSlot()));
 
+            QAction actionBreakpointHardware0("", this);
+            actionBreakpointHardware0.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_BREAKPOINT_HARDWARE_0));
+            connect(&actionBreakpointHardware0, SIGNAL(triggered()), this, SLOT(_breakpointHardware0()));
+            QAction actionBreakpointHardware1("", this);
+            actionBreakpointHardware1.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_BREAKPOINT_HARDWARE_1));
+            connect(&actionBreakpointHardware1, SIGNAL(triggered()), this, SLOT(_breakpointHardware1()));
+            QAction actionBreakpointHardware2("", this);
+            actionBreakpointHardware2.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_BREAKPOINT_HARDWARE_2));
+            connect(&actionBreakpointHardware2, SIGNAL(triggered()), this, SLOT(_breakpointHardware2()));
+            QAction actionBreakpointHardware3("", this);
+            actionBreakpointHardware3.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_BREAKPOINT_HARDWARE_3));
+            connect(&actionBreakpointHardware3, SIGNAL(triggered()), this, SLOT(_breakpointHardware3()));
+
             menuGoTo.addAction(&actionGoToAddress);
             contextMenu.addMenu(&menuGoTo);
 
             menuBreakpoint.addAction(&actionBreakpointToggle);
+            menuBreakpointHardware.addAction(&actionBreakpointHardware0);
+            menuBreakpointHardware.addAction(&actionBreakpointHardware1);
+            menuBreakpointHardware.addAction(&actionBreakpointHardware2);
+            menuBreakpointHardware.addAction(&actionBreakpointHardware3);
+
             menuBreakpoint.addMenu(&menuBreakpointHardware);
             contextMenu.addMenu(&menuBreakpoint);
 
