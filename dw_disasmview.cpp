@@ -43,27 +43,22 @@ void DW_DisasmView::_breakpointToggle()
 
 void DW_DisasmView::_breakpointHardware0()
 {
-
 }
 
 void DW_DisasmView::_breakpointHardware1()
 {
-
 }
 
 void DW_DisasmView::_breakpointHardware2()
 {
-
 }
 
 void DW_DisasmView::_breakpointHardware3()
 {
-
 }
 
 void DW_DisasmView::_breakpointHardwareShow()
 {
-
 }
 
 void DW_DisasmView::_goToAddress()
