@@ -61,6 +61,11 @@ void DW_DisasmView::_breakpointHardware3()
 
 }
 
+void DW_DisasmView::_breakpointHardwareShow()
+{
+
+}
+
 void DW_DisasmView::_goToAddress()
 {
     // TODO another modules
@@ -115,6 +120,10 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
             actionBreakpointHardware3.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_BREAKPOINT_HARDWARE_3));
             connect(&actionBreakpointHardware3, SIGNAL(triggered()), this, SLOT(_breakpointHardware3()));
 
+            QAction actionBreakpointHardwareShow(tr("Show"), this);
+            actionBreakpointHardwareShow.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_BREAKPOINT_HARDWARE_SHOW));
+            connect(&actionBreakpointHardwareShow, SIGNAL(triggered()), this, SLOT(_breakpointHardwareShow()));
+
             menuGoTo.addAction(&actionGoToAddress);
             contextMenu.addMenu(&menuGoTo);
 
@@ -123,6 +132,8 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
             menuBreakpointHardware.addAction(&actionBreakpointHardware1);
             menuBreakpointHardware.addAction(&actionBreakpointHardware2);
             menuBreakpointHardware.addAction(&actionBreakpointHardware3);
+            menuBreakpointHardware.addSeparator();
+            menuBreakpointHardware.addAction(&actionBreakpointHardwareShow);
 
             menuBreakpoint.addMenu(&menuBreakpointHardware);
             contextMenu.addMenu(&menuBreakpoint);
