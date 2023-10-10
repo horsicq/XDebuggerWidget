@@ -277,10 +277,17 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
     g_pInfoDB->updateRegsById(pBreakPointInfo->nThreadID, ui->widgetRegs->getOptions());
+    qDebug("TODO remove");
+    g_pInfoDB->getHardwareBP_Id(pBreakPointInfo->nThreadID);
 #endif
 #ifdef Q_OS_WIN
     //    g_pInfoDB->suspendThread(pBreakPointInfo->hThread);
     g_pInfoDB->updateRegsByHandle(pBreakPointInfo->hThread, ui->widgetRegs->getOptions());
+
+#ifdef QT_DEBUG
+    qDebug("TODO remove");
+    g_pInfoDB->getHardwareBP_Handle(pBreakPointInfo->hThread);
+#endif
 #endif
     // TODO reloads signals
 

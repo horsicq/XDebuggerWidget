@@ -29,8 +29,12 @@ void DW_RegistersView::contextMenu(const QPoint &pos)
 {
     QMenu contextMenu(this);
 
-    QAction actionEdit(QString("Edit"), this);
-    QAction actionClear(QString("Clear"), this);
+    QAction actionCopy(tr("Copy"), this);
+    actionCopy.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_REGISTERS_COPY));
+    connect(&actionCopy, SIGNAL(triggered()), this, SLOT(_actionCopy()));
+    contextMenu.addAction(&actionCopy);
+    QAction actionEdit(tr("Edit"), this);
+    QAction actionClear(tr("Clear"), this);
     QMenu menuFollowIn(tr("Follow in"), this);
     QAction actionFollowInDisasm(tr("Disasm"), this);
     QAction actionFollowInHex(tr("Hex"), this);
@@ -73,7 +77,6 @@ void DW_RegistersView::contextMenu(const QPoint &pos)
 
         // TODO Follow in stack if address
         // TODO Copy value
-        // TODO Zero value
         // TODO Set to 1
         // TODO invert
         // TODO increment
