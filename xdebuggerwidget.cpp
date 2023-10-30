@@ -84,46 +84,7 @@ bool XDebuggerWidget::loadFile(const QString &sFileName, bool bShowLoadDialog)
         bResult = true;
     }
 
-    XAbstractDebugger::OPTIONS options = {};
-
-    // TODO auto analyse
-    QSet<XBinary::FT> ftTypes = XFormats::getFileTypes(sFileName);
-
-    if (ftTypes.contains(XBinary::FT_PE)) {
-        QFile file;
-        file.setFileName(sFileName);
-
-        if (file.open(QIODevice::ReadOnly)) {
-            XPE pe(&file);
-
-            if (pe.isValid()) {
-                if (pe.isConsole()) {
-                    options.records[XAbstractDebugger::OPTIONS_TYPE_SHOWCONSOLE].bValid = true;
-                    options.records[XAbstractDebugger::OPTIONS_TYPE_SHOWCONSOLE].varValue = true;
-                }
-
-                if (pe.isDll()) {
-                    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTDLLMAIN].bValid = true;
-                    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTDLLMAIN].varValue = true;
-                } else {
-                    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTENTRYPOINT].bValid = true;
-                    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTENTRYPOINT].varValue = true;
-                }
-
-                if (pe.isTLSCallbacksPresent()) {
-                    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTTLSFUNCTION].bValid = true;
-                    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTTLSFUNCTION].varValue = true;
-                }
-            }
-
-            file.close();
-        }
-    }
-
-    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTSYSTEM].bValid = true;
-    options.records[XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTSYSTEM].varValue = true;
-    options.sFileName = sFileName;
-    options.sDirectory = XBinary::getFileDirectory(sFileName);
+    XAbstractDebugger::OPTIONS options = XAbstractDebugger::getDefaultOptions(sFileName);
 
     if (bShowLoadDialog) {
         XDebuggerLoadDialog debuggerLoadDialog(this, &options);
