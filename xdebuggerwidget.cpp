@@ -227,7 +227,7 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 {
     g_currentBreakPointInfo = *pBreakPointInfo;
 #ifdef QT_DEBUG
-    qDebug("ExceptionAddress %llx", pBreakPointInfo->nAddress);
+    qDebug("ExceptionAddress %llx", pBreakPointInfo->nExceptionAddress);
 #endif
     // mb TODO regs
 
