@@ -161,6 +161,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QCheckBox" name="checkBoxBreakpointExceptions">
+          <property name="text">
+           <string>Exceptions</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QCheckBox" name="checkBoxBreakpointEntryPoint">
           <property name="text">
            <string>Entry point</string>

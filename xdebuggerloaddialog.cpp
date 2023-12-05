@@ -34,7 +34,8 @@ XDebuggerLoadDialog::XDebuggerLoadDialog(QWidget *pParent, XAbstractDebugger::OP
     _setupCheckBox(ui->checkBoxShowConsole, XAbstractDebugger::OPTIONS_TYPE_SHOWCONSOLE);
     _setupCheckBox(ui->checkBoxBreakpointDLLMain, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTDLLMAIN);
     _setupCheckBox(ui->checkBoxBreakpointEntryPoint, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTENTRYPOINT);
-    _setupCheckBox(ui->checkBoxBreakpointSystem, XAbstractDebugger::OPTIONS_TYPE_SHOWSYSTEMEXCEPTIONS);
+    _setupCheckBox(ui->checkBoxBreakpointExceptions, XAbstractDebugger::OPTIONS_TYPE_BREAKPONTEXCEPTIONS);
+    _setupCheckBox(ui->checkBoxBreakpointSystem, XAbstractDebugger::OPTIONS_TYPE_BREAKPONTSYSTEM);
     _setupCheckBox(ui->checkBoxBreakpointTLSFunctions, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTTLSFUNCTION);
 }
 
@@ -74,7 +75,8 @@ void XDebuggerLoadDialog::on_pushButtonOK_clicked()
     _getCheckBoxValue(ui->checkBoxShowConsole, XAbstractDebugger::OPTIONS_TYPE_SHOWCONSOLE);
     _getCheckBoxValue(ui->checkBoxBreakpointDLLMain, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTDLLMAIN);
     _getCheckBoxValue(ui->checkBoxBreakpointEntryPoint, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTENTRYPOINT);
-    _getCheckBoxValue(ui->checkBoxBreakpointSystem, XAbstractDebugger::OPTIONS_TYPE_SHOWSYSTEMEXCEPTIONS);
+    _getCheckBoxValue(ui->checkBoxBreakpointExceptions, XAbstractDebugger::OPTIONS_TYPE_BREAKPONTEXCEPTIONS);
+    _getCheckBoxValue(ui->checkBoxBreakpointSystem, XAbstractDebugger::OPTIONS_TYPE_BREAKPONTSYSTEM);
     _getCheckBoxValue(ui->checkBoxBreakpointTLSFunctions, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTTLSFUNCTION);
 
     accept();
