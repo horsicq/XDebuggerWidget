@@ -35,6 +35,7 @@
 #include "xshortcutswidget.h"
 #include "xinfodb.h"
 #include "xdebuggerloaddialog.h"
+#include "dialogxinfodbtransferprocess.h"
 
 // TODO WinAPI page/ Widget
 // TODO for Linux send signal to process widget/menu
@@ -107,6 +108,8 @@ signals:
     void resetWidgetsSignal();
     void stateChanged();
     void testSignal(X_ID nThreadId);  // TODO remove
+    void addSymbols(QString sFileName, XADDR nImageBase);
+    void removeSymbols(QString sFileName);
     //    void debugStepOverSignal();
 
 public slots:
@@ -172,6 +175,8 @@ private slots:
     void registersListChangedSlot();
     void updateWidget(MT mt);
     void on_pushButtonCommandRun_clicked();
+    void addSymbolsSlot(QString sFileName, XADDR nImageBase);
+    void removeSymbolsSlot(QString sFileName);
 
 protected:
     virtual void registerShortcuts(bool bState);
@@ -200,6 +205,7 @@ private:
 
     STATE g_state;
     QTimer *g_pTimer;
+    QMutex *g_pMutex;
 };
 
 #endif  // XDEBUGGERWIDGET_H

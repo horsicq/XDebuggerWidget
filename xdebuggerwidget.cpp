@@ -29,6 +29,7 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) : XShortcutsWidget(pParent), 
 #endif
     g_pDebugger = nullptr;
     g_pInfoDB = nullptr;
+    g_pMutex = new QMutex;
 
     g_currentBreakPointInfo = {};
 
@@ -48,10 +49,14 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) : XShortcutsWidget(pParent), 
     qRegisterMetaType<X_HANDLE>("X_HANDLE");
     qRegisterMetaType<X_HANDLE_IO>("X_HANDLE_IO");
     qRegisterMetaType<X_HANDLE_MQ>("X_HANDLE_MQ");
+    qRegisterMetaType<XADDR>("XADDR");
 
     connect(this, SIGNAL(resetWidgetsSignal()), this, SLOT(resetWidgets()));
     connect(this, SIGNAL(infoMessage(QString)), this, SLOT(infoMessageSlot(QString)));
     connect(this, SIGNAL(errorMessage(QString)), this, SLOT(errorMessageSlot(QString)));
+
+    connect(this, SIGNAL(addSymbols(QString, XADDR)), this, SLOT(addSymbolsSlot(QString, XADDR)));
+    connect(this, SIGNAL(removeSymbols(QString)), this, SLOT(removeSymbolsSlot(QString)));
     //    ui->widgetDisasm->installEventFilter(this);
     //    XDebuggerWidget::registerShortcuts(true);
     //    connect(ui->widgetDisasm,SIGNAL(debugAction(XInfoDB::DEBUG_ACTION)),this,SLOT(addDebugAction(XInfoDB::DEBUG_ACTION)));
@@ -71,6 +76,7 @@ XDebuggerWidget::~XDebuggerWidget()
     //    qDebug("XDebuggerWidget::~XDebuggerWidget()");
     cleanUp();
 
+    delete g_pMutex;
     delete ui;
 }
 
@@ -221,6 +227,7 @@ void XDebuggerWidget::onCreateProcess(XInfoDB::PROCESS_INFO *pProcessInfo)
     QString sString = QString("%1 PID: %2").arg(tr("Process created"), QString::number(pProcessInfo->nProcessID));
 
     emit infoMessage(sString);
+    emit addSymbols(pProcessInfo->sFileName, pProcessInfo->nImageBase);
 }
 
 void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
@@ -264,6 +271,8 @@ void XDebuggerWidget::onExitProcess(XInfoDB::EXITPROCESS_INFO *pExitProcessInfo)
 
     emit infoMessage(sString);
 
+    removeSymbols(pExitProcessInfo->sFileName);
+
     emit resetWidgetsSignal();
 }
 
@@ -289,6 +298,7 @@ void XDebuggerWidget::eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pSharedO
     QString sString = QString("%1: %2").arg(tr("Shared object loaded"), pSharedObjectInfo->sFileName);
 
     emit infoMessage(sString);
+//    emit addSymbols(pSharedObjectInfo->sFileName, pSharedObjectInfo->nImageBase);
 }
 
 void XDebuggerWidget::eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pSharedObjectInfo)
@@ -297,6 +307,7 @@ void XDebuggerWidget::eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pShare
     QString sString = QString("%1: %2").arg(tr("Shared object unloaded"), pSharedObjectInfo->sFileName);  // TODO rewrite
 
     emit infoMessage(sString);
+//    emit removeSymbols(pSharedObjectInfo->sFileName);
 }
 
 void XDebuggerWidget::onReloadSignal(bool bDataReload)
@@ -309,7 +320,6 @@ void XDebuggerWidget::onReloadSignal(bool bDataReload)
 
         // TODO Check tab
         followInDisasm(nInstructionPointer);
-        followInHex(nInstructionPointer);  // TODO
         followInStack(nStackPointer);
     }
 
@@ -387,7 +397,9 @@ bool XDebuggerWidget::command(CM commandMode)
 
     if (g_currentBreakPointInfo.nProcessID) {
         if (g_pDebugger) {
-            if (commandMode == CM_DEBUG_RUN) {
+            if (commandMode == CM_READY) {
+                followInHex(g_pInfoDB->getProcessInfo()->nThreadLocalBase);
+            } else if (commandMode == CM_DEBUG_RUN) {
                 //                bResult=g_pInfoDB->resumeAllThreads();
                 bResult = g_pDebugger->run();
             } else if (commandMode == CM_DEBUG_STEPINTO) {
@@ -938,7 +950,6 @@ void XDebuggerWidget::updateWidget(MT mt)
 
         // TODO Check tab
         followInDisasm(nInstructionPointer);
-        followInHex(nInstructionPointer);  // TODO
         followInStack(nStackPointer);
 
         ui->widgetRegs->reload();
@@ -965,4 +976,38 @@ void XDebuggerWidget::on_pushButtonCommandRun_clicked()
     }
 
     reload();
+}
+
+void XDebuggerWidget::addSymbolsSlot(QString sFileName, XADDR nImageBase)
+{
+#ifdef QT_DEBUG
+    qDebug("addSymbolsSlot %s >>>>>>>>>", sFileName.toUtf8().data());
+#endif
+    g_pMutex->lock();
+
+    DialogXInfoDBTransferProcess dialogTransfer(this);
+
+    XInfoDBTransfer::OPTIONS options = {};
+    options.sFileName = sFileName;
+    options.nBase = nImageBase;
+    options.fileType = XBinary::FT_PE;
+
+    dialogTransfer.setData(g_pInfoDB, XInfoDBTransfer::COMMAND_SYMBOLS, options);
+
+    dialogTransfer.showDialogDelay();
+
+    g_pMutex->unlock();
+
+#ifdef QT_DEBUG
+    qDebug("addSymbolsSlot %s <<<<<<<<<", sFileName.toUtf8().data());
+#endif
+}
+
+void XDebuggerWidget::removeSymbolsSlot(QString sFileName)
+{
+#ifdef QT_DEBUG
+    qDebug("removeSymbolsSlot %s", sFileName.toUtf8().data());
+#endif
+    g_pMutex->lock();
+    g_pMutex->unlock();
 }
