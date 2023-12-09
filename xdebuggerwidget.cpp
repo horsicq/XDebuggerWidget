@@ -298,7 +298,7 @@ void XDebuggerWidget::eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pSharedO
     QString sString = QString("%1: %2").arg(tr("Shared object loaded"), pSharedObjectInfo->sFileName);
 
     emit infoMessage(sString);
-//    emit addSymbols(pSharedObjectInfo->sFileName, pSharedObjectInfo->nImageBase);
+    //    emit addSymbols(pSharedObjectInfo->sFileName, pSharedObjectInfo->nImageBase);
 }
 
 void XDebuggerWidget::eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pSharedObjectInfo)
@@ -307,7 +307,7 @@ void XDebuggerWidget::eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pShare
     QString sString = QString("%1: %2").arg(tr("Shared object unloaded"), pSharedObjectInfo->sFileName);  // TODO rewrite
 
     emit infoMessage(sString);
-//    emit removeSymbols(pSharedObjectInfo->sFileName);
+    //    emit removeSymbols(pSharedObjectInfo->sFileName);
 }
 
 void XDebuggerWidget::onReloadSignal(bool bDataReload)
