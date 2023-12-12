@@ -62,6 +62,8 @@ class XDebuggerWidget : public XShortcutsWidget {
 
     enum SHORTCUT {
         SC_DISASM_BREAKPOINTTOGGLE,
+        SC_DISASM_BREAKPOINTCONDITIONAL,
+        SC_DISASM_BREAKPOINTREMOVE,
         __SC_SIZE,
         // TODO more
     };
@@ -152,7 +154,9 @@ private slots:
     void on_toolButtonRun_clicked();
     void on_toolButtonStepInto_clicked();
     void on_toolButtonStepOver_clicked();
-    void _toggleBreakpoint();
+    void _breakpointToggle();
+    void _breakpointRemove();
+    void _breakpointConditional();
     void cleanUp();
     void resetWidgets();
     void errorMessageSlot(QString sErrorMessage);

@@ -26,6 +26,7 @@ DW_DisasmView::DW_DisasmView(QWidget *pParent) : XDisasmView(pParent)
 
 void DW_DisasmView::_breakpointToggle()
 {
+    // TODO isToggleEnable
     if (getXInfoDB()) {
         XADDR nAddress = getSelectionInitAddress();
 
@@ -38,6 +39,32 @@ void DW_DisasmView::_breakpointToggle()
 
             setSelectionAddress(nAddress, nSelectionSize);
         }
+    }
+}
+
+void DW_DisasmView::_breakpointRemove()
+{
+    // TODO isRemoveEnable
+    if (getXInfoDB()) {
+        XADDR nAddress = getSelectionInitAddress();
+
+        if (nAddress != (XADDR)-1) {
+            qint64 nSelectionSize = getSelectionInitSize();
+
+            if (getXInfoDB()->breakpointRemove(nAddress)) {
+                getXInfoDB()->reload(true);
+            }
+
+            setSelectionAddress(nAddress, nSelectionSize);
+        }
+    }
+}
+
+void DW_DisasmView::_breakpointConditional()
+{
+    // TODO isConditionalEnable
+    if (getXInfoDB()) {
+        // TODO
     }
 }
 
@@ -85,6 +112,14 @@ void DW_DisasmView::contextMenu(const QPoint &pos)
             QAction actionBreakpointToggle(tr("Toggle"), this);
             actionBreakpointToggle.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_BREAKPOINT_TOGGLE));
             connect(&actionBreakpointToggle, SIGNAL(triggered()), this, SLOT(_breakpointToggle()));
+
+            QAction actionBreakpointRemove(tr("Remove"), this);
+            actionBreakpointRemove.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_BREAKPOINT_REMOVE));
+            connect(&actionBreakpointRemove, SIGNAL(triggered()), this, SLOT(_breakpointRemove()));
+
+            QAction actionBreakpointConditional(tr("Conditional"), this);
+            actionBreakpointConditional.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_BREAKPOINT_CONDITIONAL));
+            connect(&actionBreakpointConditional, SIGNAL(triggered()), this, SLOT(_breakpointConditional()));
 
             QAction actionGoToAddress(tr("Address"), this);
             actionGoToAddress.setShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_GOTO_ADDRESS));

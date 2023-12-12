@@ -31,6 +31,8 @@ public:
 
 public slots:
     void _breakpointToggle();
+    void _breakpointRemove();
+    void _breakpointConditional();
     void _breakpointHardware0();
     void _breakpointHardware1();
     void _breakpointHardware2();

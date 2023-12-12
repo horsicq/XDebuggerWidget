@@ -631,7 +631,7 @@ XProcess *XDebuggerWidget::_getProcessMemory(XADDR nAddress, qint64 nSize)
     return pResult;
 }
 
-void XDebuggerWidget::_toggleBreakpoint()
+void XDebuggerWidget::_breakpointToggle()
 {
     ui->widgetDisasm->_breakpointToggle();
 
@@ -644,6 +644,16 @@ void XDebuggerWidget::_toggleBreakpoint()
     //    ui->widgetDisasm->reload(true); // TODO signal/slot
     //    ui->widgetHex->reload(true); // TODO signal/slot
     //    ui->widgetStack->reload(true); // TODO signal/slot
+}
+
+void XDebuggerWidget::_breakpointRemove()
+{
+    ui->widgetDisasm->_breakpointRemove();
+}
+
+void XDebuggerWidget::_breakpointConditional()
+{
+    ui->widgetDisasm->_breakpointConditional();
 }
 
 void XDebuggerWidget::cleanUp()
@@ -727,7 +737,11 @@ void XDebuggerWidget::registerShortcuts(bool bState)
 {
     if (bState) {
         if (!shortCuts[SC_DISASM_BREAKPOINTTOGGLE])
-            shortCuts[SC_DISASM_BREAKPOINTTOGGLE] = new QShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_BREAKPOINT_TOGGLE), this, SLOT(_toggleBreakpoint()));
+            shortCuts[SC_DISASM_BREAKPOINTTOGGLE] = new QShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_BREAKPOINT_TOGGLE), this, SLOT(_breakpointToggle()));
+        if (!shortCuts[SC_DISASM_BREAKPOINTREMOVE])
+            shortCuts[SC_DISASM_BREAKPOINTREMOVE] = new QShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_BREAKPOINT_REMOVE), this, SLOT(_breakpointRemove()));
+        if (!shortCuts[SC_DISASM_BREAKPOINTCONDITIONAL])
+            shortCuts[SC_DISASM_BREAKPOINTCONDITIONAL] = new QShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_BREAKPOINT_CONDITIONAL), this, SLOT(_breakpointConditional()));
     } else {
         for (qint32 i = 0; i < __SC_SIZE; i++) {
             if (shortCuts[i]) {
