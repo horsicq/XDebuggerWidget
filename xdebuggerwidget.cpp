@@ -741,7 +741,8 @@ void XDebuggerWidget::registerShortcuts(bool bState)
         if (!shortCuts[SC_DISASM_BREAKPOINTREMOVE])
             shortCuts[SC_DISASM_BREAKPOINTREMOVE] = new QShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_BREAKPOINT_REMOVE), this, SLOT(_breakpointRemove()));
         if (!shortCuts[SC_DISASM_BREAKPOINTCONDITIONAL])
-            shortCuts[SC_DISASM_BREAKPOINTCONDITIONAL] = new QShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_BREAKPOINT_CONDITIONAL), this, SLOT(_breakpointConditional()));
+            shortCuts[SC_DISASM_BREAKPOINTCONDITIONAL] =
+                new QShortcut(getShortcuts()->getShortcut(X_ID_DEBUGGER_DISASM_BREAKPOINT_CONDITIONAL), this, SLOT(_breakpointConditional()));
     } else {
         for (qint32 i = 0; i < __SC_SIZE; i++) {
             if (shortCuts[i]) {
