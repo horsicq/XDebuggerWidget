@@ -101,6 +101,11 @@ FORMS += \
     include($$PWD/../XBreakPointsWidget/xbreakpointswidget.pri)
 }
 
+!contains(XCONFIG, xprocesswidgetadvanced) {
+    XCONFIG += xprocesswidgetadvanced
+    include($$PWD/../XProcessWidget/xprocesswidgetadvanced.pri)
+}
+
 !contains(XCONFIG, xinfodb) {
     XCONFIG += xinfodb
     include($$PWD/../XInfoDB/xinfodb.pri)
