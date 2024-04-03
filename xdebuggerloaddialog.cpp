@@ -32,6 +32,7 @@ XDebuggerLoadDialog::XDebuggerLoadDialog(QWidget *pParent, XAbstractDebugger::OP
     ui->lineEditDirectory->setText(pOptions->sDirectory);
 
     _setupCheckBox(ui->checkBoxShowConsole, XAbstractDebugger::OPTIONS_TYPE_SHOWCONSOLE);
+    _setupCheckBox(ui->checkBoxChangePermissions, XAbstractDebugger::OPTIONS_TYPE_CHANGEPERMISSIONS);
     _setupCheckBox(ui->checkBoxBreakpointDLLMain, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTDLLMAIN);
     _setupCheckBox(ui->checkBoxBreakpointEntryPoint, XAbstractDebugger::OPTIONS_TYPE_BREAKPOINTENTRYPOINT);
     _setupCheckBox(ui->checkBoxBreakpointExceptions, XAbstractDebugger::OPTIONS_TYPE_BREAKPONTEXCEPTIONS);

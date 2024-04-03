@@ -54,6 +54,7 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) : XShortcutsWidget(pParent), 
     connect(this, SIGNAL(resetWidgetsSignal()), this, SLOT(resetWidgets()));
     connect(this, SIGNAL(infoMessage(QString)), this, SLOT(infoMessageSlot(QString)));
     connect(this, SIGNAL(errorMessage(QString)), this, SLOT(errorMessageSlot(QString)));
+    connect(this, SIGNAL(warningMessage(QString)), this, SLOT(warningMessageSlot(QString)));
 
     connect(this, SIGNAL(addSymbols(QString, XADDR)), this, SLOT(addSymbolsSlot(QString, XADDR)));
     connect(this, SIGNAL(removeSymbols(QString)), this, SLOT(removeSymbolsSlot(QString)));
@@ -136,6 +137,10 @@ bool XDebuggerWidget::loadFile(const QString &sFileName, bool bShowLoadDialog)
         connect(g_pThread, SIGNAL(started()), g_pDebugger, SLOT(process()));
 #endif
         //    connect(pDebugger,SIGNAL(finished()),pDebugger,SLOT(deleteLater()));
+
+        connect(g_pDebugger, SIGNAL(infoMessage(QString)), this, SLOT(infoMessageSlot(QString)), Qt::DirectConnection);
+        connect(g_pDebugger, SIGNAL(errorMessage(QString)), this, SLOT(errorMessageSlot(QString)), Qt::DirectConnection);
+        connect(g_pDebugger, SIGNAL(warningMessage(QString)), this, SLOT(warningMessageSlot(QString)), Qt::DirectConnection);
 
         connect(g_pDebugger, SIGNAL(eventCreateProcess(XInfoDB::PROCESS_INFO *)), this, SLOT(onCreateProcess(XInfoDB::PROCESS_INFO *)), Qt::DirectConnection);
         connect(g_pDebugger, SIGNAL(eventBreakPoint(XInfoDB::BREAKPOINT_INFO *)), this, SLOT(onBreakPoint(XInfoDB::BREAKPOINT_INFO *)), Qt::DirectConnection);
@@ -663,12 +668,7 @@ void XDebuggerWidget::cleanUp()
 #endif
 
     if (g_pDebugger) {
-        if (g_pInfoDB) {
-            if (g_pInfoDB->getThreadInfos()->count()) {
-                g_pDebugger->stop();
-                g_pDebugger->wait();
-            }
-        }
+        g_pDebugger->cleanUp();
 
         delete g_pDebugger;
         g_pDebugger = nullptr;
@@ -715,19 +715,26 @@ void XDebuggerWidget::resetWidgets()
     ui->widgetStack->clear();
 }
 
-void XDebuggerWidget::errorMessageSlot(QString sErrorMessage)
+void XDebuggerWidget::errorMessageSlot(const QString &sErrorMessage)
 {
+    QMessageBox::critical(this, tr("Error"), sErrorMessage);
     // TODO
     writeToLog(sErrorMessage);
 }
 
-void XDebuggerWidget::infoMessageSlot(QString sInfoMessage)
+void XDebuggerWidget::infoMessageSlot(const QString &sInfoMessage)
 {
     // TODO
     writeToLog(sInfoMessage);
 }
 
-void XDebuggerWidget::writeToLog(QString sText)
+void XDebuggerWidget::warningMessageSlot(const QString &sInfoMessage)
+{
+    // TODO
+    writeToLog(sInfoMessage);
+}
+
+void XDebuggerWidget::writeToLog(const QString &sText)
 {
     // TODO Show in title count of new messages
     ui->plainTextEditLog->appendPlainText(sText);

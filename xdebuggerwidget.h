@@ -105,8 +105,9 @@ public:
     STATE getState();
 
 signals:
-    void errorMessage(QString sErrorMessage);
-    void infoMessage(QString sInfoMessage);
+    void errorMessage(const QString &sErrorMessage);
+    void infoMessage(const QString &sInfoMessage);
+    void warningMessage(const QString &sWarningMessage);
     void resetWidgetsSignal();
     void stateChanged();
     void testSignal(X_ID nThreadId);  // TODO remove
@@ -159,9 +160,10 @@ private slots:
     void _breakpointConditional();
     void cleanUp();
     void resetWidgets();
-    void errorMessageSlot(QString sErrorMessage);
-    void infoMessageSlot(QString sInfoMessage);
-    void writeToLog(QString sText);
+    void errorMessageSlot(const QString &sErrorMessage);
+    void infoMessageSlot(const QString &sInfoMessage);
+    void warningMessageSlot(const QString &sInfoMessage);
+    void writeToLog(const QString &sText);
     void on_tabWidgetMain_currentChanged(int nIndex);
     void reload();
     void followInDisasm(XADDR nAddress);

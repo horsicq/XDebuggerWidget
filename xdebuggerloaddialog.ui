@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>530</width>
-    <height>396</height>
+    <width>543</width>
+    <height>466</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -100,6 +100,9 @@
         <string>Options</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_5">
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -116,6 +119,13 @@
          <widget class="QCheckBox" name="checkBoxShowConsole">
           <property name="text">
            <string>Show console</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBoxChangePermissions">
+          <property name="text">
+           <string>Change permissions</string>
           </property>
          </widget>
         </item>
@@ -141,6 +151,9 @@
         <string>Breakpoints</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -187,6 +200,19 @@
            <string>TLS functions</string>
           </property>
          </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>
