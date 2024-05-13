@@ -380,13 +380,32 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="DW_HexView" name="widgetHex" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="QTabWidget" name="tabWidgetHex">
+              <widget class="DW_HexView" name="widgetHex1">
+               <attribute name="title">
+                <string>Hex</string>
+               </attribute>
+              </widget>
+              <widget class="DW_HexView" name="widgetHex4">
+               <attribute name="title">
+                <string>Hex</string>
+               </attribute>
+              </widget>
+              <widget class="DW_HexView" name="widgetHex5">
+               <attribute name="title">
+                <string>Hex</string>
+               </attribute>
+              </widget>
+              <widget class="DW_HexView" name="widgetHex3">
+               <attribute name="title">
+                <string>Hex</string>
+               </attribute>
+              </widget>
+              <widget class="DW_HexView" name="widgetHex2">
+               <attribute name="title">
+                <string>Hex</string>
+               </attribute>
+              </widget>
              </widget>
             </item>
            </layout>
@@ -429,7 +448,7 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1033</width>
+                 <width>992</width>
                  <height>484</height>
                 </rect>
                </property>

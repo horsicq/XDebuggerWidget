@@ -63,7 +63,11 @@ XDebuggerWidget::XDebuggerWidget(QWidget *pParent) : XShortcutsWidget(pParent), 
     //    connect(ui->widgetDisasm,SIGNAL(debugAction(XInfoDB::DEBUG_ACTION)),this,SLOT(addDebugAction(XInfoDB::DEBUG_ACTION)));
 
     connect(ui->widgetDisasm, SIGNAL(followInHex(XADDR)), this, SLOT(followInHex(XADDR)));
-    connect(ui->widgetHex, SIGNAL(followInDisasm(XADDR)), this, SLOT(followInDisasm(XADDR)));
+    connect(ui->widgetHex1, SIGNAL(followInDisasm(XADDR)), this, SLOT(followInDisasm(XADDR)));
+    connect(ui->widgetHex2, SIGNAL(followInDisasm(XADDR)), this, SLOT(followInDisasm(XADDR)));
+    connect(ui->widgetHex3, SIGNAL(followInDisasm(XADDR)), this, SLOT(followInDisasm(XADDR)));
+    connect(ui->widgetHex4, SIGNAL(followInDisasm(XADDR)), this, SLOT(followInDisasm(XADDR)));
+    connect(ui->widgetHex5, SIGNAL(followInDisasm(XADDR)), this, SLOT(followInDisasm(XADDR)));
     connect(ui->widgetStack, SIGNAL(followInHex(XADDR)), this, SLOT(followInHex(XADDR)));
     connect(ui->widgetStack, SIGNAL(followInDisasm(XADDR)), this, SLOT(followInDisasm(XADDR)));
     connect(ui->widgetRegs, SIGNAL(followInHex(XADDR)), this, SLOT(followInHex(XADDR)));
@@ -119,7 +123,11 @@ bool XDebuggerWidget::loadFile(const QString &sFileName, bool bShowLoadDialog)
         g_pDebugger = new XOSXDebugger(0, g_pInfoDB);
 #endif
         ui->widgetDisasm->setXInfoDB(g_pDebugger->getXInfoDB());
-        ui->widgetHex->setXInfoDB(g_pDebugger->getXInfoDB());
+        ui->widgetHex1->setXInfoDB(g_pDebugger->getXInfoDB());
+        ui->widgetHex2->setXInfoDB(g_pDebugger->getXInfoDB());
+        ui->widgetHex3->setXInfoDB(g_pDebugger->getXInfoDB());
+        ui->widgetHex4->setXInfoDB(g_pDebugger->getXInfoDB());
+        ui->widgetHex5->setXInfoDB(g_pDebugger->getXInfoDB());
         ui->widgetRegs->setXInfoDB(g_pDebugger->getXInfoDB());
         ui->widgetStack->setXInfoDB(g_pDebugger->getXInfoDB());
 
@@ -183,7 +191,11 @@ void XDebuggerWidget::setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions)
     setActive(true);
 
     ui->widgetDisasm->setGlobal(pShortcuts, pXOptions);
-    ui->widgetHex->setGlobal(pShortcuts, pXOptions);
+    ui->widgetHex1->setGlobal(pShortcuts, pXOptions);
+    ui->widgetHex2->setGlobal(pShortcuts, pXOptions);
+    ui->widgetHex3->setGlobal(pShortcuts, pXOptions);
+    ui->widgetHex4->setGlobal(pShortcuts, pXOptions);
+    ui->widgetHex5->setGlobal(pShortcuts, pXOptions);
     ui->widgetRegs->setGlobal(pShortcuts, pXOptions);
     ui->widgetStack->setGlobal(pShortcuts, pXOptions);
     // TODO more
@@ -194,7 +206,11 @@ void XDebuggerWidget::setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions)
 void XDebuggerWidget::adjustView()
 {
     ui->widgetDisasm->adjustView();
-    ui->widgetHex->adjustView();
+    ui->widgetHex1->adjustView();
+    ui->widgetHex2->adjustView();
+    ui->widgetHex3->adjustView();
+    ui->widgetHex4->adjustView();
+    ui->widgetHex5->adjustView();
     ui->widgetRegs->adjustView();
     ui->widgetStack->adjustView();
     ui->widgetProcessModules->adjustView();
@@ -209,7 +225,11 @@ void XDebuggerWidget::adjustView()
 void XDebuggerWidget::reloadShortcuts()
 {
     ui->widgetDisasm->reloadShortcuts();
-    ui->widgetHex->reloadShortcuts();
+    ui->widgetHex1->reloadShortcuts();
+    ui->widgetHex2->reloadShortcuts();
+    ui->widgetHex3->reloadShortcuts();
+    ui->widgetHex4->reloadShortcuts();
+    ui->widgetHex5->reloadShortcuts();
     ui->widgetRegs->reloadShortcuts();
     ui->widgetStack->reloadShortcuts();
     ui->widgetProcessModules->reloadShortcuts();
@@ -326,6 +346,7 @@ void XDebuggerWidget::onReloadSignal(bool bDataReload)
         // TODO Check tab
         followInDisasm(nInstructionPointer);
         followInStack(nStackPointer);
+        followInHex(g_pInfoDB->getProcessInfo()->nImageBase); // TODO
     }
 
     reload();  // TODO Check remove
@@ -553,7 +574,11 @@ void XDebuggerWidget::_adjustState()
 
     if (g_state.bAnimateStop || g_state.bTraceStop) {
         ui->widgetDisasm->setContextMenuEnable(false);
-        ui->widgetHex->setContextMenuEnable(false);
+        ui->widgetHex1->setContextMenuEnable(false);
+        ui->widgetHex2->setContextMenuEnable(false);
+        ui->widgetHex3->setContextMenuEnable(false);
+        ui->widgetHex4->setContextMenuEnable(false);
+        ui->widgetHex5->setContextMenuEnable(false);
         ui->widgetStack->setContextMenuEnable(false);
         // TODO registers
 
@@ -568,7 +593,11 @@ void XDebuggerWidget::_adjustState()
         ui->tabWidgetMain->setTabEnabled(MT_SYMBOLS, false);
     } else {
         ui->widgetDisasm->setContextMenuEnable(true);
-        ui->widgetHex->setContextMenuEnable(true);
+        ui->widgetHex1->setContextMenuEnable(true);
+        ui->widgetHex2->setContextMenuEnable(true);
+        ui->widgetHex3->setContextMenuEnable(true);
+        ui->widgetHex4->setContextMenuEnable(true);
+        ui->widgetHex5->setContextMenuEnable(true);
         ui->widgetStack->setContextMenuEnable(true);
         // TODO registers
 
@@ -710,7 +739,11 @@ void XDebuggerWidget::resetWidgets()
     ui->tabWidgetMain->setCurrentIndex(MT_CPU);
 
     ui->widgetDisasm->clear();
-    ui->widgetHex->clear();
+    ui->widgetHex1->clear();
+    ui->widgetHex2->clear();
+    ui->widgetHex3->clear();
+    ui->widgetHex4->clear();
+    ui->widgetHex5->clear();
     ui->widgetRegs->clear();
     ui->widgetStack->clear();
 }
@@ -795,7 +828,11 @@ void XDebuggerWidget::reload()
 
     if (nIndex == MT_CPU) {
         ui->widgetDisasm->reload(true);
-        ui->widgetHex->reload(true);
+        ui->widgetHex1->reload(true);
+        ui->widgetHex2->reload(true);
+        ui->widgetHex3->reload(true);
+        ui->widgetHex4->reload(true);
+        ui->widgetHex5->reload(true);
         ui->widgetStack->reload(true);
         ui->widgetRegs->reload();
     } else if (nIndex == MT_BREAKPOINTS) {
@@ -856,14 +893,14 @@ void XDebuggerWidget::followInHex(XADDR nAddress)
             hexOptions.nStartAddress = g_mrHex.nAddress;
             hexOptions.nStartSelectionOffset = nAddress - hexOptions.nStartAddress;
             hexOptions.addressMode = XHexView::LOCMODE_ADDRESS;
-            ui->widgetHex->setData(pProcessMemory, hexOptions, false);
-            ui->widgetHex->setReadonly(false);
+            ui->widgetHex1->setData(pProcessMemory, hexOptions, false); // TODO Current
+            ui->widgetHex1->setReadonly(false); // TODO Current
         }
     } else {
-        ui->widgetHex->goToAddress(nAddress);
+        ui->widgetHex1->goToAddress(nAddress); // TODO Current
     }
 
-    ui->widgetHex->setSelectionAddress(nAddress, 1);
+    ui->widgetHex1->setSelectionAddress(nAddress, 1); // TODO Current
 }
 
 void XDebuggerWidget::followInStack(XADDR nAddress)
