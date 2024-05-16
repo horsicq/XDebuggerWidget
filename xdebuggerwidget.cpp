@@ -346,7 +346,7 @@ void XDebuggerWidget::onReloadSignal(bool bDataReload)
         // TODO Check tab
         followInDisasm(nInstructionPointer);
         followInStack(nStackPointer);
-        followInHex(g_pInfoDB->getProcessInfo()->nImageBase); // TODO
+        followInHex(g_pInfoDB->getProcessInfo()->nImageBase);  // TODO
     }
 
     reload();  // TODO Check remove
@@ -893,14 +893,14 @@ void XDebuggerWidget::followInHex(XADDR nAddress)
             hexOptions.nStartAddress = g_mrHex.nAddress;
             hexOptions.nStartSelectionOffset = nAddress - hexOptions.nStartAddress;
             hexOptions.addressMode = XHexView::LOCMODE_ADDRESS;
-            ui->widgetHex1->setData(pProcessMemory, hexOptions, false); // TODO Current
-            ui->widgetHex1->setReadonly(false); // TODO Current
+            ui->widgetHex1->setData(pProcessMemory, hexOptions, false);  // TODO Current
+            ui->widgetHex1->setReadonly(false);                          // TODO Current
         }
     } else {
-        ui->widgetHex1->goToAddress(nAddress); // TODO Current
+        ui->widgetHex1->goToAddress(nAddress);  // TODO Current
     }
 
-    ui->widgetHex1->setSelectionAddress(nAddress, 1); // TODO Current
+    ui->widgetHex1->setSelectionAddress(nAddress, 1);  // TODO Current
 }
 
 void XDebuggerWidget::followInStack(XADDR nAddress)
