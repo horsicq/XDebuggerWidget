@@ -1037,7 +1037,7 @@ void XDebuggerWidget::on_pushButtonCommandRun_clicked()
     reload();
 }
 
-void XDebuggerWidget::addSymbolsSlot(QString sFileName, XADDR nImageBase)
+void XDebuggerWidget::addSymbolsSlot(const QString &sFileName, XADDR nImageBase)
 {
 #ifdef QT_DEBUG
     qDebug("addSymbolsSlot %s >>>>>>>>>", sFileName.toUtf8().data());
@@ -1063,7 +1063,7 @@ void XDebuggerWidget::addSymbolsSlot(QString sFileName, XADDR nImageBase)
 #endif
 }
 
-void XDebuggerWidget::removeSymbolsSlot(QString sFileName)
+void XDebuggerWidget::removeSymbolsSlot(const QString &sFileName)
 {
 #ifdef QT_DEBUG
     qDebug("removeSymbolsSlot %s", sFileName.toUtf8().data());

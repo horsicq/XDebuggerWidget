@@ -181,8 +181,8 @@ private slots:
     void registersListChangedSlot();
     void updateWidget(MT mt);
     void on_pushButtonCommandRun_clicked();
-    void addSymbolsSlot(QString sFileName, XADDR nImageBase);
-    void removeSymbolsSlot(QString sFileName);
+    void addSymbolsSlot(const QString &FileName, XADDR nImageBase);
+    void removeSymbolsSlot(const QString &sFileName);
 
 protected:
     virtual void registerShortcuts(bool bState);
