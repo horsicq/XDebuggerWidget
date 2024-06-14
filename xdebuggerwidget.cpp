@@ -705,7 +705,7 @@ void XDebuggerWidget::cleanUp()
 #ifdef Q_OS_WIN
     if (g_pThread) {
         g_pThread->quit();
-        g_pThread->wait();
+        g_pThread->wait(); // TODO
 
         delete g_pThread;
         g_pThread = nullptr;
