@@ -218,8 +218,6 @@ void XDebuggerWidget::adjustView()
     ui->widgetBreakpoints->adjustView();
     ui->widgetSymbols->adjustView();
     ui->widgetThreads->adjustView();
-
-    XShortcutsWidget::adjustView();
 }
 
 void XDebuggerWidget::reloadShortcuts()
