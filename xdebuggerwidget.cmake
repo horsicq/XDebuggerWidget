@@ -1,6 +1,12 @@
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
-include(${CMAKE_CURRENT_LIST_DIR}/../XSpecDebugger/xspecdebugger.cmake)
+
+if (NOT DEFINED XPECDEBUGGER_SOURCES)
+    include(${CMAKE_CURRENT_LIST_DIR}/../XSpecDebugger/xspecdebugger.cmake)
+    set(XDEBUGGERWIDGET_SOURCES ${XDEBUGGERWIDGET_SOURCES} ${XPECDEBUGGER_SOURCES})
+endif()
+
+
 include(${CMAKE_CURRENT_LIST_DIR}/../XDisasmView/xdisasmview.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../XHexView/xhexview.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../XRegistersView/xregistersview.cmake)
@@ -20,6 +26,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../FormatWidgets/allformatwidgets.cmake)
 #    ${XCALLSTACKWIDGET_SOURCES}
 
 set(XDEBUGGERWIDGET_SOURCES
+    ${XDEBUGGERWIDGET_SOURCES}
     ${XPECDEBUGGER_SOURCES}
     ${XDISASMVIEW_SOURCES}
     ${XHEXVIEW_SOURCES}
