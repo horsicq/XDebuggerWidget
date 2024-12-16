@@ -5,7 +5,10 @@ if (NOT DEFINED XPECDEBUGGER_SOURCES)
     include(${CMAKE_CURRENT_LIST_DIR}/../XSpecDebugger/xspecdebugger.cmake)
     set(XDEBUGGERWIDGET_SOURCES ${XDEBUGGERWIDGET_SOURCES} ${XPECDEBUGGER_SOURCES})
 endif()
-
+if (NOT DEFINED XPROCESSWIDGETADVANCED_SOURCES)
+    include(${CMAKE_CURRENT_LIST_DIR}/../XProcessWidget/xprocesswidgetadvanced.cmake)
+    set(XDEBUGGERWIDGET_SOURCES ${XDEBUGGERWIDGET_SOURCES} ${XPROCESSWIDGETADVANCED_SOURCES})
+endif()
 
 include(${CMAKE_CURRENT_LIST_DIR}/../XDisasmView/xdisasmview.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../XHexView/xhexview.cmake)
@@ -18,9 +21,9 @@ include(${CMAKE_CURRENT_LIST_DIR}/../XCallStackWidget/xcallstackwidget.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../XSymbolsWidget/xsymbolswidget.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../XThreadsWidget/xthreadswidget.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../XBreakPointsWidget/xbreakpointswidget.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/../XProcessWidget/xprocesswidgetadvanced.cmake)
+
 include(${CMAKE_CURRENT_LIST_DIR}/../XInfoDB/xinfodb.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/../FormatWidgets/allformatwidgets.cmake)
+#include(${CMAKE_CURRENT_LIST_DIR}/../FormatWidgets/allformatwidgets.cmake)
 
 #    ${XHANDLESWIDGET_SOURCES}
 #    ${XCALLSTACKWIDGET_SOURCES}
@@ -28,6 +31,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../FormatWidgets/allformatwidgets.cmake)
 set(XDEBUGGERWIDGET_SOURCES
     ${XDEBUGGERWIDGET_SOURCES}
     ${XPECDEBUGGER_SOURCES}
+    ${XBREAKPOINTSWIDGET_SOURCES}
     ${XDISASMVIEW_SOURCES}
     ${XHEXVIEW_SOURCES}
     ${XREGISTERSVIEW_SOURCES}
@@ -35,11 +39,9 @@ set(XDEBUGGERWIDGET_SOURCES
     ${XPROCESSMEMORYMAPWIDGET_SOURCES}
     ${XPROCESSMODULESWIDGET_SOURCES}
     ${XSYMBOLSWIDGET_SOURCES}
-    ${XTHREADSWIDGET_SOURCES}
-    ${XBREAKPOINTSWIDGET_SOURCES}
     ${XPROCESSWIDGETADVANCED_SOURCES}
     ${XINFODB_SOURCES}
-    ${ALLFORMATWIDGETS_SOURCES}
+    #${ALLFORMATWIDGETS_SOURCES}
     ${CMAKE_CURRENT_LIST_DIR}/dw_breakpointswidget.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dw_breakpointswidget.h
     ${CMAKE_CURRENT_LIST_DIR}/dw_disasmview.cpp
