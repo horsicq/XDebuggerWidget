@@ -122,14 +122,14 @@ bool XDebuggerWidget::loadFile(const QString &sFileName, bool bShowLoadDialog)
 #ifdef Q_OS_MACOS
         g_pDebugger = new XOSXDebugger(0, g_pInfoDB);
 #endif
-        ui->widgetDisasm->setXInfoDB(g_pDebugger->getXInfoDB());
-        ui->widgetHex1->setXInfoDB(g_pDebugger->getXInfoDB());
-        ui->widgetHex2->setXInfoDB(g_pDebugger->getXInfoDB());
-        ui->widgetHex3->setXInfoDB(g_pDebugger->getXInfoDB());
-        ui->widgetHex4->setXInfoDB(g_pDebugger->getXInfoDB());
-        ui->widgetHex5->setXInfoDB(g_pDebugger->getXInfoDB());
+        ui->widgetDisasm->setXInfoDB(g_pDebugger->getXInfoDB(), "main");
+        ui->widgetHex1->setXInfoDB(g_pDebugger->getXInfoDB(), "main");
+        ui->widgetHex2->setXInfoDB(g_pDebugger->getXInfoDB(), "main");
+        ui->widgetHex3->setXInfoDB(g_pDebugger->getXInfoDB(), "main");
+        ui->widgetHex4->setXInfoDB(g_pDebugger->getXInfoDB(), "main");
+        ui->widgetHex5->setXInfoDB(g_pDebugger->getXInfoDB(), "main");
         ui->widgetRegs->setXInfoDB(g_pDebugger->getXInfoDB());
-        ui->widgetStack->setXInfoDB(g_pDebugger->getXInfoDB());
+        ui->widgetStack->setXInfoDB(g_pDebugger->getXInfoDB(), "main");
 
         ui->widgetProcessModules->setXInfoDB(g_pDebugger->getXInfoDB(), false);
         ui->widgetProcessMemoryMap->setXInfoDB(g_pDebugger->getXInfoDB(), false);
@@ -282,7 +282,7 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 #endif
     // TODO reloads signals
 
-    g_pInfoDB->clearRecordInfoCache();
+    // g_pInfoDB->clearRecordInfoCache();
 
     g_pInfoDB->reload(true);  // TODO Check
 }
@@ -888,8 +888,8 @@ void XDebuggerWidget::followInHex(XADDR nAddress)
 
         if (pProcessMemory) {
             XHexView::OPTIONS hexOptions = {};
-            hexOptions.nStartAddress = g_mrHex.nAddress;
-            hexOptions.nStartSelectionOffset = nAddress - hexOptions.nStartAddress;
+            // hexOptions.nStartAddress = g_mrHex.nAddress;
+            // hexOptions.nStartSelectionOffset = nAddress - hexOptions.nStartAddress;
             hexOptions.addressMode = XHexView::LOCMODE_ADDRESS;
             ui->widgetHex1->setData(pProcessMemory, hexOptions, false);  // TODO Current
             ui->widgetHex1->setReadonly(false);                          // TODO Current

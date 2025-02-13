@@ -19,6 +19,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../XProcessModulesWidget/xprocessmoduleswidget
 include(${CMAKE_CURRENT_LIST_DIR}/../XHandlesWidget/xhandleswidget.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../XCallStackWidget/xcallstackwidget.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../XSymbolsWidget/xsymbolswidget.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/../XRegionsWidget/xregionswidget.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../XThreadsWidget/xthreadswidget.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../XBreakPointsWidget/xbreakpointswidget.cmake)
 
@@ -39,8 +40,10 @@ set(XDEBUGGERWIDGET_SOURCES
     ${XPROCESSMEMORYMAPWIDGET_SOURCES}
     ${XPROCESSMODULESWIDGET_SOURCES}
     ${XSYMBOLSWIDGET_SOURCES}
+    ${XREGIONSWIDGET_SOURCES}
     ${XPROCESSWIDGETADVANCED_SOURCES}
     ${XINFODB_SOURCES}
+    ${XTHREADSWIDGET_SOURCES}
     #${ALLFORMATWIDGETS_SOURCES}
     ${CMAKE_CURRENT_LIST_DIR}/dw_breakpointswidget.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dw_breakpointswidget.h
