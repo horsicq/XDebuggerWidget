@@ -34,7 +34,7 @@ void DW_DisasmView::_breakpointToggle()
             qint64 nSelectionSize = getSelectionInitSize();
 
             if (getXInfoDB()->breakpointToggle(nAddress)) {
-                getXInfoDB()->reload(true);
+                getXInfoDB()->reloadView();
             }
 
             setSelectionAddress(nAddress, nSelectionSize);
@@ -52,7 +52,7 @@ void DW_DisasmView::_breakpointRemove()
             qint64 nSelectionSize = getSelectionInitSize();
 
             if (getXInfoDB()->breakpointRemove(nAddress)) {
-                getXInfoDB()->reload(true);
+                getXInfoDB()->reloadView();
             }
 
             setSelectionAddress(nAddress, nSelectionSize);

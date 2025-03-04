@@ -122,19 +122,19 @@ bool XDebuggerWidget::loadFile(const QString &sFileName, bool bShowLoadDialog)
 #ifdef Q_OS_MACOS
         g_pDebugger = new XOSXDebugger(0, g_pInfoDB);
 #endif
-        ui->widgetDisasm->setXInfoDB(g_pDebugger->getXInfoDB(), "main");
-        ui->widgetHex1->setXInfoDB(g_pDebugger->getXInfoDB(), "main");
-        ui->widgetHex2->setXInfoDB(g_pDebugger->getXInfoDB(), "main");
-        ui->widgetHex3->setXInfoDB(g_pDebugger->getXInfoDB(), "main");
-        ui->widgetHex4->setXInfoDB(g_pDebugger->getXInfoDB(), "main");
-        ui->widgetHex5->setXInfoDB(g_pDebugger->getXInfoDB(), "main");
+        ui->widgetDisasm->setXInfoDB(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN);
+        ui->widgetHex1->setXInfoDB(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN);
+        ui->widgetHex2->setXInfoDB(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN);
+        ui->widgetHex3->setXInfoDB(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN);
+        ui->widgetHex4->setXInfoDB(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN);
+        ui->widgetHex5->setXInfoDB(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN);
         ui->widgetRegs->setXInfoDB(g_pDebugger->getXInfoDB());
-        ui->widgetStack->setXInfoDB(g_pDebugger->getXInfoDB(), "main");
+        ui->widgetStack->setXInfoDB(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN);
 
         ui->widgetProcessModules->setXInfoDB(g_pDebugger->getXInfoDB(), false);
         ui->widgetProcessMemoryMap->setXInfoDB(g_pDebugger->getXInfoDB(), false);
         ui->widgetBreakpoints->setXInfoDB(g_pDebugger->getXInfoDB(), false);
-        ui->widgetSymbols->setData(g_pDebugger->getXInfoDB(), XSymbolsWidget::MODE_ALL, QVariant(), false);
+        ui->widgetSymbols->setData(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN, XInfoDB::SYMBOL_MODE_ALL, true);
         ui->widgetThreads->setXInfoDB(g_pDebugger->getXInfoDB(), false);
 
         g_osInfo = XProcess::getOsInfo();
@@ -284,7 +284,7 @@ void XDebuggerWidget::onBreakPoint(XInfoDB::BREAKPOINT_INFO *pBreakPointInfo)
 
     // g_pInfoDB->clearRecordInfoCache();
 
-    g_pInfoDB->reload(true);  // TODO Check
+    g_pInfoDB->reloadView();
 }
 
 void XDebuggerWidget::onExitProcess(XInfoDB::EXITPROCESS_INFO *pExitProcessInfo)
@@ -846,7 +846,7 @@ void XDebuggerWidget::reload()
     } else if (nIndex == MT_MODULES) {
         ui->widgetProcessModules->reload();
     } else if (nIndex == MT_SYMBOLS) {
-        ui->widgetSymbols->reload(true);
+        ui->widgetSymbols->reload();
     }
 }
 
