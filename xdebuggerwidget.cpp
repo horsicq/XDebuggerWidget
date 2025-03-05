@@ -134,7 +134,11 @@ bool XDebuggerWidget::loadFile(const QString &sFileName, bool bShowLoadDialog)
         ui->widgetProcessModules->setXInfoDB(g_pDebugger->getXInfoDB(), false);
         ui->widgetProcessMemoryMap->setXInfoDB(g_pDebugger->getXInfoDB(), false);
         ui->widgetBreakpoints->setXInfoDB(g_pDebugger->getXInfoDB(), false);
-        ui->widgetSymbols->setData(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN, XInfoDB::SYMBOL_MODE_ALL, true);
+
+        XSymbolsWidget::OPTIONS sym_options = {};
+        sym_options.symbolMode = XInfoDB::SYMBOL_MODE_ALL;
+
+        ui->widgetSymbols->setData(nullptr, sym_options, g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN, true);
         ui->widgetThreads->setXInfoDB(g_pDebugger->getXInfoDB(), false);
 
         g_osInfo = XProcess::getOsInfo();
