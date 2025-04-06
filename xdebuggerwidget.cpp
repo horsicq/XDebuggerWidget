@@ -122,14 +122,14 @@ bool XDebuggerWidget::loadFile(const QString &sFileName, bool bShowLoadDialog)
 #ifdef Q_OS_MACOS
         g_pDebugger = new XOSXDebugger(0, g_pInfoDB);
 #endif
-        ui->widgetDisasm->setXInfoDB(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN);
-        ui->widgetHex1->setXInfoDB(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN);
-        ui->widgetHex2->setXInfoDB(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN);
-        ui->widgetHex3->setXInfoDB(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN);
-        ui->widgetHex4->setXInfoDB(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN);
-        ui->widgetHex5->setXInfoDB(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN);
+        ui->widgetDisasm->setXInfoDB(g_pDebugger->getXInfoDB());
+        ui->widgetHex1->setXInfoDB(g_pDebugger->getXInfoDB());
+        ui->widgetHex2->setXInfoDB(g_pDebugger->getXInfoDB());
+        ui->widgetHex3->setXInfoDB(g_pDebugger->getXInfoDB());
+        ui->widgetHex4->setXInfoDB(g_pDebugger->getXInfoDB());
+        ui->widgetHex5->setXInfoDB(g_pDebugger->getXInfoDB());
         ui->widgetRegs->setXInfoDB(g_pDebugger->getXInfoDB());
-        ui->widgetStack->setXInfoDB(g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN);
+        ui->widgetStack->setXInfoDB(g_pDebugger->getXInfoDB());
 
         ui->widgetProcessModules->setXInfoDB(g_pDebugger->getXInfoDB(), false);
         ui->widgetProcessMemoryMap->setXInfoDB(g_pDebugger->getXInfoDB(), false);
@@ -138,10 +138,10 @@ bool XDebuggerWidget::loadFile(const QString &sFileName, bool bShowLoadDialog)
         XSymbolsWidget::OPTIONS sym_options = {};
         sym_options.symbolMode = XInfoDB::SYMBOL_MODE_ALL;
 
-        ui->widgetSymbols->setData(nullptr, sym_options, g_pDebugger->getXInfoDB(), XInfoDB::PROFILE_MAIN, true);
+        ui->widgetSymbols->setData(nullptr, sym_options, g_pDebugger->getXInfoDB(), true);
         ui->widgetThreads->setXInfoDB(g_pDebugger->getXInfoDB(), false);
 
-        g_osInfo = XProcess::getOsInfo();
+        // g_osInfo = XProcess::getOsInfo();
 
         g_pDebugger->setOptions(options);
 
@@ -865,13 +865,13 @@ void XDebuggerWidget::followInDisasm(XADDR nAddress)
         XProcess *pProcessMemory = _getProcessMemory(g_mrDisasm.nAddress, g_mrDisasm.nSize);
 
         if (pProcessMemory) {
-            XBinary binary(pProcessMemory, true, g_mrDisasm.nAddress);
-            binary.setArch(g_osInfo.sArch);
-            binary.setMode(g_osInfo.mode);
+            // XBinary binary(pProcessMemory, true, g_mrDisasm.nAddress);
+            // binary.setArch(g_osInfo.sArch);
+            // binary.setMode(g_osInfo.mode);
 
             XDisasmView::OPTIONS disasmOptions = {};
             disasmOptions.nInitAddress = nAddress;
-            disasmOptions.memoryMapRegion = binary.getMemoryMap();
+            // disasmOptions.memoryMapRegion = binary.getMemoryMap();
             disasmOptions.bAprox = true;
             ui->widgetDisasm->setData(pProcessMemory, disasmOptions, false);
             ui->widgetDisasm->setReadonly(false);

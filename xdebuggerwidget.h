@@ -202,7 +202,7 @@ private:
     XInfoDB *g_pInfoDB;
     XInfoDB::BREAKPOINT_INFO g_currentBreakPointInfo;
     QShortcut *shortCuts[__SC_SIZE];
-    XBinary::OSINFO g_osInfo;
+    // XBinary::OSINFO g_osInfo;
     QList<XProcess *> g_listRegions;
 
     XProcess::MEMORY_REGION g_mrDisasm;
