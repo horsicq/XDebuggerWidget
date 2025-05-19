@@ -1049,7 +1049,7 @@ void XDebuggerWidget::addSymbolsSlot(const QString &sFileName, XADDR nImageBase)
     DialogXInfoDBTransferProcess dialogTransfer(this);
 
     XInfoDBTransfer::OPTIONS options = {};
-    options.sFileName = sFileName;
+    options.sDatabaseFileName = sFileName;
     // options.bIsImage = false;
     // options.nModuleAddress = nImageBase;
     options.fileType = XBinary::FT_PE;

@@ -56,10 +56,10 @@ void DW_RegistersView::contextMenu(const QPoint &pos)
         }
 
 #ifdef Q_PROCESSOR_X86_32
-        XADDR nAddress = getXinfoDB()->getCurrentRegCache(reg).var.v_uint32;
+        XADDR nAddress = getXinfoDB()->getCurrentRegCache(reg).var.toLongLong();
 #endif
 #ifdef Q_PROCESSOR_X86_64
-        XADDR nAddress = getXinfoDB()->getCurrentRegCache(reg).var.v_uint64;
+        XADDR nAddress = getXinfoDB()->getCurrentRegCache(reg).var.toLongLong();
 #endif
         if (getXinfoDB()->isAddressValid(nAddress)) {
             actionFollowInDisasm.setProperty("ADDRESS", nAddress);
