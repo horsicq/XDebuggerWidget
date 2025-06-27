@@ -1044,21 +1044,21 @@ void XDebuggerWidget::addSymbolsSlot(const QString &sFileName, XADDR nImageBase)
 #ifdef QT_DEBUG
     qDebug("addSymbolsSlot %s >>>>>>>>>", sFileName.toUtf8().data());
 #endif
-    g_pMutex->lock();
+    // g_pMutex->lock();
 
-    DialogXInfoDBTransferProcess dialogTransfer(this);
+    // DialogXInfoDBTransferProcess dialogTransfer(this);
 
-    XInfoDBTransfer::OPTIONS options = {};
-    options.sDatabaseFileName = sFileName;
-    // options.bIsImage = false;
-    // options.nModuleAddress = nImageBase;
-    options.fileType = XBinary::FT_PE;
+    // XInfoDBTransfer::OPTIONS options = {};
+    // options.sDatabaseFileName = sFileName;
+    // // options.bIsImage = false;
+    // // options.nModuleAddress = nImageBase;
+    // options.fileType = XBinary::FT_PE;
 
-    // dialogTransfer.setData(g_pInfoDB, XInfoDBTransfer::COMMAND_SYMBOLS, options);
+    // // dialogTransfer.setData(g_pInfoDB, XInfoDBTransfer::COMMAND_SYMBOLS, options);
 
-    dialogTransfer.showDialogDelay();
+    // dialogTransfer.showDialogDelay();
 
-    g_pMutex->unlock();
+    // g_pMutex->unlock();
 
 #ifdef QT_DEBUG
     qDebug("addSymbolsSlot %s <<<<<<<<<", sFileName.toUtf8().data());

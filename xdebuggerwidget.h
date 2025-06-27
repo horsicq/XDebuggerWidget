@@ -35,7 +35,6 @@
 #include "xshortcutswidget.h"
 #include "xinfodb.h"
 #include "xdebuggerloaddialog.h"
-#include "dialogxinfodbtransferprocess.h"
 
 // TODO WinAPI page/ Widget
 // TODO for Linux send signal to process widget/menu
