@@ -167,7 +167,7 @@ bool XDebuggerWidget::loadFile(const QString &sFileName, bool bShowLoadDialog)
         //    connect(this,SIGNAL(testSignal(X_ID)),g_pDebugger,SLOT(testSlot(X_ID)),Qt::BlockingQueuedConnection);
         //    connect(this,SIGNAL(testSignal(X_ID)),g_pDebugger,SLOT(testSlot(X_ID)),Qt::QueuedConnection);
 
-        connect(g_pInfoDB, SIGNAL(reloadSignal(bool)), this, SLOT(onReloadSignal(bool)));  // TODO remove
+        connect(g_pInfoDB, SIGNAL(reloadViewSignal()), this, SLOT(onReloadSignal()));  // TODO remove
 
         // connect(g_pInfoDB, SIGNAL(memoryRegionsListChanged()), this, SLOT(memoryRegionsListChangedSlot()));
         connect(g_pInfoDB, SIGNAL(modulesListChanged()), this, SLOT(modulesListChangedSlot()));
@@ -337,11 +337,11 @@ void XDebuggerWidget::eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pShare
     //    emit removeSymbols(pSharedObjectInfo->sFileName);
 }
 
-void XDebuggerWidget::onReloadSignal(bool bDataReload)
+void XDebuggerWidget::onReloadSignal()
 {
     qDebug("void XDebuggerWidget::onReloadSignal(bool bDataReload)");
     // TODO rework
-    if (bDataReload) {
+    if (true) {
         quint64 nInstructionPointer = g_pInfoDB->getCurrentInstructionPointerCache();
         quint64 nStackPointer = g_pInfoDB->getCurrentStackPointerCache();
 

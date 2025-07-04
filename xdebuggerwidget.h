@@ -150,7 +150,7 @@ private slots:
     void eventExitThread(XInfoDB::EXITTHREAD_INFO *pExitThreadInfo);
     void eventLoadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pSharedObjectInfo);
     void eventUnloadSharedObject(XInfoDB::SHAREDOBJECT_INFO *pSharedObjectInfo);
-    void onReloadSignal(bool bDataReload);  // TODO Check remove
+    void onReloadSignal();  // TODO Check remove
     void on_toolButtonRun_clicked();
     void on_toolButtonStepInto_clicked();
     void on_toolButtonStepOver_clicked();
